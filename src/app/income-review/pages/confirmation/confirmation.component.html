@@ -1,0 +1,40 @@
+<common-confirm-template [displayIcon]="displayIcon">
+
+  <div class="print-hide" confirmationTitle>
+    <ng-container *ngTemplateOutlet="confirmTitle"></ng-container>
+  </div>
+
+  <div message>
+    <ng-container *ngTemplateOutlet="confirmMessage"></ng-container>
+  </div>
+
+  <div AdditionalInfo>
+    confirmation works!
+  </div>
+
+</common-confirm-template>
+
+
+<!-- Needed if we print confirmation of submission with review information -->
+<ng-template #confirmTitle>
+  <button *ngIf="!isError" (click)="print($event)" class="btn btn-clear float-right print-hide">
+    <strong>Print
+      <i class="fa fa-print fa-lg"
+        aria-hidden="true"></i>
+    </strong>
+  </button>
+  <h1 class='border-bottom'>{{pageTitle}}</h1>
+</ng-template>
+
+<ng-template #confirmMessage>
+
+  <div class='mt-0 p-2 text-dark confirmation-message' [innerHTML]='confirmationMessage'></div>
+
+  <div *ngIf="!isError" class="row">
+    <div class='col-6 review-key'>Date of Submission</div>
+    <div class="col-6 review-value">{{submissionDate}}</div>
+
+    <div class='col-6 review-key'>Reference Number</div>
+    <div class="col-6 review-value">{{referenceNumber}}</div>
+  </div>
+</ng-template>

@@ -6,7 +6,7 @@ export const environment = {
    */
   api: {
     envServerUrl: '/fpcare/api/env', // spa-env service - splash page information
-    loggingURL: '/fpcare/api/logging' // splunk forwarder service
+    loggingURL: '/fpcare/api/logging', // splunk forwarder service
   },
 
   /**
@@ -21,6 +21,11 @@ export const environment = {
     bypassGuards: false,
 
     /**
+     * log HTTP requests to console
+     */
+    logHTTPRequestsToConsole: false,
+
+    /**
      * Simulate back-end
      */
     mockBackend: {
@@ -29,7 +34,7 @@ export const environment = {
       // YYYY-MM-DD 24H:mm:ss
       maintModeStart: '',
       maintModeEnd: '',
-      maintModeMessage: 'Fair PharmaCare is unavaible.'
-    }
-  }
+      maintModeMessage: '',
+    },
+  },
 };

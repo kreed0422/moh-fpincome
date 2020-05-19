@@ -10,7 +10,7 @@ export const environment = {
    */
   api: {
     envServerUrl: '/fpcare/api/env', // spa-env service - splash page information
-    loggingURL: '/fpcare/api/logging' // splunk forwarder service
+    loggingURL: '/fpcare/api/logging', // splunk forwarder service
   },
 
   /**
@@ -26,18 +26,23 @@ export const environment = {
     bypassGuards: true,
 
     /**
+     * log HTTP requests to console
+     */
+    logHTTPRequestsToConsole: true,
+
+    /**
      * Simulate back-end
      * When enabled = true, mockBackend can be used when mockBackend: {enabled = true}, loads provider for a fake backend
      */
     mockBackend: {
-      enabled: true,
+      enabled: false,
 
       // YYYY-MM-DD 24H:mm:ss
       maintModeStart: '2020-05-13 21:45:00',
       maintModeEnd: '2020-05-13 21:50:00',
-      maintModeMessage: 'Fair PharmaCare is unavaible.'
-    }
-  }
+      maintModeMessage: 'Fair PharmaCare Income Review is unavailable..',
+    },
+  },
 };
 
 /*

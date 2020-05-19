@@ -17,11 +17,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "deployUrl": "/fpincome/",
             "outputPath": "dist/moh-fpincome",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "preserveSymlinks": true,
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/styles"
@@ -74,6 +76,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "moh-fpincome:build",
+            "port": 4310,
             "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {

@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AbstractHttpService } from 'moh-common-lib';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { throwError, BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { retry, filter } from 'rxjs/operators';
@@ -11,25 +15,21 @@ import { SplunkLoggingService } from './splunk-logging.service';
  * Responsible for retrieving values from the spa-env-server on OpenShift.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SpaEnvApiService extends AbstractHttpService {
-
   protected _headers: HttpHeaders = new HttpHeaders({
-    SPA_ENV_NAME: JSON.stringify( FPIR_SPA_ENV_CONFIG ),
+    SPA_ENV_NAME: JSON.stringify(FPIR_SPA_ENV_CONFIG),
   });
 
-  // private _values = new BehaviorSubject<SpaEnvResponse>( null );
-
-  /** The values retrieved from the SpaEnv server. */
-  // public values: Observable<SpaEnvResponse> = this._values.asObservable()
-    // .pipe(filter(x => !!x)); // filter null response out, init value
-
-  constructor( protected http: HttpClient,
-               private splunkLoggingService: SplunkLoggingService ) {
+  constructor(
+    protected http: HttpClient,
+    private splunkLoggingService: SplunkLoggingService
+  ) {
     super(http);
 
-    // this.loadEnvs().subscribe(response => this._values.next(response));
+    this.logHTTPRequestsToConsole =
+      environment.developmentMode.logHTTPRequestsToConsole;
   }
 
   public getEnvs() {
@@ -37,7 +37,7 @@ export class SpaEnvApiService extends AbstractHttpService {
 
     // When the SpaEnv server is being deployed it can return an HTML error
     // page, and it should resolve shortly, so we try again.
-    return this.post<SpaEnvResponse>( url, null ).pipe( retry( 3 ) );
+    return this.post<SpaEnvResponse>(url, null).pipe(retry(3));
   }
 
   protected handleError(error: HttpErrorResponse) {
@@ -45,17 +45,18 @@ export class SpaEnvApiService extends AbstractHttpService {
 
     if (error.error instanceof ErrorEvent) {
       // Client-side / network error occured
-      console.error( 'An error occured: ', error.error.message) ;
+      console.error('An error occured: ', error.error.message);
     } else {
       // The backend returned an unsuccessful response code
-      console.error( `Backend returned error code: ${error.status}.  Error body: ${error.error}`) ;
+      console.error(
+        `Backend returned error code: ${error.status}.  Error body: ${error.error}`
+      );
     }
 
     // Log error to logging service
-    this.splunkLoggingService.logHttpError( error );
+    this.splunkLoggingService.logHttpError(error);
 
     // A user facing erorr message /could/ go here; we shouldn't log dev info through the throwError observable
-    return throwError( 'Something went wrong with the network request.' );
+    return throwError('Something went wrong with the network request.');
   }
-
 }

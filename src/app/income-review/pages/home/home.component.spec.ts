@@ -3,8 +3,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedCoreModule } from 'moh-common-lib';
-
+import { CaptchaModule } from 'moh-common-lib/captcha';
 import { HomeComponent } from './home.component';
+import { CollectionNoticeComponent } from '../../component/collection-notice/collection-notice.component';
+import { ModalModule } from 'ngx-bootstrap';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -12,17 +14,16 @@ describe('HomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        HomeComponent
-      ],
+      declarations: [HomeComponent, CollectionNoticeComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        SharedCoreModule
-      ]
-    })
-    .compileComponents();
+        SharedCoreModule,
+        CaptchaModule,
+        ModalModule.forRoot(),
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CollectionNoticeComponent } from './collection-notice.component';
+import { ModalModule } from 'ngx-bootstrap';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -9,6 +10,7 @@ describe('CollectionNoticeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CollectionNoticeComponent],
+      imports: [ModalModule.forRoot()],
     }).compileComponents();
   }));
 

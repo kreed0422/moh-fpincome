@@ -3,20 +3,21 @@ import { Container, ContainerService, PageStateService } from 'moh-common-lib';
 import { incomeReviewPageRoutes } from './income-review-pages.route';
 import { INCOME_REVIEW_PAGES } from './income-review.constants';
 
-
 @Component({
   selector: 'fpir-income-review',
   templateUrl: './income-review.component.html',
-  styleUrls: ['./income-review.component.scss']
+  styleUrls: ['./income-review.component.scss'],
 })
-export class IncomeReviewComponent extends Container implements AfterViewInit, OnDestroy  {
+export class IncomeReviewComponent extends Container
+  implements AfterViewInit, OnDestroy {
+  constructor(
+    protected containerService: ContainerService,
+    private pageStateService: PageStateService
+  ) {
+    super(containerService);
 
-  constructor( protected containerService: ContainerService,
-               private pageStateService: PageStateService ) {
-    super( containerService );
-
-    this.setProgressSteps( incomeReviewPageRoutes );
-    this.pageStateService.setPages( incomeReviewPageRoutes, INCOME_REVIEW_PAGES );
+    this.setProgressSteps(incomeReviewPageRoutes);
+    this.pageStateService.setPages(incomeReviewPageRoutes, INCOME_REVIEW_PAGES);
   }
 
   ngOnDestroy(): void {

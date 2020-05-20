@@ -9,7 +9,7 @@ import {
   AbstractPageGuardService,
   LoadPageGuardService,
 } from 'moh-common-lib';
-
+import { CaptchaModule } from 'moh-common-lib/captcha';
 import { IncomeReviewRoutingModule } from './income-review-routing.module';
 import { IncomeReviewComponent } from './income-review.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -20,6 +20,7 @@ import { INCOME_REVIEW_PAGES } from './income-review.constants';
 import { ConsentComponent } from './pages/consent/consent.component';
 import { CollectionNoticeComponent } from './component/collection-notice/collection-notice.component';
 import { CollectionNoticeDirective } from './component/collection-notice/collection-notice.directive';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,13 @@ import { CollectionNoticeDirective } from './component/collection-notice/collect
     CollectionNoticeComponent,
     CollectionNoticeDirective,
   ],
-  imports: [CommonModule, SharedCoreModule, IncomeReviewRoutingModule],
+  imports: [
+    CommonModule,
+    SharedCoreModule,
+    IncomeReviewRoutingModule,
+    ModalModule.forRoot(),
+    CaptchaModule,
+  ],
   providers: [
     {
       provide: BYPASS_GUARDS,

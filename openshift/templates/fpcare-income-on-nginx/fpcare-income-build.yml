@@ -1,0 +1,47 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  creationTimestamp: '2020-05-20T17:34:40Z'
+  name: fpcare-income-build
+  namespace: moh-fpcare-tools
+  resourceVersion: '1800974101'
+  selfLink: >-
+    /apis/build.openshift.io/v1/namespaces/moh-fpcare-tools/buildconfigs/fpcare-income-build
+  uid: 2f30d5d6-9ac0-11ea-a8b6-005056832285
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'fpcare-income:latest'
+  postCommit: {}
+  resources:
+    limits:
+      cpu: '1'
+      memory: 4Gi
+    requests:
+      cpu: 100m
+      memory: 2Gi
+  runPolicy: Parallel
+  source:
+    git:
+      ref: master
+      uri: 'https://github.com/bcgov/moh-fpincome.git'
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'nodejs:10'
+        namespace: openshift
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+    - imageChange:
+        lastTriggeredImageID: >-
+          docker-registry.default.svc:5000/openshift/nodejs@sha256:91002d434b585df0262f0350fe91dac9adb3e56d6b9ccfea47ac91064f4513b7
+      type: ImageChange
+status:
+  lastVersion: 15
+

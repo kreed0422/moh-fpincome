@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "deployUrl": "/fpincome/",
+            "deployUrl": "/fpcare/",
             "outputPath": "dist/moh-fpincome",
             "index": "src/index.html",
             "main": "src/main.ts",

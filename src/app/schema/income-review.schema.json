@@ -1,0 +1,41 @@
+{
+  "id": "moh-fpincome/income-review.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "0.1.0",
+  "definitions": {
+    "DateType": {
+      "$comment": "Date as a string formatted YYYY-MM-DD",
+      "type": "string",
+      "pattern": "^[12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$"
+    },
+    "ReturnCodeType": {
+      "$comment": "Return code to indicate success (0), errror (1) or warning (2)",
+      "$type": "number"
+    }
+
+  },
+  "title": "Fair PharmaCare Income Review",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "applicatonUUUID": {
+      "$comment": "Unique identifier (input/output)",
+      "type": "string"
+    },
+    "submissionDate": {
+      "$comment": "Date the request was submitted for processing",
+      "$ref": "#/definitions/DateType"
+    },
+    "returnCode": {
+      "$comment": "Code returned in response to indicate status of request",
+      "$ref": "#/definitions/ReturnCodeType"
+    },
+    "referenceNumber": {
+      "$comment": "Reference number for the processed request",
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicatonUUUID"
+  ]
+}

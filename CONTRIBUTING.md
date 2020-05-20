@@ -17,14 +17,17 @@ Please note that:
   contains a succinct description of the change. It contains a  
   type, an optional scope, and a subject
 
-  - <type> describes the kind of change that this commit is  
-     providing. Allowed types are:
-    _ feat (feature)
-    _ fix (bug fix)
-    _ docs (documentation)
-    _ style (formatting, missing semicolons, ...)
-    _ refactor
-    _ test (when adding missing tests) \* chore (maintain)
+  - <type> describes the kind of change that this commit is
+
+    - providing. Allowed types are:
+    - feat (feature)
+    - fix (bug fix)
+    - docs (documentation)
+    - style (formatting, missing semicolons, ...)
+    - refactor
+    - test (when adding missing tests)
+    - chore (maintain)
+
   - <scope> can be anything specifying the place of the commit  
      change
   - <subject> is a very short description of the change

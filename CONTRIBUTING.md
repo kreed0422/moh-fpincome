@@ -17,9 +17,8 @@ Please note that:
   contains a succinct description of the change. It contains a  
   type, an optional scope, and a subject
 
-  - <type> describes the kind of change that this commit is
-
-    - providing. Allowed types are:
+  - <type> describes the kind of change that this commit is 
+  providing. Allowed types are:
     - feat (feature)
     - fix (bug fix)
     - docs (documentation)

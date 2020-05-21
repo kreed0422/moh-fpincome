@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BaseForm } from '../../models/base-form';
 import { Router } from '@angular/router';
 import { ContainerService, PageStateService } from 'moh-common-lib';
-import {
-  INCOME_REVIEW_PAGES,
-  FORM_SUBMIT_LABEL,
-} from '../../income-review.constants';
+import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
 
 @Component({

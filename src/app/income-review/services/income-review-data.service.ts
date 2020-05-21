@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { UUID } from 'angular2-uuid';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IncomeReviewDataService {
-
   /**
    * Application UUID sent in JSON message
    * TODO: Discussion with Jam how we want to do this (i.e. like MSP or FPCARE)
@@ -22,5 +21,9 @@ export class IncomeReviewDataService {
    */
   isPrintView: boolean = false;
 
-  constructor() { }
+  // Infomation for income review process
+  isRegistered: boolean;
+  isIncomeLess: boolean;
+
+  constructor() {}
 }

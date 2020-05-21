@@ -16,11 +16,11 @@ export const incomeReviewPageRoutes: Routes = [
     component: HomeComponent,
     data: { title: INCOME_REVIEW_PAGES.HOME.title },
   },
-  {
+  /* {
     path: INCOME_REVIEW_PAGES.REVIEW.path,
     component: ReviewComponent,
     data: { title: INCOME_REVIEW_PAGES.REVIEW.title },
-  },
+  },*/
   {
     path: INCOME_REVIEW_PAGES.CONSENT.path,
     component: ConsentComponent,

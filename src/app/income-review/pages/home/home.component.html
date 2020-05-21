@@ -1,5 +1,4 @@
-<p>home works!</p>
-
+<!-- INFORAMTION COLLECTION NOTICE DIALOG BOX -->
 <fpir-collection-notice #infoCollectionModal [isDisabled]="!hasConsent">
   <h2 collectModalTitle>Information Collection Notice</h2>
   <div collectModalBody>
@@ -37,3 +36,58 @@
     </div>
   </div>
 </fpir-collection-notice>
+
+<!-- HOME PAGE -->
+<h1>Title H1</h1>
+
+<div class="pb-4">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat ut
+  velit id fermentum. Integer sit amet turpis sit amet nisl feugiat mattis.
+  Curabitur maximus sapien eget diam tincidunt, in euismod ante viverra.
+</div>
+
+<div class="pb-4">
+  <strong>Who can complete this form?</strong><br />
+  Maecenas at neque volutpat, vulputate orci id, sodales odio. Proin sed
+  pellentesque nibh, vitae fringilla nisl. Pellentesque gravida feugiat pretium.
+  Mauris a neque volutpat, volutpat sapien a, vehicula quam.
+</div>
+
+<div class="pb-4">
+  <strong>What can the form be used for?</strong><br />
+  Donec varius enim sit amet tellus tristique dictum.<br />
+  <ul>
+    <li>Nullam pellentesque lacus sed orci fringilla</li>
+    <li>Sit amet imperdiet arcu tempor. Proin aliquam venenatis ultrices.</li>
+  </ul>
+</div>
+
+<div>
+  <strong>What do you need to fill ou this form?</strong><br />
+  Duis porta mauris dolor, vitae gravida enim tristique sed. Nulla porttitor
+  accumsan convallis. Donec eleifend tellus bibendum vestibulum eleifend. Ut
+  dapibus, risus ac lacinia mollis, tortor sem dictum orci, non pulvinar elit
+  lectus nec magna.
+</div>
+
+<form [formGroup]="formGroup">
+  <h2 class="border-bottom">Fair PharmaCare Registration</h2>
+  <common-page-section layout="tips">
+    <common-radio
+      formControlName="isRegistered"
+      name="isRegistered"
+      [label]="isRegisteredQuestion"
+      display="table-row-group"
+    ></common-radio>
+  </common-page-section>
+
+  <h2 class="border-bottom">Income Requirements</h2>
+  <common-page-section layout="tips">
+    <common-radio
+      formControlName="isIncomeLess"
+      name="isIncomeLess"
+      [label]="isIncomeLessQuestion"
+      display="table-row-group"
+    ></common-radio>
+  </common-page-section>
+</form>

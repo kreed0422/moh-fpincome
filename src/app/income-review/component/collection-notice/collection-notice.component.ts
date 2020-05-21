@@ -5,7 +5,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 @Component({
   selector: 'fpir-collection-notice',
   templateUrl: './collection-notice.component.html',
-  styleUrls: ['./collection-notice.component.scss'],
 })
 export class CollectionNoticeComponent extends Base {
   @Input() isDisabled: boolean = false;

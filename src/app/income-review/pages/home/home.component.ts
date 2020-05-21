@@ -8,12 +8,11 @@ import { CollectionNoticeComponent } from '../../component/collection-notice/col
 import { environment } from '../../../../environments/environment';
 import { UUID } from 'angular2-uuid';
 import { IncomeReviewApiService } from '../../services/income-review-api.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'fpir-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   @ViewChild('infoCollectionModal', { static: true })

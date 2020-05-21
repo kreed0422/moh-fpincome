@@ -18,7 +18,7 @@
   "description": "",
   "type": "object",
   "properties": {
-    "applicatonUUUID": {
+    "applicatonUUID": {
       "$comment": "Unique identifier (input/output)",
       "type": "string"
     },
@@ -36,6 +36,6 @@
     }
   },
   "required": [
-    "applicatonUUUID"
+    "applicatonUUID"
   ]
 }

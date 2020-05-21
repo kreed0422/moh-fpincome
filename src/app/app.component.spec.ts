@@ -6,6 +6,7 @@ import { SharedCoreModule } from 'moh-common-lib';
 
 import { AppComponent } from './app.component';
 import { APP_TITLE } from './app.constants';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -13,11 +14,11 @@ describe('AppComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        SharedCoreModule
+        SharedCoreModule,
+        FormsModule,
+        ReactiveFormsModule,
       ],
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent],
     }).compileComponents();
   }));
 

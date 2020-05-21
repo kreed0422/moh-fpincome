@@ -8,6 +8,7 @@ import { CollectionNoticeComponent } from '../../component/collection-notice/col
 import { environment } from '../../../../environments/environment';
 import { UUID } from 'angular2-uuid';
 import { IncomeReviewApiService } from '../../services/income-review-api.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'fpir-home',
@@ -24,14 +25,18 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   // Use the UUID as a cryptographic client nonce to avoid replay attacks.
   nonce: string = UUID.UUID();
 
-  private _hasToken: boolean = false;
+  // Radio button questions
+  isRegisteredQuestion: string = 'Are you registered for Fair PharmaCare?';
+  isIncomeLessQuestion: string =
+    'Is your net income for last year or this year at least 10% less than your income from two years ago?';
 
   constructor(
     protected router: Router,
     protected containerService: ContainerService,
     protected pageStateService: PageStateService,
     private incomeReviewDataService: IncomeReviewDataService,
-    private incomeReviewApiService: IncomeReviewApiService
+    private incomeReviewApiService: IncomeReviewApiService,
+    private fb: FormBuilder
   ) {
     super(router, containerService, pageStateService);
   }
@@ -40,8 +45,30 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
     return this.incomeReviewDataService.informationCollectionNoticeConsent;
   }
 
+  ngOnInit() {
+    super.ngOnInit();
+    this.formGroup = this.fb.group({
+      isRegistered: [
+        this.incomeReviewDataService.isRegistered,
+        Validators.required,
+      ],
+      isIncomeLess: [
+        this.incomeReviewDataService.isIncomeLess,
+        Validators.required,
+      ],
+    });
+  }
+
   ngAfterViewInit() {
     super.ngAfterViewInit();
+
+    // subscrib to value changes
+    this.formGroup.controls.isRegistered.valueChanges.subscribe(
+      (val) => (this.incomeReviewDataService.isRegistered = val)
+    );
+    this.formGroup.controls.isIncomeLess.valueChanges.subscribe(
+      (val) => (this.incomeReviewDataService.isIncomeLess = val)
+    );
 
     // Individual has not consented to collection notice
     if (!this.incomeReviewDataService.informationCollectionNoticeConsent) {
@@ -50,13 +77,17 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   }
 
   setToken(token: string): void {
-    this._hasToken = true;
     this.incomeReviewApiService.setCaptchaToken(token);
     this.incomeReviewDataService.informationCollectionNoticeConsent = true;
   }
 
   continue() {
-    console.log('continue ');
-    this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
+    this.markAllInputsTouched();
+    if (
+      this.canContinue() &&
+      this.incomeReviewDataService.informationCollectionNoticeConsent
+    ) {
+      this.navigate(INCOME_REVIEW_PAGES.CONSENT.fullpath);
+    }
   }
 }

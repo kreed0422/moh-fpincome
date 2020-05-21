@@ -21,6 +21,7 @@ import { ConsentComponent } from './pages/consent/consent.component';
 import { CollectionNoticeComponent } from './component/collection-notice/collection-notice.component';
 import { CollectionNoticeDirective } from './component/collection-notice/collection-notice.directive';
 import { ModalModule } from 'ngx-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,8 @@ import { ModalModule } from 'ngx-bootstrap';
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     SharedCoreModule,
     IncomeReviewRoutingModule,
     ModalModule.forRoot(),

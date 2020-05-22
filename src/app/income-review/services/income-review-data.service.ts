@@ -31,5 +31,13 @@ export class IncomeReviewDataService {
 
   hasSpouse: boolean;
 
+  // Payload for application
+  get applicationPayload() {
+    return {
+      applicationUUID: this.applicationUUID,
+      submissionDate: this.dateOfSubmission,
+    };
+  }
+
   constructor() {}
 }

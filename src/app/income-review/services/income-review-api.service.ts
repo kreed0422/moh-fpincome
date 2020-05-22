@@ -35,6 +35,16 @@ export class IncomeReviewApiService extends AbstractHttpService {
     });
   }
 
+  /**
+   *
+   * @param jsonPayLoad Information for income review application
+   */
+  public submitApplication(jsonPayLoad: any) {
+    // TODO: Update url when Jing gets middleware ready for initial round trip
+    const url = `${environment.api.baseAPIUrl}/submitApplication`;
+    return this.post(url, jsonPayLoad);
+  }
+
   protected handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // Client-side / network error occured

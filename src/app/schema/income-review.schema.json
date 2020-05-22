@@ -1,7 +1,7 @@
 {
   "id": "moh-fpincome/income-review.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "definitions": {
     "DateType": {
       "$comment": "Date as a string formatted YYYY-MM-DD",
@@ -9,8 +9,8 @@
       "pattern": "^[12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$"
     },
     "ReturnCodeType": {
-      "$comment": "Return code to indicate success (0), errror (1) or warning (2)",
-      "$type": "number"
+      "$comment": "Return code to indicate success ('0)', errror ('1') or warning ('2')",
+      "$type": "string"
     }
 
   },
@@ -18,7 +18,7 @@
   "description": "",
   "type": "object",
   "properties": {
-    "applicatonUUID": {
+    "applicationUUID": {
       "$comment": "Unique identifier (input/output)",
       "type": "string"
     },
@@ -36,6 +36,6 @@
     }
   },
   "required": [
-    "applicatonUUID"
+    "applicationUUID"
   ]
 }

@@ -7,7 +7,8 @@ export const environment = {
   api: {
     envServerUrl: '/fpcare/api/env', // spa-env service - splash page information
     loggingURL: '/fpcare/api/logging', // splunk forwarder service
-    captchaURL: '/fpcare/api/captcha', // captcha for authorization
+    captchaBaseURL: '/fpcare/api/captcha', // captcha for authorization
+    baseAPIUrl: '/fpcare/api/fpcareIncomeIntegration/rest/', // middleware url to send requests
   },
 
   /**

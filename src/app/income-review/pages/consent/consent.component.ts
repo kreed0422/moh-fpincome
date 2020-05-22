@@ -12,7 +12,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 @Component({
   selector: 'fpir-consent',
   templateUrl: './consent.component.html',
-  styleUrls: ['./consent.component.scss'],
 })
 export class ConsentComponent extends BaseForm
   implements OnInit, AfterViewInit {

@@ -5,9 +5,9 @@ import {
   HttpHeaders,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { throwError, BehaviorSubject, Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { retry, filter } from 'rxjs/operators';
+import { retry } from 'rxjs/operators';
 import { FPIR_SPA_ENV_CONFIG, SpaEnvResponse } from '../app.constants';
 import { SplunkLoggingService } from './splunk-logging.service';
 

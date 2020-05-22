@@ -25,5 +25,11 @@ export class IncomeReviewDataService {
   isRegistered: boolean;
   isIncomeLess: boolean;
 
+  // Consent (checkboxes)
+  registrantConsent: boolean = false;
+  spouseConsent: boolean = false;
+
+  hasSpouse: boolean;
+
   constructor() {}
 }

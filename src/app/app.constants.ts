@@ -1,12 +1,11 @@
-
 // Route constants for main app
 export const APP_ROUTES = {
   income_review: 'income-review',
-  maintenance: 'maintenance'
+  maintenance: 'maintenance',
 };
 
 // Title to be displayed in banner
-export const APP_TITLE = 'Fair PharmaCare Income Review';
+export const APP_TITLE = 'Application for Income Review for Fair PharmaCare';
 export const TAB_APP_TITLE = 'FPC Income Review';
 
 /**

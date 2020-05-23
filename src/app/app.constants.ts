@@ -5,7 +5,8 @@ export const APP_ROUTES = {
 };
 
 // Title to be displayed in banner
-export const APP_TITLE = 'Application for Income Review for Fair PharmaCare';
+export const APP_TITLE =
+  'Application for Income Review (COVID-19) for Fair PharmaCare';
 export const TAB_APP_TITLE = 'FPC Income Review';
 
 /**

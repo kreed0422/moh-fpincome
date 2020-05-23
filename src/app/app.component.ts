@@ -13,19 +13,24 @@ import * as version from '../version.GENERATED';
 @Component({
   selector: 'fpir-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   appTitle = APP_TITLE;
 
-  constructor( private titleService: Title,
-               private router: Router,
-               private splunkLogging: SplunkLoggingService,
-               private activatedRoute: ActivatedRoute,
-               private splashPageService: SplashPageService ) {
+  constructor(
+    private titleService: Title,
+    private router: Router,
+    private splunkLogging: SplunkLoggingService,
+    private activatedRoute: ActivatedRoute,
+    private splashPageService: SplashPageService
+  ) {
     version.success
-    ? console.log('%c' + version.message, 'color: #036; font-size: 20px; background-color: white;')
-    : console.error(version.message);
+      ? console.log(
+          '%c' + version.message,
+          'color: #036; font-size: 20px; background-color: white;'
+        )
+      : console.error(version.message);
   }
 
   ngOnInit() {
@@ -37,12 +42,16 @@ export class AppComponent implements OnInit {
   private setTitle(title?: string) {
     let tabTitle = TAB_APP_TITLE;
 
-    if ( title ) {
-      tabTitle = tabTitle.concat( '|' + title );
+    if (title) {
+      const _title = title
+        .split('-')
+        .map((x) => x[0].toUpperCase() + x.slice(1))
+        .join(' ');
+      tabTitle = tabTitle.concat('|' + _title);
     }
 
     // If title is null, use default title
-    this.titleService.setTitle( tabTitle );
+    this.titleService.setTitle(tabTitle);
   }
 
   /**
@@ -50,24 +59,26 @@ export class AppComponent implements OnInit {
    * 'title' property in the route's data.
    */
   private updateTitleOnRouteChange() {
-    this.router.events.pipe(
-      filter( event => event instanceof NavigationEnd ),
-        map( () => this.activatedRoute),
-        map( route => {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map(() => this.activatedRoute),
+        map((route) => {
           while (route.firstChild) {
             route = route.firstChild;
           }
           return route;
         }),
-      filter( route => route.outlet === 'primary'),
-      mergeMap(route => route.data)
-    ).subscribe((data: { title?: string }) => {
-      this.setTitle(data.title);
-      this.splunkLogging.log({
-        event: CommonLogEvents.navigation,
-        title: data.title ? data.title : this.appTitle,
-        url: this.router.url,
+        filter((route) => route.outlet === 'primary'),
+        mergeMap((route) => route.data)
+      )
+      .subscribe((data: { title?: string }) => {
+        this.setTitle(data.title);
+        this.splunkLogging.log({
+          event: CommonLogEvents.navigation,
+          title: data.title ? data.title : this.appTitle,
+          url: this.router.url,
+        });
       });
-    });
   }
 }

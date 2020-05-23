@@ -1,31 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { format } from 'date-fns';
 import { Base, ApiStatusCodes, PageStateService } from 'moh-common-lib';
 
-import { SUCCESSFUL_CONFIRMATION_MSG, ERROR_CONFIRMATION_MSG, INCOME_REVIEW_PAGES } from '../../income-review.constants';
+import {
+  SUCCESSFUL_CONFIRMATION_MSG,
+  ERROR_CONFIRMATION_MSG,
+} from '../../income-review.constants';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
+import { ReviewContainerComponent } from '../../component/review-container/review-container.component';
 
 @Component({
   selector: 'fpir-confirmation',
   templateUrl: './confirmation.component.html',
-  styleUrls: ['./confirmation.component.scss']
+  styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent extends Base implements OnInit {
+  @ViewChild('personalInfo', { static: true })
+  personalInfo: ReviewContainerComponent;
+  @ViewChild('grossIncome', { static: true })
+  grossIncome: ReviewContainerComponent;
+  @ViewChild('supportDocs', { static: true })
+  supportDocs: ReviewContainerComponent;
+
+  readonly printView: boolean = true;
 
   // Default to error state - NOTE: set to ERROR, when start coding logic
   displayIcon: ApiStatusCodes = ApiStatusCodes.SUCCESS;
 
-  constructor( private pageStateService: PageStateService,
-               private incomeReviewDataService: IncomeReviewDataService ) {
+  pageTitle: string = 'Confirmation Message';
+
+  constructor(
+    private pageStateService: PageStateService,
+    private incomeReviewDataService: IncomeReviewDataService
+  ) {
     super();
   }
 
   ngOnInit() {
     this.pageStateService.clearCompletePages();
 
-    // Set isPrintView to true
-    this.incomeReviewDataService.isPrintView = true;
+    this.personalInfo.reviewObject = this.incomeReviewDataService.getPersonalInformationSection(
+      this.printView
+    );
+    this.grossIncome.reviewObject = this.incomeReviewDataService.getGrossIncomeSection(
+      this.printView
+    );
+    this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection(
+      this.printView
+    );
   }
 
   get isError() {
@@ -33,7 +56,9 @@ export class ConfirmationComponent extends Base implements OnInit {
   }
 
   get confirmationMessage() {
-    return this.displayIcon === ApiStatusCodes.SUCCESS ? SUCCESSFUL_CONFIRMATION_MSG : ERROR_CONFIRMATION_MSG;
+    return this.displayIcon === ApiStatusCodes.SUCCESS
+      ? SUCCESSFUL_CONFIRMATION_MSG
+      : ERROR_CONFIRMATION_MSG;
   }
 
   get referenceNumber() {
@@ -42,15 +67,10 @@ export class ConfirmationComponent extends Base implements OnInit {
 
   get submissionDate() {
     const dt = new Date();
-    return format( dt, 'MMMM dd, yyyy' );
+    return format(dt, 'MMMM dd, yyyy');
   }
 
-  // Title for route
-  get pageTitle() {
-    return INCOME_REVIEW_PAGES.CONFIRMATION.title;
-  }
-
-  print( event: Event ) {
+  print(event: Event) {
     window.print();
     event.stopPropagation();
     return false;

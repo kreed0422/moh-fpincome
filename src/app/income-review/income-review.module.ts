@@ -22,6 +22,7 @@ import { CollectionNoticeComponent } from './component/collection-notice/collect
 import { CollectionNoticeDirective } from './component/collection-notice/collection-notice.directive';
 import { ModalModule } from 'ngx-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReviewContainerComponent } from './component/review-container/review-container.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ConsentComponent,
     CollectionNoticeComponent,
     CollectionNoticeDirective,
+    ReviewContainerComponent,
   ],
   imports: [
     CommonModule,

@@ -86,7 +86,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
       this.canContinue() &&
       this.incomeReviewDataService.informationCollectionNoticeConsent
     ) {
-      this.navigate(INCOME_REVIEW_PAGES.CONSENT.fullpath);
+      this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
     }
   }
 }

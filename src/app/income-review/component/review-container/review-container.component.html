@@ -1,0 +1,33 @@
+<div *ngIf="reviewObject" class="review--container">
+  <!-- Section: Heading -->
+  <div class="row review--heading border-bottom">
+    <div class="col-md-10 pl-0 ml-0">
+      <h2>{{ reviewObject.heading }}</h2>
+    </div>
+    <div *ngIf="!reviewObject.isPrintView" class="col-md-2 review--icon">
+      <button class="btn btn-edit" (click)="redirectURL()" aria-label="Edit">
+        Edit <i class="fa fa-pencil fa-lg pl-2" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="review--background-color pt-2 pb-2 pl-4">
+    <div class="review--subheading" *ngIf="reviewObject.subHeading">
+      {{ reviewObject.subHeading }}
+    </div>
+    <div *ngFor="let item of reviewObject.sectionItems; let idx = index">
+      <div class="row review--row mb-2">
+        <div class="col-md-4 review--key" [innerHTML]="item.label"></div>
+        <div
+          class="{{ item.extraInfo ? 'col-md-4' : 'col-md-8' }}"
+          [innerHTML]="item.value"
+        ></div>
+        <div
+          class="col-md-4"
+          *ngIf="item.extraInfo"
+          [innerHTML]="item.extraInfo"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>

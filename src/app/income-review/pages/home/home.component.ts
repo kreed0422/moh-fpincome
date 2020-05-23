@@ -19,7 +19,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   infoCollectionModal: CollectionNoticeComponent;
 
   // Value never changed, but can be read outside class
-  readonly captchaApiUrl = environment.api.captchaURL;
+  readonly captchaApiUrl = environment.api.captchaBaseURL;
 
   // Use the UUID as a cryptographic client nonce to avoid replay attacks.
   nonce: string = UUID.UUID();
@@ -86,7 +86,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
       this.canContinue() &&
       this.incomeReviewDataService.informationCollectionNoticeConsent
     ) {
-      this.navigate(INCOME_REVIEW_PAGES.CONSENT.fullpath);
+      this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
     }
   }
 }

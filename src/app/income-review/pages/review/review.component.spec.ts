@@ -5,7 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedCoreModule } from 'moh-common-lib';
 
 import { ReviewComponent } from './review.component';
-
+import { ReviewContainerComponent } from '../../component/review-container/review-container.component';
 
 describe('ReviewComponent', () => {
   let component: ReviewComponent;
@@ -13,17 +13,14 @@ describe('ReviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ReviewComponent
-      ],
+      declarations: [ReviewContainerComponent, ReviewComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        SharedCoreModule
-      ]
-    })
-    .compileComponents();
+        SharedCoreModule,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

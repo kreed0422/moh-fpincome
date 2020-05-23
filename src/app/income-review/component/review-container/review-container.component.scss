@@ -1,0 +1,34 @@
+.review--heading {
+  margin-left: 0px;
+  margin-right: auto;
+  margin-bottom: 0.5rem;
+
+  padding-left: 0px;
+  word-wrap: break-word;
+}
+
+.review--icon {
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: 0px;
+  padding-right: 0px;
+  text-align: right;
+  align-items: right;
+}
+
+.review--row > div {
+  margin-top: 0.5rem;
+}
+.review--subheading {
+  font-weight: bold;
+}
+
+.review--background-color {
+  background-color: #f2f2f2;
+}
+
+@media print {
+  :host .review--container {
+    page-break-inside: avoid;
+  }
+}

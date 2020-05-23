@@ -2,10 +2,13 @@ import { APP_ROUTES } from '../app.constants';
 
 /** Name of each page */
 const PAGE_NAMES = {
-  home: 'Requirements',
-  review: 'Review',
-  consent: 'Consent',
-  confirmation: 'Confirmation',
+  home: 'requirements',
+  personalInfo: 'personal-info',
+  grossIncome: 'gross-income',
+  supportDocs: 'supporting-docs',
+  review: 'review',
+  consent: 'consent',
+  confirmation: 'confirmation',
 };
 
 /** Page route information */

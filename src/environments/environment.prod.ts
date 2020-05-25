@@ -16,7 +16,7 @@ export const environment = {
    */
   links: {
     mspSuppBenefits: 'https://www.gov.bc.ca/MSP/supplementarybenefits',
-    hlth5255: 'https://www2.gov.bc.ca/assets/gov/health/forms/5255fil.pdf',
+    hlth5355: 'https://www2.gov.bc.ca/assets/gov/health/forms/5355fil.pdf',
   },
 
   /**

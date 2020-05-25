@@ -40,8 +40,8 @@ export class IncomeReviewApiService extends AbstractHttpService {
    * @param jsonPayLoad Information for income review application
    */
   public submitApplication(jsonPayLoad: any) {
-    // TODO: Update url when Jing gets middleware ready for initial round trip
-    const url = `${environment.api.baseAPIUrl}/submitApplication`;
+    // TODO: Inital Request - to be updated in next sprint
+    const url = `${environment.api.baseAPIUrl}/initialRequest`;
     return this.post(url, jsonPayLoad);
   }
 

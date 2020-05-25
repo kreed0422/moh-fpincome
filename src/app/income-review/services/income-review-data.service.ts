@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { UUID } from 'angular2-uuid';
 import { ReviewObject } from '../component/review-container/review-container.component';
-import { INCOME_REVIEW_PAGES } from '../income-review.constants';
+import { ServerPayload } from '../models/review-income-api';
+import { formatISO } from 'date-fns';
 
 @Injectable({
   providedIn: 'root',
@@ -28,11 +29,17 @@ export class IncomeReviewDataService {
 
   hasSpouse: boolean;
 
+  applicationResponse: ServerPayload;
+
   // Payload for application
   get applicationPayload() {
+    // Create date
+    this.dateOfSubmission = new Date();
     return {
       applicationUUID: this.applicationUUID,
-      submissionDate: this.dateOfSubmission,
+      submissionDate: formatISO(this.dateOfSubmission, {
+        representation: 'date',
+      }),
     };
   }
 

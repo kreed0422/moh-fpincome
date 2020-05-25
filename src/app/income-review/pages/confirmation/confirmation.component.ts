@@ -25,8 +25,8 @@ export class ConfirmationComponent extends Base implements OnInit {
 
   readonly printView: boolean = true;
 
-  // Default to error state - NOTE: set to ERROR, when start coding logic
-  displayIcon: ApiStatusCodes = ApiStatusCodes.SUCCESS;
+  // Default to error state
+  displayIcon: ApiStatusCodes = ApiStatusCodes.ERROR;
 
   pageTitle: string = 'Confirmation Message';
 
@@ -38,6 +38,14 @@ export class ConfirmationComponent extends Base implements OnInit {
   }
 
   ngOnInit() {
+    console.log(
+      'application response: ',
+      this.incomeReviewDataService.applicationResponse
+    );
+    if (this.incomeReviewDataService.applicationResponse) {
+      this.displayIcon = this.incomeReviewDataService.applicationResponse.returnCode;
+    }
+
     this.pageStateService.clearCompletePages();
 
     this.personalInfo.reviewObject = this.incomeReviewDataService.getPersonalInformationSection(
@@ -62,7 +70,7 @@ export class ConfirmationComponent extends Base implements OnInit {
   }
 
   get referenceNumber() {
-    return 'REF#1234';
+    return this.incomeReviewDataService.applicationResponse.referenceNumber;
   }
 
   get submissionDate() {

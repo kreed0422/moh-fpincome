@@ -23,6 +23,7 @@ import { CollectionNoticeDirective } from './component/collection-notice/collect
 import { ModalModule } from 'ngx-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReviewContainerComponent } from './component/review-container/review-container.component';
+import { PersonalInfoComponent } from './pages/personal-info/personal-info.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ReviewContainerComponent } from './component/review-container/review-co
     CollectionNoticeComponent,
     CollectionNoticeDirective,
     ReviewContainerComponent,
+    PersonalInfoComponent,
   ],
   imports: [
     CommonModule,

@@ -30,7 +30,7 @@
     "bootstrap": "^4.4.1",
     "date-fns": "^2.13.0",
     "font-awesome": "^4.7.0",
-    "moh-common-lib": "^3.0.13",
+    "moh-common-lib": "^3.0.14",
     "moment": "^2.25.3",
     "mygovbc-bootstrap-theme": "^0.4.1",
     "ngx-bootstrap": "~5.1.2",

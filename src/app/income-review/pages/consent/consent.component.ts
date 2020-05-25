@@ -15,10 +15,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class ConsentComponent extends BaseForm
   implements OnInit, AfterViewInit {
-  registrantConsentStmt: string =
-    'I consent [Registrant Name} more text here....';
-  spouseConsentStmt: string =
-    'I consent [Signature of Spouse/ Common-Law partner] more text here....';
+  registrantConsentStmt: string = 'I consent [Registrant Name]';
+  spouseConsentStmt: string = 'I consent [Spouse/ Common-Law partner]';
 
   constructor(
     protected router: Router,

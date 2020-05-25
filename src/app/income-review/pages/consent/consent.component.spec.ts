@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedCoreModule } from 'moh-common-lib';
 
 import { ConsentComponent } from './consent.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ConsentComponent', () => {
   let component: ConsentComponent;
@@ -17,6 +18,7 @@ describe('ConsentComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         SharedCoreModule,
+        HttpClientTestingModule,
       ],
     }).compileComponents();
   }));

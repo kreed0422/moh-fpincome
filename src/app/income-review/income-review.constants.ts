@@ -18,6 +18,11 @@ export const INCOME_REVIEW_PAGES = {
     fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.home}`,
     title: PAGE_NAMES.home,
   },
+  PERSONAL_INFO: {
+    path: PAGE_NAMES.personalInfo,
+    fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.personalInfo}`,
+    title: PAGE_NAMES.personalInfo,
+  },
   REVIEW: {
     path: PAGE_NAMES.review,
     fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.review}`,

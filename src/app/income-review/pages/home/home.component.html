@@ -38,36 +38,63 @@
 </fpir-collection-notice>
 
 <!-- HOME PAGE -->
-<h1>Title H1</h1>
+<h1>Use this form if:</h1>
 
 <div class="pb-4">
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat ut
-  velit id fermentum. Integer sit amet turpis sit amet nisl feugiat mattis.
-  Curabitur maximus sapien eget diam tincidunt, in euismod ante viverra.
-</div>
-
-<div class="pb-4">
-  <strong>Who can complete this form?</strong><br />
-  Maecenas at neque volutpat, vulputate orci id, sodales odio. Proin sed
-  pellentesque nibh, vitae fringilla nisl. Pellentesque gravida feugiat pretium.
-  Mauris a neque volutpat, volutpat sapien a, vehicula quam.
-</div>
-
-<div class="pb-4">
-  <strong>What can the form be used for?</strong><br />
-  Donec varius enim sit amet tellus tristique dictum.<br />
   <ul>
-    <li>Nullam pellentesque lacus sed orci fringilla</li>
-    <li>Sit amet imperdiet arcu tempor. Proin aliquam venenatis ultrices.</li>
+    <li>You have already registered for Fair PharmaCare; and</li>
+    <li>
+      You have experienced layoff, loss of employment or other reduction of
+      income resulting from the COVID-19 pandemic; and
+    </li>
+    <li>
+      Your anticipated gross income for this year will be at least 10% less than
+      your income from two years ago as verified by the Canada Revenue Agency.
+    </li>
   </ul>
+  For income reviews not related to COVID-19, use Fair PharmaCare Plan:
+  Application for Income Review (HLTH 5355).
 </div>
 
 <div>
-  <strong>What do you need to fill ou this form?</strong><br />
-  Duis porta mauris dolor, vitae gravida enim tristique sed. Nulla porttitor
-  accumsan convallis. Donec eleifend tellus bibendum vestibulum eleifend. Ut
-  dapibus, risus ac lacinia mollis, tortor sem dictum orci, non pulvinar elit
-  lectus nec magna.
+  <strong>IMPORTANT:</strong><br />
+  <ul>
+    <li>
+      If you are unable to provide required supporting documents, you must
+      submit a letter signed by you (and your spouse, including common-law
+      partner, if applicable) declaring the following:<br />
+      <ul>
+        <li>
+          The types of document(s) you are unable to provide and why they are
+          not available;
+        </li>
+        <li>
+          the source of the income received, e.g., Canadian Emergency Response
+          Benefit (CERB) (see p. 2, Include your supporting documents);
+        </li>
+        <li>the gross income you received from this source each month;</li>
+        <li>
+          how many months of the year you have received this income, and how
+          many additional months you expect to receive it;
+        </li>
+        <li>
+          Note: the letter of declaration is only for documents you are unable
+          to obtain. You must try to obtain all required documents.
+        </li>
+      </ul>
+    </li>
+    <li>
+      To request more assistance for this year, your application and supporting
+      documents must be received no later than December 31 of this year. You
+      cannot request more assistance for a previous year.
+    </li>
+    <li>
+      For more information, visit
+      <a href="{{ mspSuppBenefits }}" target="_blank" rel="noopener noreferrer"
+        >www.gov.bc.ca/MSP/supplementarybenefits</a
+      >.
+    </li>
+  </ul>
 </div>
 
 <form [formGroup]="formGroup">
@@ -90,4 +117,8 @@
       display="table-row-group"
     ></common-radio>
   </common-page-section>
+
+  <common-error-container [displayError]="!isEligible && isTouched">
+    You are not eligible to apply for Fair PharmaCare Income Review.
+  </common-error-container>
 </form>

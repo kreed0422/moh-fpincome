@@ -20,6 +20,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   // Value never changed, but can be read outside class
   readonly captchaApiUrl = environment.api.captchaBaseURL;
+  readonly mspSuppBenefits = environment.links.mspSuppBenefits;
 
   // Use the UUID as a cryptographic client nonce to avoid replay attacks.
   nonce: string = UUID.UUID();
@@ -42,6 +43,27 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   get hasConsent() {
     return this.incomeReviewDataService.informationCollectionNoticeConsent;
+  }
+
+  get isEligible() {
+    return (
+      this.incomeReviewDataService.isRegistered &&
+      this.incomeReviewDataService.isIncomeLess
+    );
+  }
+
+  get isTouched() {
+    let _touched =
+      this.formGroup.controls.isRegistered.value !== null &&
+      this.formGroup.controls.isIncomeLess.value !== null;
+
+    if (_touched) {
+      _touched =
+        this.formGroup.controls.isRegistered.touched &&
+        this.formGroup.controls.isIncomeLess.touched;
+    }
+
+    return _touched;
   }
 
   ngOnInit() {
@@ -84,7 +106,8 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
     this.markAllInputsTouched();
     if (
       this.canContinue() &&
-      this.incomeReviewDataService.informationCollectionNoticeConsent
+      this.incomeReviewDataService.informationCollectionNoticeConsent &&
+      this.isEligible
     ) {
       this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
     }

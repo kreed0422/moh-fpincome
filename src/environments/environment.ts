@@ -16,6 +16,13 @@ export const environment = {
   },
 
   /**
+   * URL links for other sites
+   */
+  links: {
+    mspSuppBenefits: 'https://www.gov.bc.ca/MSP/supplementarybenefits',
+  },
+
+  /**
    * assist with development - turned off for production
    */
   developmentMode: {

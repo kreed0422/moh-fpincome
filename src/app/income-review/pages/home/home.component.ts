@@ -21,6 +21,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   // Value never changed, but can be read outside class
   readonly captchaApiUrl = environment.api.captchaBaseURL;
   readonly mspSuppBenefits = environment.links.mspSuppBenefits;
+  readonly hlth5355 = environment.links.hlth5355;
 
   // Use the UUID as a cryptographic client nonce to avoid replay attacks.
   nonce: string = UUID.UUID();

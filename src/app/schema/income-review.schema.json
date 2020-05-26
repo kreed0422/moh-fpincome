@@ -1,30 +1,230 @@
 {
   "id": "moh-fpincome/income-review.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "definitions": {
     "DateType": {
       "$comment": "Date as a string formatted YYYY-MM-DD",
       "type": "string",
       "pattern": "^[12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$"
     },
+    "CurrencyType": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 99999.99
+    },
+    "IncomeInfoType": {
+      "$comment": "Financial information for income review",
+      "type": "object",
+      "properties": {
+        "originalIncome": {
+          "$comment": "Before reduction of income",
+          "$ref": "#/definitions/CurrencyType"
+        },
+        "reducedIncome":  {
+          "$comment": "During reduction of income",
+          "$ref": "#/definitions/CurrencyType"
+        },
+        "remainderIncome":  {
+          "$comment": "Remainder of the year",
+          "$ref": "#/definitions/CurrencyType"
+        },
+        "subtotal":  {
+          "$comment": "Subtotal of income information, present only if multiple IncomeInfoType objects",
+          "$ref": "#/definitions/CurrencyType"
+        }
+      },
+      "required": [
+        "originalIncome",
+        "reducedIncome",
+        "remainderIncome"
+      ]
+    },
+    "AddressType": {
+      "$omment": "Person's mailing addresss",
+      "type": "object",
+      "properties": {
+        "street": {
+          "$comment": "Street address, rural route or PO Box",
+          "type": "string",
+          "maxLength": 50
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 25
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 10
+        }
+      },
+      "required": [
+        "street",
+        "city",
+        "postalCode"
+      ]
+    },
+    "PersonType": {
+      "$comment": "Person object",
+      "type":"object",
+      "properties":{
+        "firstName": {
+          "$comment": "Given or first name of person",
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z-.' ]*$",
+          "maxLength": 20
+        },
+        "lastName": {
+          "$comment": "Surname of person",
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z-.' ]*$",
+          "maxLength": 35
+        },
+        "phn": {
+          "$comment": "Personal Health Number",
+          "type":"string",
+          "pattern":"^[0-9]{10})",
+          "minLength": 10,
+          "maxLength": 10
+        },
+        "address": {
+          "$comment": "Required for applicant",
+          "$ref": "#/definitions/AddressType"
+        }
+      },
+      "required": [
+        "firstName",
+        "lastName",
+        "phn"
+      ]
+    },
+    "UUIDType": {
+      "$comment": "",
+      "type": "string",
+      "minLength": 36,
+      "maxLength": 36
+    },
+    "ContentType":{
+      "type":"string",
+      "enum":[
+        "image/jpeg",
+        "application/pdf"
+      ]
+    },
+    "AttachmentType": {
+      "$comment": "Document attachments",
+      "type": "object",
+      "properties": {
+        "contentType":{
+          "$comment": "Type of document",
+          "$ref": "#/definitions/ContentType"
+        },
+        "attachmentDocumentType": {
+          "$comment": "Type of document - SUPPORTDOCUMENT",
+          "type": "string",
+          "minLength":1
+        },
+        "attachmentUuid": {
+          "$comment": "Unique identifier for attachment",
+          "$ref": "#/definitions/UUIDType"
+        },
+        "attachmentOrder":{
+          "$comment": "Order of documents",
+          "type":"string"
+        }
+      },
+      "required":[
+        "attachmentDocumentType",
+        "attachmentUuid"
+      ]
+    },
     "ReturnCodeType": {
       "$comment": "Return code to indicate success ('0)', errror ('1') or warning ('2')",
       "$type": "string"
+    },
+    "fpcIncomeReviewCovid19Type": {
+      "$comment": "",
+      "type": "object",
+      "properties": {
+        "informationConsentAgreement": {
+          "$comment": "Flag to indicate agreement to collection of information",
+          "type": "boolean"
+        },
+        "submissionDate": {
+          "$comment": "Date the application was submitted for processing",
+          "$ref": "#/definitions/DateType"
+        },
+        "applicant": {
+          "$comment": "Individual applying for income review",
+          "$ref": "#/definitions/PersonType"
+        },
+        "spouse": {
+          "$comment": "Applicant's spouse",
+          "$ref": "#/definitions/PersonType"
+        },
+        "grossIncome": {
+          "$comment": "Income information for applicant and/or spouse",
+          "type": "object",
+          "properties": {
+            "applicant": {
+              "$ref": "#/definitions/IncomeInfoType"
+            },
+            "spouse": {
+              "$ref": "#/definitions/IncomeInfoType"
+            },
+            "totalIncome":  {
+              "$comment": "Total of income",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 999999.99
+            }
+          },
+          "required": [
+            "applicant",
+            "totalIncome"
+          ]
+        },
+        "applicantConsent": {
+          "$comment": "Flag to indicate applicant provided consent",
+          "type": "boolean"
+        },
+        "spouseConsent": {
+          "$comment": "Flag to indicate spouse provided consent, if spouse exists",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "informationConsentAgreement",
+        "applicant",
+        "applicantConsent",
+        "submissionDate"
+      ]
     }
-
   },
   "title": "Fair PharmaCare Income Review",
   "description": "",
   "type": "object",
   "properties": {
     "applicationUUID": {
-      "$comment": "Unique identifier (input/output)",
-      "type": "string"
+      "$comment": "Unique session identifier (input/output)",
+      "$ref": "#/definitions/UUIDType"
     },
-    "submissionDate": {
-      "$comment": "Date the request was submitted for processing",
-      "$ref": "#/definitions/DateType"
+    "requestUUID": {
+      "$comment": "Unique request identifier (input/output)",
+      "$ref": "#/definitions/UUIDType"
+    },
+    "fpcIncomeReviewCovid19": {
+      "$comment": "Application for Fair PharmaCare Income Review",
+      "$ref": "#/definitions/fpcIncomeReviewCovid19Type"
+    },
+    "attachments": {
+      "$comment": "Array of documents",
+      "type":"array",
+      "items":{
+        "$ref":"#/definitions/AttachmentType"
+      },
+      "minItems": 1,
+      "uniqueItems": true
     },
     "returnCode": {
       "$comment": "Code returned in response to indicate status of request",
@@ -36,6 +236,7 @@
     }
   },
   "required": [
-    "applicationUUID"
+    "applicationUUID",
+    "requestUUID"
   ]
 }

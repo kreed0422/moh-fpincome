@@ -166,10 +166,10 @@
           "$comment": "Income information for applicant and/or spouse",
           "type": "object",
           "properties": {
-            "applicant": {
+            "applicantIncome": {
               "$ref": "#/definitions/IncomeInfoType"
             },
-            "spouse": {
+            "spouseIncome": {
               "$ref": "#/definitions/IncomeInfoType"
             },
             "totalIncome":  {

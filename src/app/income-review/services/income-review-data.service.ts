@@ -3,6 +3,15 @@ import { UUID } from 'angular2-uuid';
 import { ReviewObject } from '../component/review-container/review-container.component';
 import { ServerPayload } from '../models/review-income-api';
 import { formatISO } from 'date-fns';
+import { Person, Address } from 'moh-common-lib';
+import { INCOME_REVIEW_PAGES } from '../income-review.constants';
+
+export class Registrant extends Person {
+  phn: string;
+
+  // consent declaration
+  consent: boolean = false;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -23,11 +32,11 @@ export class IncomeReviewDataService {
   isRegistered: boolean;
   isIncomeLess: boolean;
 
-  // Consent (checkboxes)
-  registrantConsent: boolean = false;
-  spouseConsent: boolean = false;
-
   hasSpouse: boolean;
+
+  applicant: Registrant = new Registrant();
+  spouse: Registrant = new Registrant();
+  address: Address = new Address();
 
   applicationResponse: ServerPayload;
 
@@ -46,18 +55,30 @@ export class IncomeReviewDataService {
   constructor() {}
 
   getPersonalInformationSection(printView: boolean = false): ReviewObject {
-    return {
+    const obj = {
       heading: 'Personal Information',
+      redirectPath: INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath,
       sectionItems: [
-        { label: 'First name:', value: 'John' },
-        { label: 'Last name:', value: 'Sivertime' },
-        { label: 'Address:', value: '876 Tree Street' },
-        { label: 'City:', value: 'Cortney' },
-        { label: 'Postal code:', value: 'V8J 8J8' },
-        { label: 'PHN:', value: '2468024680' },
+        { label: 'First name:', value: this.applicant.firstName },
+        { label: 'Last name:', value: this.applicant.lastName },
+        { label: 'Address:', value: this.address.addressLine1 },
+        { label: 'City:', value: this.address.city },
+        { label: 'Postal code:', value: this.address.postal },
+        { label: 'PHN:', value: this.applicant.phn },
       ],
       isPrintView: printView,
     };
+
+    if (this.hasSpouse) {
+      const sectionItemsArray = [
+        { label: 'Spouse first name:', value: this.spouse.firstName },
+        { label: 'Spouse last name:', value: this.spouse.lastName },
+        { label: 'Spouse PHN:', value: this.spouse.phn },
+      ];
+      obj.sectionItems = obj.sectionItems.concat(sectionItemsArray);
+    }
+
+    return obj;
   }
 
   getGrossIncomeSection(printView: boolean = false): ReviewObject {

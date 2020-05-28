@@ -38,10 +38,6 @@ export class ConfirmationComponent extends Base implements OnInit {
   }
 
   ngOnInit() {
-    console.log(
-      'application response: ',
-      this.incomeReviewDataService.applicationResponse
-    );
     if (this.incomeReviewDataService.applicationResponse) {
       this.displayIcon = this.incomeReviewDataService.applicationResponse.returnCode;
     }

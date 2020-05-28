@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { ReviewComponent } from './pages/review/review.component';
 import { ConsentComponent } from './pages/consent/consent.component';
+import { PersonalInfoComponent } from './pages/personal-info/personal-info.component';
 
 /** The individual page routes only, does not include container */
 export const incomeReviewPageRoutes: Routes = [
@@ -10,6 +11,11 @@ export const incomeReviewPageRoutes: Routes = [
     path: INCOME_REVIEW_PAGES.HOME.path,
     component: HomeComponent,
     data: { title: INCOME_REVIEW_PAGES.HOME.title },
+  },
+  {
+    path: INCOME_REVIEW_PAGES.PERSONAL_INFO.path,
+    component: PersonalInfoComponent,
+    data: { title: INCOME_REVIEW_PAGES.PERSONAL_INFO.title },
   },
   {
     path: INCOME_REVIEW_PAGES.REVIEW.path,

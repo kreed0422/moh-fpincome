@@ -84,7 +84,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     super.ngAfterViewInit();
 
-    // subscrib to value changes
+    // subscribe to value changes
     this.formGroup.controls.isRegistered.valueChanges.subscribe(
       (val) => (this.incomeReviewDataService.isRegistered = val)
     );
@@ -110,7 +110,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
       this.incomeReviewDataService.informationCollectionNoticeConsent &&
       this.isEligible
     ) {
-      this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
+      this.navigate(INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath);
     }
   }
 }

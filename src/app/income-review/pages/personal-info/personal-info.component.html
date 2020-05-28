@@ -1,1 +1,99 @@
-<p>personal-info works!</p>
+<h1>Personal Information</h1>
+
+<p class="border-bottom mb-4">
+  Enter the following details (enter your name as it appears on your income tax
+  return):
+</p>
+
+<form [formGroup]="formGroup">
+  <common-page-section layout="tips">
+    <div class="col-md-8">
+      <div class="p-2">
+        <common-name
+          formControlName="firstName"
+          name="firstName"
+          label="{{ applFirstNameLabel }}"
+          maxlength="{{ firstNameLen }}"
+        ></common-name>
+      </div>
+      <div class="p-2">
+        <common-name
+          formControlName="lastName"
+          name="lastName"
+          label="{{ applLastNameLabel }}"
+          maxlength="{{ lastNameLen }}"
+        ></common-name>
+      </div>
+      <!-- TODO: When library is updated placeholder fields can be removed -->
+      <div class="p-2">
+        <common-street
+          formControlName="address"
+          name="address"
+          label="{{ applAddressLabel }}"
+          placeholder=""
+        ></common-street>
+      </div>
+      <div class="p-2">
+        <common-city
+          formControlName="city"
+          name="city"
+          placeholder=""
+        ></common-city>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="p-2">
+        <common-postal-code
+          formControlName="postalCode"
+          name="postalCode"
+        ></common-postal-code>
+      </div>
+      <div class="p-2">
+        <common-phn
+          formControlName="phn"
+          name="phn"
+          label="{{ phnLabel }}"
+          placeholder=""
+        ></common-phn>
+      </div>
+    </div>
+  </common-page-section>
+  <common-page-section layout="tips" class="border-top mt-4 pt-4">
+    <common-radio
+      formControlName="hasSpouse"
+      name="hasSpouse"
+      [label]="hasSpouseQuestion"
+      display="table-row-group"
+    ></common-radio>
+    <div *ngIf="hasSpouseFlag" class="border-left pl-4">
+      <div class="col-md-8">
+        <div class="p-2">
+          <common-name
+            formControlName="spFirstName"
+            name="spFirstName"
+            label="{{ spFirstNameLabel }}"
+            maxlength="{{ firstNameLen }}"
+          ></common-name>
+        </div>
+        <div class="p-2">
+          <common-name
+            formControlName="spLastName"
+            name="spLastName"
+            label="{{ spLastNameLabel }}"
+            maxlength="{{ lastNameLen }}"
+          ></common-name>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="p-2">
+          <common-phn
+            formControlName="spPhn"
+            name="spPhn"
+            label="{{ spPhnLabel }}"
+            placeholder=""
+          ></common-phn>
+        </div>
+      </div>
+    </div>
+  </common-page-section>
+</form>

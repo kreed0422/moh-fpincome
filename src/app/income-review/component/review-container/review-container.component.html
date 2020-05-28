@@ -12,21 +12,23 @@
   </div>
 
   <div class="review--background-color pt-2 pb-2 pl-4">
-    <div class="review--subheading" *ngIf="reviewObject.subHeading">
-      {{ reviewObject.subHeading }}
-    </div>
-    <div *ngFor="let item of reviewObject.sectionItems; let idx = index">
-      <div class="row review--row mb-2">
-        <div class="col-md-4 review--key" [innerHTML]="item.label"></div>
-        <div
-          class="{{ item.extraInfo ? 'col-md-4' : 'col-md-8' }}"
-          [innerHTML]="item.value"
-        ></div>
-        <div
-          class="col-md-4"
-          *ngIf="item.extraInfo"
-          [innerHTML]="item.extraInfo"
-        ></div>
+    <div *ngFor="let section of reviewObject.section; let s_idx = index">
+      <div class="review--subheading pb-2 pt-2" *ngIf="section.subHeading">
+        {{ section.subHeading }}
+      </div>
+      <div *ngFor="let item of section.sectionItems; let idx = index">
+        <div class="row review--row pb-2">
+          <div class="col-md-4 review--key" [innerHTML]="item.label"></div>
+          <div
+            class="{{ item.extraInfo ? 'col-md-4' : 'col-md-8' }}"
+            [innerHTML]="item.value"
+          ></div>
+          <div
+            class="col-md-4"
+            *ngIf="item.extraInfo"
+            [innerHTML]="item.extraInfo"
+          ></div>
+        </div>
       </div>
     </div>
   </div>

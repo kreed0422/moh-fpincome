@@ -11,6 +11,15 @@ export class Registrant extends Person {
 
   // consent declaration
   consent: boolean = false;
+
+  // financial information
+  originalIncome: number = 2500.0;
+  reducedIncome: number = 1040.0;
+  remainderIncome: number = 0.0;
+
+  get incomeSubTotal() {
+    return this.originalIncome + this.reducedIncome + this.remainderIncome;
+  }
 }
 
 @Injectable({
@@ -23,6 +32,12 @@ export class IncomeReviewDataService {
    *       Should be like MSP <URL>/UUID - may need new service in Openshift
    */
   readonly applicationUUID: string = UUID.UUID();
+
+  readonly originalIncomeLabel =
+    'Before reduction of income<br><strong>(e.g., January - March)<strong>';
+  readonly reducedIncomeLabel =
+    'During reduction of income<br><strong>(e.g., April - June)</strong>';
+  readonly remainderIncomeLabel = 'Remainder of 2020 (estimated)';
 
   dateOfSubmission: Date;
 
@@ -57,65 +72,128 @@ export class IncomeReviewDataService {
   getPersonalInformationSection(printView: boolean = false): ReviewObject {
     const obj = {
       heading: 'Personal Information',
-      redirectPath: INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath,
-      sectionItems: [
-        { label: 'First name:', value: this.applicant.firstName },
-        { label: 'Last name:', value: this.applicant.lastName },
-        { label: 'Address:', value: this.address.addressLine1 },
-        { label: 'City:', value: this.address.city },
-        { label: 'Postal code:', value: this.address.postal },
-        { label: 'PHN:', value: this.applicant.phn },
-      ],
       isPrintView: printView,
+      redirectPath: INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath,
+      section: [
+        {
+          sectionItems: [
+            { label: 'First name:', value: this.applicant.firstName },
+            { label: 'Last name:', value: this.applicant.lastName },
+            { label: 'Address:', value: this.address.addressLine1 },
+            { label: 'City:', value: this.address.city },
+            { label: 'Postal code:', value: this.address.postal },
+            { label: 'PHN:', value: this.applicant.phn },
+          ],
+        },
+      ],
     };
 
     if (this.hasSpouse) {
-      const sectionItemsArray = [
-        { label: 'Spouse first name:', value: this.spouse.firstName },
-        { label: 'Spouse last name:', value: this.spouse.lastName },
-        { label: 'Spouse PHN:', value: this.spouse.phn },
-      ];
-      obj.sectionItems = obj.sectionItems.concat(sectionItemsArray);
+      const spouseSection = {
+        sectionItems: [
+          { label: 'Spouse first name:', value: this.spouse.firstName },
+          { label: 'Spouse last name:', value: this.spouse.lastName },
+          { label: 'Spouse PHN:', value: this.spouse.phn },
+        ],
+      };
+
+      obj.section.push(spouseSection);
     }
 
     return obj;
   }
 
   getGrossIncomeSection(printView: boolean = false): ReviewObject {
-    return {
+    const obj = {
       heading: 'Gross Income',
-      redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
-      subHeading: 'YOUR ESTIMATED 2020 GROSS INCOME',
-      sectionItems: [
-        {
-          label:
-            'Before reduction of income<br><strong>(e.g., Jan - March)<strong>',
-          value: '$15,000.00',
-          extraInfo: '1',
-        },
-        {
-          label:
-            'During reduction of income<br><strong>(e.g., April - June)</strong>',
-          value: '$0.00',
-          extraInfo: '2',
-        },
-        {
-          label: 'Remainder of 2020 (est.)',
-          value: '$25,000.00',
-          extraInfo: '3',
-        },
-        { label: 'Total (lines 1-3)', value: '$40,000.00', extraInfo: '4' },
-      ],
       isPrintView: printView,
+      redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
+      section: [
+        {
+          subHeading: 'YOUR ESTIMATED 2020 GROSS INCOME',
+          sectionItems: [
+            {
+              label: this.originalIncomeLabel,
+              value: '$' + this.applicant.originalIncome.toFixed(2),
+              extraInfo: '1',
+            },
+            {
+              label: this.reducedIncomeLabel,
+              value: '$' + this.applicant.reducedIncome.toFixed(2),
+              extraInfo: '2',
+            },
+            {
+              label: this.remainderIncomeLabel,
+              value: '$' + this.applicant.remainderIncome.toFixed(2),
+              extraInfo: '3',
+            },
+            {
+              label: 'Total (lines 1-3)',
+              value: '$' + this.applicant.incomeSubTotal.toFixed(2),
+              extraInfo: '4',
+            },
+          ],
+        },
+      ],
     };
+
+    if (this.hasSpouse) {
+      const spouseSection = {
+        subHeading: "SPOUSE'S ESTIMATED 2020 GROSS INCOME",
+        sectionItems: [
+          {
+            label: this.originalIncomeLabel,
+            value: '$' + this.spouse.originalIncome.toFixed(2),
+            extraInfo: '5',
+          },
+          {
+            label: this.reducedIncomeLabel,
+            value: '$' + this.spouse.reducedIncome.toFixed(2),
+            extraInfo: '6',
+          },
+          {
+            label: this.remainderIncomeLabel,
+            value: '$' + this.spouse.remainderIncome.toFixed(2),
+            extraInfo: '7',
+          },
+          {
+            label: 'Total (lines 5-7)',
+            value: '$' + this.spouse.incomeSubTotal.toFixed(2),
+            extraInfo: '8',
+          },
+        ],
+      };
+      const totalSection = {
+        subHeading: null,
+        sectionItems: [
+          {
+            label: '<strong>TOTAL (line 4 + line 8)<strong>',
+            value:
+              '$' +
+              (
+                this.applicant.incomeSubTotal + this.spouse.incomeSubTotal
+              ).toFixed(2),
+            extraInfo: '9',
+          },
+        ],
+      };
+      obj.section.push(spouseSection);
+      obj.section.push(totalSection);
+    }
+
+    return obj;
   }
 
   getSupportDocsSection(printView: boolean = false): ReviewObject {
     return {
       heading: 'Supporting Documents',
-      redirectPath: INCOME_REVIEW_PAGES.SUPPORT_DOCS.fullpath,
-      sectionItems: [{ label: 'Documents uploaded', value: '3' }],
       isPrintView: printView,
+      redirectPath: INCOME_REVIEW_PAGES.SUPPORT_DOCS.fullpath,
+      section: [
+        {
+          sectionItems: [{ label: 'Documents uploaded', value: '3' }],
+        },
+      ],
     };
   }
 }

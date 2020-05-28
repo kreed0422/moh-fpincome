@@ -7,6 +7,7 @@ import { CaptchaModule } from 'moh-common-lib/captcha';
 import { HomeComponent } from './home.component';
 import { CollectionNoticeComponent } from '../../component/collection-notice/collection-notice.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -20,6 +21,7 @@ describe('HomeComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         SharedCoreModule,
+        HttpClientTestingModule,
         CaptchaModule,
         ModalModule.forRoot(),
       ],

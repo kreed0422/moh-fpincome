@@ -37,9 +37,7 @@ export class SplashPageService {
    * Check if maitenance mode is active, and if so redirect to splash page.
    */
   public setup(): void {
-    console.log('setup splash');
     this.load().then((isMaintenance) => {
-      console.log('isMaintenance: ', isMaintenance);
       if (isMaintenance) {
         this.router.navigate([APP_ROUTES.maintenance]);
       }
@@ -47,10 +45,8 @@ export class SplashPageService {
   }
 
   public load(): Promise<boolean> {
-    console.log('load env');
     return new Promise((resolve) => {
       this.spaEnvApiService.getEnvs().subscribe((envs) => {
-        console.log('getEnvs subscription: ', envs);
         if (envs) {
           this.isMaintenanceMode =
             envs.SPA_ENV_FPIR_MAINTENANCE_FLAG.toLowerCase() ===

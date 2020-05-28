@@ -22,9 +22,6 @@ import { ServerPayload } from '../../models/review-income-api';
 })
 export class ConsentComponent extends BaseForm
   implements OnInit, AfterViewInit {
-  registrantConsentStmt: string = 'I consent [Registrant Name]';
-  spouseConsentStmt: string = 'I consent [Spouse/ Common-Law partner]';
-
   constructor(
     protected router: Router,
     protected containerService: ContainerService,
@@ -41,14 +38,22 @@ export class ConsentComponent extends BaseForm
     return this.incomeReviewDataService.hasSpouse;
   }
 
+  get registrantConsentStmt() {
+    return `I consent [${this.incomeReviewDataService.applicant.name}]`;
+  }
+
+  get spouseConsentStmt() {
+    return `I consent [${this.incomeReviewDataService.spouse.name}]`;
+  }
+
   /**
    * NOTE: Work-around until checkbox component is fixed in library, not compatiable with reactive forms
    */
   get isChecked() {
-    let _isChecked = !!this.incomeReviewDataService.registrantConsent;
+    let _isChecked = !!this.incomeReviewDataService.applicant.consent;
 
     if (this.hasSpouse) {
-      _isChecked = _isChecked && !!this.incomeReviewDataService.spouseConsent;
+      _isChecked = _isChecked && !!this.incomeReviewDataService.spouse.consent;
     }
     return _isChecked;
   }
@@ -68,11 +73,11 @@ export class ConsentComponent extends BaseForm
 
     this.formGroup = this.fb.group({
       registrantConsent: [
-        this.incomeReviewDataService.registrantConsent,
+        this.incomeReviewDataService.applicant.consent,
         Validators.required,
       ],
       spouseConsent: [
-        this.incomeReviewDataService.spouseConsent,
+        this.incomeReviewDataService.spouse.consent,
         Validators.required,
       ],
     });
@@ -83,10 +88,10 @@ export class ConsentComponent extends BaseForm
 
     // subscrib to value changes
     this.formGroup.controls.registrantConsent.valueChanges.subscribe(
-      (val) => (this.incomeReviewDataService.registrantConsent = val)
+      (val) => (this.incomeReviewDataService.applicant.consent = val)
     );
     this.formGroup.controls.spouseConsent.valueChanges.subscribe(
-      (val) => (this.incomeReviewDataService.spouseConsent = val)
+      (val) => (this.incomeReviewDataService.spouse.consent = val)
     );
   }
 

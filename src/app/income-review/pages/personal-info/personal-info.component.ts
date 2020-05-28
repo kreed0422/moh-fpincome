@@ -118,7 +118,7 @@ export class PersonalInfoComponent extends BaseForm
     this.formGroup.updateValueAndValidity({ onlySelf: false });
 
     if (this.canContinue()) {
-      this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
+      this.navigate(INCOME_REVIEW_PAGES.INCOME.fullpath);
     }
   }
 }

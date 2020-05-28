@@ -84,6 +84,7 @@ export class IncomeReviewDataService {
   getGrossIncomeSection(printView: boolean = false): ReviewObject {
     return {
       heading: 'Gross Income',
+      redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
       subHeading: 'YOUR ESTIMATED 2020 GROSS INCOME',
       sectionItems: [
         {
@@ -112,6 +113,7 @@ export class IncomeReviewDataService {
   getSupportDocsSection(printView: boolean = false): ReviewObject {
     return {
       heading: 'Supporting Documents',
+      redirectPath: INCOME_REVIEW_PAGES.SUPPORT_DOCS.fullpath,
       sectionItems: [{ label: 'Documents uploaded', value: '3' }],
       isPrintView: printView,
     };

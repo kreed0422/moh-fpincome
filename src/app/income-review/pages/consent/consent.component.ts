@@ -22,8 +22,6 @@ import { ServerPayload } from '../../models/review-income-api';
 })
 export class ConsentComponent extends BaseForm
   implements OnInit, AfterViewInit {
-  spouseConsentStmt: string = 'I consent [Spouse/ Common-Law partner]';
-
   constructor(
     protected router: Router,
     protected containerService: ContainerService,
@@ -41,7 +39,11 @@ export class ConsentComponent extends BaseForm
   }
 
   get registrantConsentStmt() {
-    return 'I consent [`${this.incomeReviewDataService.applicant.name}`]';
+    return `I consent [${this.incomeReviewDataService.applicant.name}]`;
+  }
+
+  get spouseConsentStmt() {
+    return `I consent [${this.incomeReviewDataService.spouse.name}]`;
   }
 
   /**

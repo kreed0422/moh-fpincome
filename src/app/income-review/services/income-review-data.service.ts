@@ -13,12 +13,49 @@ export class Registrant extends Person {
   consent: boolean = false;
 
   // financial information
-  originalIncome: number = 2500.0;
-  reducedIncome: number = 1040.0;
-  remainderIncome: number = 0.0;
+  private _originalIncome: number;
+  private _reducedIncome: number;
+  private _remainderIncome: number;
+
+  get originalIncome() {
+    return isNaN(this._originalIncome) ? null : this._originalIncome.toFixed(2);
+  }
+  set originalIncome(value: string) {
+    if (value) {
+      this._originalIncome = Number(value);
+    }
+  }
+
+  get reducedIncome() {
+    return isNaN(this._reducedIncome) ? null : this._reducedIncome.toFixed(2);
+  }
+  set reducedIncome(value: string) {
+    if (value) {
+      this._reducedIncome = Number(value);
+    }
+  }
+
+  get remainderIncome() {
+    return isNaN(this._remainderIncome)
+      ? null
+      : this._remainderIncome.toFixed(2);
+  }
+  set remainderIncome(value: string) {
+    if (value) {
+      this._remainderIncome = Number(value);
+    }
+  }
 
   get incomeSubTotal() {
-    return this.originalIncome + this.reducedIncome + this.remainderIncome;
+    const total =
+      this._convertNaN(this._originalIncome) +
+      this._convertNaN(this._reducedIncome) +
+      this._convertNaN(this._remainderIncome);
+    return total.toFixed(2);
+  }
+
+  private _convertNaN(value: number) {
+    return isNaN(value) ? 0 : value;
   }
 }
 
@@ -33,11 +70,17 @@ export class IncomeReviewDataService {
    */
   readonly applicationUUID: string = UUID.UUID();
 
+  readonly applSectionTitle = 'YOUR ESTIMATED 2020 GROSS INCOME';
+  readonly spSectionTitle = "SPOUSE'S ESTIMATED 2020 GROSS INCOME";
   readonly originalIncomeLabel =
-    'Before reduction of income<br><strong>(e.g., January - March)<strong>';
+    'Before reduction of income<br><strong>(e.g. January - March)<strong>';
   readonly reducedIncomeLabel =
-    'During reduction of income<br><strong>(e.g., April - June)</strong>';
+    'During reduction of income<br><strong>(e.g. April - June)</strong>';
   readonly remainderIncomeLabel = 'Remainder of 2020 (estimated)';
+  readonly subtotalLabelLine1to3 = 'SUBTOTAL (lines 1-3)';
+  readonly totalLabelLine1to3 = 'TOTAL (lines 1-3)';
+  readonly subtotalLabelLine5to7 = 'SUBTOTAL (lines 5-7)';
+  readonly totalLabelLine4and8 = '<strong>TOTAL (line 4 + line 8)<strong>';
 
   dateOfSubmission: Date;
 
@@ -65,6 +108,13 @@ export class IncomeReviewDataService {
         representation: 'date',
       }),
     };
+  }
+
+  get incomeTotal() {
+    const total =
+      Number(this.applicant.incomeSubTotal) +
+      Number(this.spouse.incomeSubTotal);
+    return total.toFixed(2);
   }
 
   constructor() {}
@@ -110,26 +160,28 @@ export class IncomeReviewDataService {
       redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
       section: [
         {
-          subHeading: 'YOUR ESTIMATED 2020 GROSS INCOME',
+          subHeading: this.applSectionTitle,
           sectionItems: [
             {
               label: this.originalIncomeLabel,
-              value: '$' + this.applicant.originalIncome.toFixed(2),
+              value: `$ ${this.applicant.originalIncome}`,
               extraInfo: '1',
             },
             {
               label: this.reducedIncomeLabel,
-              value: '$' + this.applicant.reducedIncome.toFixed(2),
+              value: `$ ${this.applicant.reducedIncome}`,
               extraInfo: '2',
             },
             {
               label: this.remainderIncomeLabel,
-              value: '$' + this.applicant.remainderIncome.toFixed(2),
+              value: `$ ${this.applicant.remainderIncome}`,
               extraInfo: '3',
             },
             {
-              label: 'Total (lines 1-3)',
-              value: '$' + this.applicant.incomeSubTotal.toFixed(2),
+              label: this.hasSpouse
+                ? this.subtotalLabelLine1to3
+                : this.totalLabelLine1to3,
+              value: `$ ${this.applicant.incomeSubTotal}`,
               extraInfo: '4',
             },
           ],
@@ -139,26 +191,26 @@ export class IncomeReviewDataService {
 
     if (this.hasSpouse) {
       const spouseSection = {
-        subHeading: "SPOUSE'S ESTIMATED 2020 GROSS INCOME",
+        subHeading: this.spSectionTitle,
         sectionItems: [
           {
             label: this.originalIncomeLabel,
-            value: '$' + this.spouse.originalIncome.toFixed(2),
+            value: `$ ${this.spouse.originalIncome}`,
             extraInfo: '5',
           },
           {
             label: this.reducedIncomeLabel,
-            value: '$' + this.spouse.reducedIncome.toFixed(2),
+            value: `$ ${this.spouse.reducedIncome}`,
             extraInfo: '6',
           },
           {
             label: this.remainderIncomeLabel,
-            value: '$' + this.spouse.remainderIncome.toFixed(2),
+            value: `$ ${this.spouse.remainderIncome}`,
             extraInfo: '7',
           },
           {
-            label: 'Total (lines 5-7)',
-            value: '$' + this.spouse.incomeSubTotal.toFixed(2),
+            label: this.subtotalLabelLine5to7,
+            value: `$ ${this.spouse.incomeSubTotal}`,
             extraInfo: '8',
           },
         ],
@@ -167,12 +219,8 @@ export class IncomeReviewDataService {
         subHeading: null,
         sectionItems: [
           {
-            label: '<strong>TOTAL (line 4 + line 8)<strong>',
-            value:
-              '$' +
-              (
-                this.applicant.incomeSubTotal + this.spouse.incomeSubTotal
-              ).toFixed(2),
+            label: this.totalLabelLine4and8,
+            value: `$ ${this.incomeTotal}`,
             extraInfo: '9',
           },
         ],

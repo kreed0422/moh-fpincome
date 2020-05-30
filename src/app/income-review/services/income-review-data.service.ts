@@ -71,7 +71,7 @@ export class IncomeReviewDataService {
   readonly applicationUUID: string = UUID.UUID();
 
   readonly applSectionTitle = 'YOUR ESTIMATED 2020 GROSS INCOME';
-  readonly spSectionTitle = "SPOUSE'S ESTIMATED 2020 GROSS INCOME";
+  readonly spSectionTitle = `SPOUSE'S ESTIMATED 2020 GROSS INCOME`;
   readonly originalIncomeLabel =
     'Before reduction of income<br><strong>(e.g. January - March)<strong>';
   readonly reducedIncomeLabel =

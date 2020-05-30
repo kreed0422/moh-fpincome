@@ -71,7 +71,7 @@ export class IncomeReviewDataService {
   readonly applicationUUID: string = UUID.UUID();
 
   readonly applSectionTitle = 'YOUR ESTIMATED 2020 GROSS INCOME';
-  readonly spSectionTitle = "SPOUSE'S ESTIMATED 2020 GROSS INCOME";
+  readonly spSectionTitle = `SPOUSE'S ESTIMATED 2020 GROSS INCOME`;
   readonly originalIncomeLabel =
     'Before reduction of income<br><strong>(e.g. January - March)<strong>';
   readonly reducedIncomeLabel =
@@ -102,6 +102,8 @@ export class IncomeReviewDataService {
   remainderIncomeSupportDocs: CommonImage[] = [];
 
   applicationResponse: ServerPayload;
+
+  private _zeroAmount: string = '0.00';
 
   // Payload for application
   get applicationPayload() {
@@ -177,17 +179,29 @@ export class IncomeReviewDataService {
           sectionItems: [
             {
               label: this.originalIncomeLabel,
-              value: `$ ${this.applicant.originalIncome}`,
+              value: `$ ${
+                this.applicant.originalIncome
+                  ? this.applicant.originalIncome
+                  : this._zeroAmount
+              }`,
               extraInfo: '1',
             },
             {
               label: this.reducedIncomeLabel,
-              value: `$ ${this.applicant.reducedIncome}`,
+              value: `$ ${
+                this.applicant.reducedIncome
+                  ? this.applicant.reducedIncome
+                  : this._zeroAmount
+              }`,
               extraInfo: '2',
             },
             {
               label: this.remainderIncomeLabel,
-              value: `$ ${this.applicant.remainderIncome}`,
+              value: `$ ${
+                this.applicant.remainderIncome
+                  ? this.applicant.remainderIncome
+                  : this._zeroAmount
+              }`,
               extraInfo: '3',
             },
             {
@@ -208,17 +222,29 @@ export class IncomeReviewDataService {
         sectionItems: [
           {
             label: this.originalIncomeLabel,
-            value: `$ ${this.spouse.originalIncome}`,
+            value: `$ ${
+              this.spouse.originalIncome
+                ? this.spouse.originalIncome
+                : this._zeroAmount
+            }`,
             extraInfo: '5',
           },
           {
             label: this.reducedIncomeLabel,
-            value: `$ ${this.spouse.reducedIncome}`,
+            value: `$ ${
+              this.spouse.reducedIncome
+                ? this.spouse.reducedIncome
+                : this._zeroAmount
+            }`,
             extraInfo: '6',
           },
           {
             label: this.remainderIncomeLabel,
-            value: `$ ${this.spouse.remainderIncome}`,
+            value: `$ ${
+              this.spouse.remainderIncome
+                ? this.spouse.remainderIncome
+                : this._zeroAmount
+            }`,
             extraInfo: '7',
           },
           {

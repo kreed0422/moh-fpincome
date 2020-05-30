@@ -64,15 +64,9 @@ export class PersonalInfoComponent extends BaseForm
       ],
       phn: [this.incomeReviewDataService.applicant.phn, Validators.required],
       hasSpouse: [this.incomeReviewDataService.hasSpouse, Validators.required],
-      spFirstName: [
-        this.incomeReviewDataService.spouse.firstName,
-        Validators.required,
-      ],
-      spLastName: [
-        this.incomeReviewDataService.spouse.lastName,
-        Validators.required,
-      ],
-      spPhn: [this.incomeReviewDataService.spouse.phn, Validators.required],
+      spFirstName: [this.incomeReviewDataService.spouse.firstName],
+      spLastName: [this.incomeReviewDataService.spouse.lastName],
+      spPhn: [this.incomeReviewDataService.spouse.phn],
     });
   }
 

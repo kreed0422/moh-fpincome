@@ -1,0 +1,120 @@
+<h1>Estimate your 2020 Gross Income</h1>
+<p>
+  If you are a new resident of Canada: If you have not yet filed a tax return in
+  Canada for a full year of income, you must submit an affidavit. Call Health
+  Insurance BC at the phone numbers shown on page 1 before completing this form.
+</p>
+<p>
+  Provide, the income you received from all sources prior to your loss of
+  income, the income you expect to receive during the period of your reduced
+  income, and the income you expect to receive for the remainder of 2020
+  (following resumption of employment or end of temporary benefits). If no
+  income received for any of the periods, please type 0.
+</p>
+
+<form [formGroup]="formGroup">
+  <h2 class="border-bottom">{{ applSectionTitle }}</h2>
+
+  <common-page-section layout="tips">
+    <div class="row pb-2">
+      <div class="col-md-4" [innerHTML]="originalIncomeLabel"></div>
+      <div class="col-md-4">
+        <input
+          type="text"
+          formControlName="originalIncome"
+          name="originalIncome"
+        />
+      </div>
+      <div class="col-md-4">1</div>
+    </div>
+
+    <div class="row pb-2">
+      <div class="col-md-4" [innerHTML]="reducedIncomeLabel"></div>
+      <div class="col-md-4">
+        <input
+          type="text"
+          formControlName="reducedIncome"
+          name="reducedIncome"
+        />
+      </div>
+      <div class="col-md-4">2</div>
+    </div>
+
+    <div class="row pb-2">
+      <div class="col-md-4" [innerHTML]="remainderIncomeLabel"></div>
+      <div class="col-md-4">
+        <input
+          type="text"
+          formControlName="remainderIncome"
+          name="remainderIncome"
+        />
+      </div>
+      <div class="col-md-4">3</div>
+    </div>
+
+    <div class="row pb-2">
+      <div class="col-md-4" [innerHTML]="line1to3Label"></div>
+      <div class="col-md-4">
+        <input type="text" formControlName="subtotal" name="subtotal" />
+      </div>
+      <div class="col-md-4">4</div>
+    </div>
+  </common-page-section>
+
+  <div *ngIf="hasSpouse">
+    <h2 class="border-bottom">{{ spSectionTitle }}</h2>
+    <common-page-section layout="tips">
+      <div class="row pb-2">
+        <div class="col-md-4" [innerHTML]="originalIncomeLabel"></div>
+        <div class="col-md-4">
+          <input
+            type="text"
+            formControlName="spOriginalIncome"
+            name="spOriginalIncome"
+          />
+        </div>
+        <div class="col-md-4">5</div>
+      </div>
+
+      <div class="row pb-2">
+        <div class="col-md-4" [innerHTML]="reducedIncomeLabel"></div>
+        <div class="col-md-4">
+          <input
+            type="text"
+            formControlName="spReducedIncome"
+            name="spReducedIncome"
+          />
+        </div>
+        <div class="col-md-4">6</div>
+      </div>
+
+      <div class="row pb-2">
+        <div class="col-md-4" [innerHTML]="remainderIncomeLabel"></div>
+        <div class="col-md-4">
+          <input
+            type="text"
+            formControlName="spRemainderIncome"
+            name="spRemainderIncome"
+          />
+        </div>
+        <div class="col-md-4">7</div>
+      </div>
+
+      <div class="row pb-2">
+        <div class="col-md-4" [innerHTML]="line5to7Label"></div>
+        <div class="col-md-4">
+          <input type="text" formControlName="spSubtotal" name="spSubtotal" />
+        </div>
+        <div class="col-md-4">8</div>
+      </div>
+
+      <div class="row pb-2">
+        <div class="col-md-4" [innerHTML]="line4and8Label"></div>
+        <div class="col-md-4">
+          <input type="text" formControlName="total" name="total" />
+        </div>
+        <div class="col-md-4">8</div>
+      </div>
+    </common-page-section>
+  </div>
+</form>

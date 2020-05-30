@@ -23,6 +23,16 @@ export const INCOME_REVIEW_PAGES = {
     fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.personalInfo}`,
     title: PAGE_NAMES.personalInfo,
   },
+  INCOME: {
+    path: PAGE_NAMES.grossIncome,
+    fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.grossIncome}`,
+    title: PAGE_NAMES.grossIncome,
+  },
+  SUPPORT_DOCS: {
+    path: PAGE_NAMES.supportDocs,
+    fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.supportDocs}`,
+    title: PAGE_NAMES.supportDocs,
+  },
   REVIEW: {
     path: PAGE_NAMES.review,
     fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.review}`,

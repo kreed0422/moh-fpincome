@@ -1,0 +1,143 @@
+<h1>Upload your supporting documents</h1>
+<ul>
+  <li>
+    Provide documents for all income sources for you and your spouse/common-law
+    partner. All documents must indicate gross income and have been issued in
+    2020.
+  </li>
+  <li>
+    Provide only one copy of each document. If a document supports income for
+    more than one period, just submit it once for the earliest applicable
+    period.
+  </li>
+  <li>
+    If you are unable to obtain the required supporting documents because of
+    limited services due to the COVID-19 pandemic, you must provide a letter
+    signed by you (and your spouse/common-law partner, if applicable) declaring
+    the document(s) you are unable to provide, the reason they are not
+    available, the source of the income, the gross monthly amount of this
+    income, and how long you expect to collect this income. Upload the letter to
+    any section below.
+  </li>
+  <li>
+    Your supporting documents and letter of declaration must account for the
+    total income you are declaring for income review.
+  </li>
+</ul>
+
+<form #formRef="ngForm" novalidate>
+  <h2 class="border-bottom">Period before reduction of income</h2>
+  <p class="border-bottom pt-4">{{ supportDocumentLabel }}</p>
+  <common-page-section layout="double">
+    <common-file-uploader
+      [(images)]="originalIncomeSupportDocs"
+      id="{{ originalIncomeSupDocId }}"
+      required="true"
+      instructionText="{{ uploadInstructions }}"
+    >
+    </common-file-uploader>
+
+    <aside class="tips--background-color">
+      <strong>Examples of supporting documents</strong>
+      <ul>
+        <li>
+          <strong>For employment:</strong> Letter from your employer (on
+          letterhead) showing your gross income this period.
+        </li>
+        <li>
+          <strong>For self-employment:</strong> A letter from your accountant,
+          if you have one, and copies of your invoices or cheque stubs to date.
+        </li>
+        <li>
+          <strong>For unemployment:</strong> Record of Employment, final pay
+          stub showing gross year-to-date income, and letter from Employment
+          Insurance (EI) showing the EI coverage start date, end date and gross
+          weekly benefit amount. These letters can be requested through Service
+          Canada.
+        </li>
+        <li>
+          <strong
+            >For pensions, workers compensation or disability payments:</strong
+          >
+          Letter from Canada Pension Plan, Old Age Security, Guaranteed Income
+          Supplement showing your current gross monthly benefit amount. These
+          letters can be requested through Service Canada, or by logging in to
+          your Service Canada account: www.canada.ca.
+        </li>
+        <li>
+          Letter from WorkSafeBC showing your current gross monthly benefit
+          amount.
+        </li>
+        <li>
+          Letter from disability insurance or pension provider showing your
+          current gross monthly benefit amount.
+        </li>
+        <li>
+          <strong>Gross income from other sources:</strong> Documents for
+          investments (such as interest and mutual fund payments); income from
+          RRSPs, RIFs, LIFs, annuities, etc.; income earned outside of Canada;
+          business income (rental income including the BC-TRS, partnerships,
+          etc.); support payments.
+        </li>
+      </ul>
+    </aside>
+  </common-page-section>
+
+  <h2 class="border-bottom">Period of reduced income</h2>
+  <p class="border-bottom pt-4">{{ supportDocumentLabel }}</p>
+  <common-page-section layout="double">
+    <common-file-uploader
+      [(images)]="reducedIncomeSupportDocs"
+      id="{{ reducedIncomeSupDocId }}"
+      instructionText="{{ uploadInstructions }}"
+    >
+    </common-file-uploader>
+
+    <aside class="tips--background-color">
+      <strong>Examples of supporting documents</strong><br />
+      Provide only one copy of each document.
+      <ul>
+        <li>
+          <strong>
+            Canada Emergency Response Benefit (CERB) and the BC Emergency
+            Benefit for Workers:</strong
+          >
+          statement from the CERB and/or the BC Emergency Benefit for Workers
+          confirming payment of the benefit.
+        </li>
+        <li>
+          <strong>Other income:</strong> See above for supporting documents.
+        </li>
+      </ul>
+    </aside>
+  </common-page-section>
+
+  <h2 class="border-bottom">Remainder of 2020</h2>
+  <p class="border-bottom pt-4">{{ supportDocumentLabel }}</p>
+  <common-page-section layout="double">
+    <common-file-uploader
+      [(images)]="remainderIncomeSupportDocs"
+      id="{{ remainderIncomeSupDocId }}"
+      instructionText="{{ uploadInstructions }}"
+    >
+    </common-file-uploader>
+
+    <aside class="tips--background-color">
+      <strong>Examples of supporting documents</strong><br />
+      Provide only one copy of each document.
+      <ul>
+        <li>
+          <strong>
+            Canada Emergency Response Benefit (CERB) and the BC Emergency
+            Benefit for Workers:</strong
+          >
+          statement from the CERB and/or the BC Emergency Benefit for Workers
+          confirming payment of the benefit.
+        </li>
+        <li>
+          <strong>Other income:</strong> See above for supporting documents.
+        </li>
+      </ul>
+    </aside>
+  </common-page-section>
+</form>

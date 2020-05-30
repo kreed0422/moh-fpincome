@@ -1,18 +1,22 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-export interface SectionItemType {
+export interface ReviewSectionItemType {
   label: string;
   value: string;
-  extraInfo?: string;
+  extraInfo?: string | null;
+}
+
+export interface ReviewSectionType {
+  subHeading?: string | null;
+  sectionItems: ReviewSectionItemType[];
 }
 
 export interface ReviewObject {
   heading: string;
-  subHeading?: string;
-  redirectPath?: string;
-  sectionItems?: SectionItemType[];
   isPrintView: boolean;
+  section: ReviewSectionType[];
+  redirectPath?: string;
 }
 
 @Component({

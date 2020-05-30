@@ -24,6 +24,8 @@ import { ModalModule } from 'ngx-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReviewContainerComponent } from './component/review-container/review-container.component';
 import { PersonalInfoComponent } from './pages/personal-info/personal-info.component';
+import { IncomeComponent } from './pages/income/income.component';
+import { SupportDocsComponent } from './pages/support-docs/support-docs.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { PersonalInfoComponent } from './pages/personal-info/personal-info.compo
     CollectionNoticeDirective,
     ReviewContainerComponent,
     PersonalInfoComponent,
+    IncomeComponent,
+    SupportDocsComponent,
   ],
   imports: [
     CommonModule,

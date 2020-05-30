@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 .review--heading {
   margin-left: 0px;
   margin-right: auto;
@@ -24,7 +26,7 @@
 }
 
 .review--background-color {
-  background-color: #f2f2f2;
+  background-color: $gray;
 }
 
 @media print {

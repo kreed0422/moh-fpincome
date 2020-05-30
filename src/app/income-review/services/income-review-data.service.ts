@@ -3,7 +3,7 @@ import { UUID } from 'angular2-uuid';
 import { ReviewObject } from '../component/review-container/review-container.component';
 import { ServerPayload } from '../models/review-income-api';
 import { formatISO } from 'date-fns';
-import { Person, Address } from 'moh-common-lib';
+import { Person, Address, CommonImage } from 'moh-common-lib';
 import { INCOME_REVIEW_PAGES } from '../income-review.constants';
 
 export class Registrant extends Person {
@@ -96,6 +96,11 @@ export class IncomeReviewDataService {
   spouse: Registrant = new Registrant();
   address: Address = new Address();
 
+  // Support documents
+  originalIncomeSupportDocs: CommonImage[] = [];
+  reducedIncomeSupportDocs: CommonImage[] = [];
+  remainderIncomeSupportDocs: CommonImage[] = [];
+
   applicationResponse: ServerPayload;
 
   // Payload for application
@@ -115,6 +120,14 @@ export class IncomeReviewDataService {
       Number(this.applicant.incomeSubTotal) +
       Number(this.spouse.incomeSubTotal);
     return total.toFixed(2);
+  }
+
+  get uploadedDocCount() {
+    const cnt =
+      this.originalIncomeSupportDocs.length +
+      this.reducedIncomeSupportDocs.length +
+      this.remainderIncomeSupportDocs.length;
+    return Number(cnt).toString();
   }
 
   constructor() {}
@@ -239,7 +252,9 @@ export class IncomeReviewDataService {
       redirectPath: INCOME_REVIEW_PAGES.SUPPORT_DOCS.fullpath,
       section: [
         {
-          sectionItems: [{ label: 'Documents uploaded', value: '3' }],
+          sectionItems: [
+            { label: 'Documents uploaded', value: this.uploadedDocCount },
+          ],
         },
       ],
     };

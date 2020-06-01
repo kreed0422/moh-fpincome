@@ -13,7 +13,6 @@ import * as version from '../version.GENERATED';
 @Component({
   selector: 'fpir-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   appTitle = APP_TITLE;

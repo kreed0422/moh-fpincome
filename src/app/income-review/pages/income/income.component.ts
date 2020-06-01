@@ -4,12 +4,11 @@ import { BaseForm } from '../../models/base-form';
 import { Router } from '@angular/router';
 import { ContainerService, PageStateService } from 'moh-common-lib';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'fpir-income',
   templateUrl: './income.component.html',
-  styleUrls: ['./income.component.scss'],
 })
 export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   constructor(

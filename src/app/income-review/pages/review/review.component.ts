@@ -9,7 +9,6 @@ import { ReviewContainerComponent } from '../../component/review-container/revie
 @Component({
   selector: 'fpir-review',
   templateUrl: './review.component.html',
-  styleUrls: ['./review.component.scss'],
 })
 export class ReviewComponent extends BaseForm implements OnInit {
   @ViewChild('personalInfo', { static: true })

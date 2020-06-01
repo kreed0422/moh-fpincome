@@ -6,7 +6,6 @@ import { INCOME_REVIEW_PAGES } from './income-review.constants';
 @Component({
   selector: 'fpir-income-review',
   templateUrl: './income-review.component.html',
-  styleUrls: ['./income-review.component.scss'],
 })
 export class IncomeReviewComponent extends Container
   implements AfterViewInit, OnDestroy {

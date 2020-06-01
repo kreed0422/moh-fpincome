@@ -13,7 +13,6 @@ import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 @Component({
   selector: 'fpir-personal-info',
   templateUrl: './personal-info.component.html',
-  styleUrls: ['./personal-info.component.scss'],
 })
 export class PersonalInfoComponent extends BaseForm
   implements OnInit, AfterViewInit {

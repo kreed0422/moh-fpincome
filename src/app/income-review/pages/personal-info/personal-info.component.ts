@@ -5,11 +5,13 @@ import {
   ContainerService,
   PageStateService,
   commonValidatePostalcode,
+  commonDuplicateCheck,
 } from 'moh-common-lib';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { first } from 'rxjs/operators';
+import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 
 @Component({
   selector: 'fpir-personal-info',
@@ -89,13 +91,13 @@ export class PersonalInfoComponent extends BaseForm
     this.formGroup.controls.postalCode.valueChanges.subscribe(
       (val) => (this.incomeReviewDataService.address.postal = val)
     );
-    this.formGroup.controls.phn.valueChanges.subscribe(
-      (val) => (this.incomeReviewDataService.applicant.phn = val)
-    );
+    this.formGroup.controls.phn.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.applicant.phn = val;
+      this.checkDuplicatePhn(false);
+    });
     this.formGroup.controls.hasSpouse.valueChanges.subscribe((val) => {
       this.incomeReviewDataService.hasSpouse = val;
-      console.log('has spouse', val);
-      this.updateFieldValidors(val);
+      this.updateSpouseValidors(val);
     });
     this.formGroup.controls.spFirstName.valueChanges.subscribe(
       (val) => (this.incomeReviewDataService.spouse.firstName = val)
@@ -103,9 +105,10 @@ export class PersonalInfoComponent extends BaseForm
     this.formGroup.controls.spLastName.valueChanges.subscribe(
       (val) => (this.incomeReviewDataService.spouse.lastName = val)
     );
-    this.formGroup.controls.spPhn.valueChanges.subscribe(
-      (val) => (this.incomeReviewDataService.spouse.phn = val)
-    );
+    this.formGroup.controls.spPhn.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.spouse.phn = val;
+      this.checkDuplicatePhn();
+    });
   }
 
   continue() {
@@ -116,29 +119,56 @@ export class PersonalInfoComponent extends BaseForm
     }
   }
 
-  updateFieldValidors(hasSpouse: boolean) {
+  updateSpouseValidors(hasSpouse: boolean) {
     const firstName = this.formGroup.controls.spFirstName;
     const lastName = this.formGroup.controls.spLastName;
-    const phn = this.formGroup.controls.spPhn;
+    const spousePhn = this.formGroup.controls.spPhn;
 
     if (hasSpouse) {
       firstName.setValidators(Validators.required);
       lastName.setValidators(Validators.required);
-      phn.setValidators(Validators.required);
+      spousePhn.setValidators(Validators.required);
     } else {
       firstName.clearValidators();
       lastName.clearValidators();
-      phn.clearValidators();
+      spousePhn.clearValidators();
 
       firstName.patchValue(null);
       lastName.patchValue(null);
-      phn.patchValue(null);
+      spousePhn.patchValue(null);
     }
 
     firstName.updateValueAndValidity();
     lastName.updateValueAndValidity();
-    phn.updateValueAndValidity();
-
+    spousePhn.updateValueAndValidity();
     this.formGroup.updateValueAndValidity({ onlySelf: false });
+  }
+
+  checkDuplicatePhn(onSpouse: boolean = true) {
+    const duplicateError =
+      this.hasSpouseFlag &&
+      this.incomeReviewDataService.applicant.phn ===
+        this.incomeReviewDataService.spouse.phn;
+
+    if (duplicateError) {
+      this.formGroup.controls.phn.setErrors(
+        !onSpouse ? { duplicate: true } : null
+      );
+      this.formGroup.controls.spPhn.setErrors(
+        onSpouse ? { duplicate: true } : null
+      );
+      return;
+    }
+
+    // Clear duplicate errors
+    if (this.formGroup.controls.phn.hasError('duplicate')) {
+      this.formGroup.controls.phn.setErrors(null);
+    }
+    if (
+      this.hasSpouseFlag &&
+      this.formGroup.controls.spPhn.hasError('duplicate')
+    ) {
+      this.formGroup.controls.spPhn.setErrors(null);
+    }
   }
 }

@@ -9,6 +9,7 @@ import {
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'fpir-personal-info',
@@ -91,9 +92,11 @@ export class PersonalInfoComponent extends BaseForm
     this.formGroup.controls.phn.valueChanges.subscribe(
       (val) => (this.incomeReviewDataService.applicant.phn = val)
     );
-    this.formGroup.controls.hasSpouse.valueChanges.subscribe(
-      (val) => (this.incomeReviewDataService.hasSpouse = val)
-    );
+    this.formGroup.controls.hasSpouse.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.hasSpouse = val;
+      console.log('has spouse', val);
+      this.updateFieldValidors(val);
+    });
     this.formGroup.controls.spFirstName.valueChanges.subscribe(
       (val) => (this.incomeReviewDataService.spouse.firstName = val)
     );
@@ -108,10 +111,34 @@ export class PersonalInfoComponent extends BaseForm
   continue() {
     this.markAllInputsTouched();
 
-    this.formGroup.updateValueAndValidity({ onlySelf: false });
-
     if (this.canContinue()) {
       this.navigate(INCOME_REVIEW_PAGES.INCOME.fullpath);
     }
+  }
+
+  updateFieldValidors(hasSpouse: boolean) {
+    const firstName = this.formGroup.controls.spFirstName;
+    const lastName = this.formGroup.controls.spLastName;
+    const phn = this.formGroup.controls.spPhn;
+
+    if (hasSpouse) {
+      firstName.setValidators(Validators.required);
+      lastName.setValidators(Validators.required);
+      phn.setValidators(Validators.required);
+    } else {
+      firstName.clearValidators();
+      lastName.clearValidators();
+      phn.clearValidators();
+
+      firstName.patchValue(null);
+      lastName.patchValue(null);
+      phn.patchValue(null);
+    }
+
+    firstName.updateValueAndValidity();
+    lastName.updateValueAndValidity();
+    phn.updateValueAndValidity();
+
+    this.formGroup.updateValueAndValidity({ onlySelf: false });
   }
 }

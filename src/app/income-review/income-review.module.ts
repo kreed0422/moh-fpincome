@@ -26,6 +26,7 @@ import { ReviewContainerComponent } from './component/review-container/review-co
 import { PersonalInfoComponent } from './pages/personal-info/personal-info.component';
 import { IncomeComponent } from './pages/income/income.component';
 import { SupportDocsComponent } from './pages/support-docs/support-docs.component';
+import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { SupportDocsComponent } from './pages/support-docs/support-docs.componen
     IncomeReviewRoutingModule,
     ModalModule.forRoot(),
     CaptchaModule,
+    TextMaskModule,
   ],
   providers: [
     {

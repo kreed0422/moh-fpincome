@@ -4,6 +4,7 @@ import { IncomeComponent } from './income.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedCoreModule } from 'moh-common-lib';
+import { TextMaskModule } from 'angular2-text-mask';
 
 describe('IncomeComponent', () => {
   let component: IncomeComponent;
@@ -17,6 +18,7 @@ describe('IncomeComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         SharedCoreModule,
+        TextMaskModule,
       ],
     }).compileComponents();
   }));

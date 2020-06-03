@@ -5,13 +5,10 @@ import {
   ContainerService,
   PageStateService,
   commonValidatePostalcode,
-  commonDuplicateCheck,
 } from 'moh-common-lib';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
-import { first } from 'rxjs/operators';
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 
 @Component({
   selector: 'fpir-personal-info',

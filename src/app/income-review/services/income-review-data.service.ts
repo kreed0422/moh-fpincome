@@ -5,6 +5,8 @@ import { ServerPayload } from '../models/review-income-api';
 import { formatISO } from 'date-fns';
 import { Person, Address, CommonImage } from 'moh-common-lib';
 import { INCOME_REVIEW_PAGES } from '../income-review.constants';
+import { conformToMask } from 'angular2-text-mask';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 export class Registrant extends Person {
   phn: string;
@@ -13,45 +15,16 @@ export class Registrant extends Person {
   consent: boolean = false;
 
   // financial information
-  private _originalIncome: number;
-  private _reducedIncome: number;
-  private _remainderIncome: number;
-
-  get originalIncome() {
-    return isNaN(this._originalIncome) ? null : this._originalIncome.toFixed(2);
-  }
-  set originalIncome(value: string) {
-    if (value) {
-      this._originalIncome = Number(value);
-    }
-  }
-
-  get reducedIncome() {
-    return isNaN(this._reducedIncome) ? null : this._reducedIncome.toFixed(2);
-  }
-  set reducedIncome(value: string) {
-    if (value) {
-      this._reducedIncome = Number(value);
-    }
-  }
-
-  get remainderIncome() {
-    return isNaN(this._remainderIncome)
-      ? null
-      : this._remainderIncome.toFixed(2);
-  }
-  set remainderIncome(value: string) {
-    if (value) {
-      this._remainderIncome = Number(value);
-    }
-  }
+  originalIncome: number;
+  reducedIncome: number;
+  remainderIncome: number;
 
   get incomeSubTotal() {
-    const total =
-      this._convertNaN(this._originalIncome) +
-      this._convertNaN(this._reducedIncome) +
-      this._convertNaN(this._remainderIncome);
-    return total.toFixed(2);
+    return (
+      this._convertNaN(this.originalIncome) +
+      this._convertNaN(this.reducedIncome) +
+      this._convertNaN(this.remainderIncome)
+    );
   }
 
   private _convertNaN(value: number) {
@@ -103,7 +76,18 @@ export class IncomeReviewDataService {
 
   applicationResponse: ServerPayload;
 
-  private _zeroAmount: string = '0.00';
+  // Money masks
+  moneyMask = createNumberMask({
+    prefix: '',
+    allowDecimal: true,
+    integerLimit: 5, // Max numeric value is 99,999.99
+  });
+
+  totalMoneyMask = createNumberMask({
+    prefix: '',
+    allowDecimal: true,
+    integerLimit: 7, // Max numeric value is 9,999,999.99
+  });
 
   // Payload for application
   get applicationPayload() {
@@ -118,10 +102,7 @@ export class IncomeReviewDataService {
   }
 
   get incomeTotal() {
-    const total =
-      Number(this.applicant.incomeSubTotal) +
-      Number(this.spouse.incomeSubTotal);
-    return total.toFixed(2);
+    return this.applicant.incomeSubTotal + this.spouse.incomeSubTotal;
   }
 
   get uploadedDocCount() {
@@ -179,36 +160,36 @@ export class IncomeReviewDataService {
           sectionItems: [
             {
               label: this.originalIncomeLabel,
-              value: `$ ${
-                this.applicant.originalIncome
-                  ? this.applicant.originalIncome
-                  : this._zeroAmount
-              }`,
+              value: this._currencyFormat(
+                this.applicant.originalIncome,
+                this.moneyMask
+              ),
               extraInfo: '1',
             },
             {
               label: this.reducedIncomeLabel,
-              value: `$ ${
-                this.applicant.reducedIncome
-                  ? this.applicant.reducedIncome
-                  : this._zeroAmount
-              }`,
+              value: this._currencyFormat(
+                this.applicant.reducedIncome,
+                this.moneyMask
+              ),
               extraInfo: '2',
             },
             {
               label: this.remainderIncomeLabel,
-              value: `$ ${
-                this.applicant.remainderIncome
-                  ? this.applicant.remainderIncome
-                  : this._zeroAmount
-              }`,
+              value: this._currencyFormat(
+                this.applicant.remainderIncome,
+                this.moneyMask
+              ),
               extraInfo: '3',
             },
             {
               label: this.hasSpouse
                 ? this.subtotalLabelLine1to3
                 : this.totalLabelLine1to3,
-              value: `$ ${this.applicant.incomeSubTotal}`,
+              value: this._currencyFormat(
+                this.applicant.incomeSubTotal,
+                this.totalMoneyMask
+              ),
               extraInfo: '4',
             },
           ],
@@ -222,34 +203,34 @@ export class IncomeReviewDataService {
         sectionItems: [
           {
             label: this.originalIncomeLabel,
-            value: `$ ${
-              this.spouse.originalIncome
-                ? this.spouse.originalIncome
-                : this._zeroAmount
-            }`,
+            value: this._currencyFormat(
+              this.spouse.originalIncome,
+              this.moneyMask
+            ),
             extraInfo: '5',
           },
           {
             label: this.reducedIncomeLabel,
-            value: `$ ${
-              this.spouse.reducedIncome
-                ? this.spouse.reducedIncome
-                : this._zeroAmount
-            }`,
+            value: this._currencyFormat(
+              this.spouse.reducedIncome,
+              this.moneyMask
+            ),
             extraInfo: '6',
           },
           {
             label: this.remainderIncomeLabel,
-            value: `$ ${
-              this.spouse.remainderIncome
-                ? this.spouse.remainderIncome
-                : this._zeroAmount
-            }`,
+            value: this._currencyFormat(
+              this.spouse.remainderIncome,
+              this.moneyMask
+            ),
             extraInfo: '7',
           },
           {
             label: this.subtotalLabelLine5to7,
-            value: `$ ${this.spouse.incomeSubTotal}`,
+            value: this._currencyFormat(
+              this.spouse.incomeSubTotal,
+              this.totalMoneyMask
+            ),
             extraInfo: '8',
           },
         ],
@@ -259,7 +240,7 @@ export class IncomeReviewDataService {
         sectionItems: [
           {
             label: this.totalLabelLine4and8,
-            value: `$ ${this.incomeTotal}`,
+            value: this._currencyFormat(this.incomeTotal, this.totalMoneyMask),
             extraInfo: '9',
           },
         ],
@@ -284,5 +265,20 @@ export class IncomeReviewDataService {
         },
       ],
     };
+  }
+
+  currencyStrToNumber(strValue: string): number {
+    if (strValue) {
+      let value = strValue.replace(/,/g, '');
+      value = value.replace('$', '');
+      return Number(value);
+    }
+    return 0;
+  }
+
+  private _currencyFormat(currency: number, moneyMask: string): string {
+    const _currency = isNaN(currency) ? 0 : currency;
+    const mask = conformToMask(_currency.toFixed(2), moneyMask, {});
+    return `$ ${mask.conformedValue}`;
   }
 }

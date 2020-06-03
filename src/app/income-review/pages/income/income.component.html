@@ -23,7 +23,11 @@
           type="text"
           formControlName="originalIncome"
           name="originalIncome"
+          [textMask]="{ mask: moneyMask }"
         />
+        <common-error-container [displayError]="originalIncomeHasError">
+          {{ originalIncomeErrorMsg }}
+        </common-error-container>
       </div>
       <div class="col-md-4">1</div>
     </div>
@@ -35,7 +39,11 @@
           type="text"
           formControlName="reducedIncome"
           name="reducedIncome"
+          [textMask]="{ mask: moneyMask }"
         />
+        <common-error-container [displayError]="reducedIncomeHasError">
+          {{ reducedIncomeErrorMsg }}
+        </common-error-container>
       </div>
       <div class="col-md-4">2</div>
     </div>
@@ -47,7 +55,11 @@
           type="text"
           formControlName="remainderIncome"
           name="remainderIncome"
+          [textMask]="{ mask: moneyMask }"
         />
+        <common-error-container [displayError]="remainderIncomeHasError">
+          {{ remainderIncomeErrorMsg }}
+        </common-error-container>
       </div>
       <div class="col-md-4">3</div>
     </div>
@@ -55,7 +67,12 @@
     <div class="row pb-2">
       <div class="col-md-4" [innerHTML]="line1to3Label"></div>
       <div class="col-md-4">
-        <input type="text" formControlName="subtotal" name="subtotal" />
+        <input
+          type="text"
+          formControlName="subtotal"
+          name="subtotal"
+          [textMask]="{ mask: totalMoneyMask }"
+        />
       </div>
       <div class="col-md-4">4</div>
     </div>
@@ -71,7 +88,11 @@
             type="text"
             formControlName="spOriginalIncome"
             name="spOriginalIncome"
+            [textMask]="{ mask: moneyMask }"
           />
+          <common-error-container [displayError]="spOriginalIncomeHasError">
+            {{ originalIncomeErrorMsg }}
+          </common-error-container>
         </div>
         <div class="col-md-4">5</div>
       </div>
@@ -83,7 +104,11 @@
             type="text"
             formControlName="spReducedIncome"
             name="spReducedIncome"
+            [textMask]="{ mask: moneyMask }"
           />
+          <common-error-container [displayError]="spReducedIncomeHasError">
+            {{ reducedIncomeErrorMsg }}
+          </common-error-container>
         </div>
         <div class="col-md-4">6</div>
       </div>
@@ -95,7 +120,11 @@
             type="text"
             formControlName="spRemainderIncome"
             name="spRemainderIncome"
+            [textMask]="{ mask: moneyMask }"
           />
+          <common-error-container [displayError]="spRemainderIncomeHasError">
+            {{ remainderIncomeErrorMsg }}
+          </common-error-container>
         </div>
         <div class="col-md-4">7</div>
       </div>
@@ -103,7 +132,12 @@
       <div class="row pb-2">
         <div class="col-md-4" [innerHTML]="line5to7Label"></div>
         <div class="col-md-4">
-          <input type="text" formControlName="spSubtotal" name="spSubtotal" />
+          <input
+            type="text"
+            formControlName="spSubtotal"
+            name="spSubtotal"
+            [textMask]="{ mask: totalMoneyMask }"
+          />
         </div>
         <div class="col-md-4">8</div>
       </div>
@@ -111,7 +145,12 @@
       <div class="row pb-2">
         <div class="col-md-4" [innerHTML]="line4and8Label"></div>
         <div class="col-md-4">
-          <input type="text" formControlName="total" name="total" />
+          <input
+            type="text"
+            formControlName="total"
+            name="total"
+            [textMask]="{ mask: totalMoneyMask }"
+          />
         </div>
         <div class="col-md-4">8</div>
       </div>

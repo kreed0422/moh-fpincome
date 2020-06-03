@@ -1,3 +1,39 @@
+<a name="0.2.1"></a>
+
+## 0.2.1 (2020-06-03)
+
+### Bug Fixes
+
+- **accessibility:** resolve broken aria reference ([0715d90](https://github.com/bcgov/moh-fpincome/commit/0715d90))
+- **dist:** change output directory path ([fe72c2c](https://github.com/bcgov/moh-fpincome/commit/fe72c2c))
+- **proxy:** fix target url ([4859dc0](https://github.com/bcgov/moh-fpincome/commit/4859dc0))
+- **reqirements:** fix URL for hlth5355 doc ([5621cc5](https://github.com/bcgov/moh-fpincome/commit/5621cc5))
+- **schema:** correct uuid name in schema ([939ffa9](https://github.com/bcgov/moh-fpincome/commit/939ffa9))
+- **security:** prevent page from being modified ([538196e](https://github.com/bcgov/moh-fpincome/commit/538196e))
+- **url:** change base url from fpincome to fpcare ([18d0179](https://github.com/bcgov/moh-fpincome/commit/18d0179))
+
+### Features
+
+- **api:** add template for submit application ([1be43b9](https://github.com/bcgov/moh-fpincome/commit/1be43b9))
+- **app-link:** add link to doc ([d90a35b](https://github.com/bcgov/moh-fpincome/commit/d90a35b))
+- **consent:** update content on page ([5f8a937](https://github.com/bcgov/moh-fpincome/commit/5f8a937))
+- **content:** update requirement content & logic ([a3154d1](https://github.com/bcgov/moh-fpincome/commit/a3154d1))
+- **fcpir-2:** add consent page ([3c3aefc](https://github.com/bcgov/moh-fpincome/commit/3c3aefc))
+- **fcpir-45:** check mandatory fields ([68c96de](https://github.com/bcgov/moh-fpincome/commit/68c96de))
+- **fpcir-1:** initial round trip to back-end successful ([6d04ede](https://github.com/bcgov/moh-fpincome/commit/6d04ede))
+- **fpcir-36-37:** add income validation ([252e994](https://github.com/bcgov/moh-fpincome/commit/252e994))
+- **fpcir-4:** scaffold components for requirements page ([98ff58a](https://github.com/bcgov/moh-fpincome/commit/98ff58a))
+- **fpcir-5:** add names to consent ([b7b0898](https://github.com/bcgov/moh-fpincome/commit/b7b0898))
+- **fpcir-5:** add personal information page ([e886dce](https://github.com/bcgov/moh-fpincome/commit/e886dce))
+- add spouse and duplicate phn validations ([f29e2b3](https://github.com/bcgov/moh-fpincome/commit/f29e2b3))
+- **fpcir-7:** edit button links to pages ([c346d49](https://github.com/bcgov/moh-fpincome/commit/c346d49))
+- **fpir-1:** add content to confirmation and review pages ([e3b0516](https://github.com/bcgov/moh-fpincome/commit/e3b0516))
+- **fpir-1:** add review container component ([cd472ce](https://github.com/bcgov/moh-fpincome/commit/cd472ce))
+- **fpir-4:** add page layout and logic ([0427fa7](https://github.com/bcgov/moh-fpincome/commit/0427fa7))
+- **modal:** add information collection notice ([416f950](https://github.com/bcgov/moh-fpincome/commit/416f950))
+- **page:** add gross income page - no validation ([3a86e77](https://github.com/bcgov/moh-fpincome/commit/3a86e77))
+- **page:** add supporting documents ([9fc0c2c](https://github.com/bcgov/moh-fpincome/commit/9fc0c2c))
+
 <a name="0.2.0"></a>
 
 # 0.2.0 (2020-05-30)

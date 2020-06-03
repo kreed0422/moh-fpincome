@@ -123,15 +123,24 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
       spOriginalIncome: [
         this.incomeReviewDataService.spouse.originalIncome,
-        { validators: Validators.required, updateOn: 'blur' },
+        {
+          validators: this.hasSpouse ? Validators.required : null,
+          updateOn: 'blur',
+        },
       ],
       spReducedIncome: [
         this.incomeReviewDataService.spouse.reducedIncome,
-        { validators: Validators.required, updateOn: 'blur' },
+        {
+          validators: this.hasSpouse ? Validators.required : null,
+          updateOn: 'blur',
+        },
       ],
       spRemainderIncome: [
         this.incomeReviewDataService.spouse.remainderIncome,
-        { validators: Validators.required, updateOn: 'blur' },
+        {
+          validators: this.hasSpouse ? Validators.required : null,
+          updateOn: 'blur',
+        },
       ],
       spSubtotal: [
         {

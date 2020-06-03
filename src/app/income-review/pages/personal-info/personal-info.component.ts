@@ -97,7 +97,7 @@ export class PersonalInfoComponent extends BaseForm
     });
     this.formGroup.controls.hasSpouse.valueChanges.subscribe((val) => {
       this.incomeReviewDataService.hasSpouse = val;
-      this.updateSpouseValidors(val);
+      this.updateSpouseValidators(val);
     });
     this.formGroup.controls.spFirstName.valueChanges.subscribe(
       (val) => (this.incomeReviewDataService.spouse.firstName = val)
@@ -119,7 +119,7 @@ export class PersonalInfoComponent extends BaseForm
     }
   }
 
-  updateSpouseValidors(hasSpouse: boolean) {
+  updateSpouseValidators(hasSpouse: boolean) {
     const firstName = this.formGroup.controls.spFirstName;
     const lastName = this.formGroup.controls.spLastName;
     const spousePhn = this.formGroup.controls.spPhn;

@@ -20,11 +20,13 @@
         <div class="row review--row pb-2">
           <div class="col-md-4 review--key" [innerHTML]="item.label"></div>
           <div
-            class="{{ item.extraInfo ? 'col-md-4' : 'col-md-8' }}"
+            class="{{ item.extraInfo ? 'col-md-2' : 'col-md-8' }} {{
+              item.valueClass ? item.valueClass : null
+            }}"
             [innerHTML]="item.value"
           ></div>
           <div
-            class="col-md-4"
+            class="col-md-2"
             *ngIf="item.extraInfo"
             [innerHTML]="item.extraInfo"
           ></div>

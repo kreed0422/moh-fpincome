@@ -10,7 +10,7 @@ export const environment = {
     captchaBaseURL: '/fpcare/api/captcha', // captcha for authorization
     baseAPIUrl: '/fpcare/api/fpcareIncome', // middleware url to send requests
     application: 'application', // end point for submitting income review applications
-    attachments: 'bcpAttachment', // end point for submitting supporting documents
+    attachments: 'fpcareAttachment', // end point for submitting supporting documents
   },
 
   /**

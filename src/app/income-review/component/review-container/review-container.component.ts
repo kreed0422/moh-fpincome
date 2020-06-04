@@ -5,6 +5,7 @@ export interface ReviewSectionItemType {
   label: string;
   value: string;
   extraInfo?: string | null;
+  valueClass?: string | null; // Format cell for value only
 }
 
 export interface ReviewSectionType {

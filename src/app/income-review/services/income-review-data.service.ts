@@ -54,17 +54,19 @@ export class IncomeReviewDataService {
   readonly applicationUUID: string = UUID.UUID();
 
   // Labels for calculate income, review and confirmation pages
-  readonly applSectionTitle = 'YOUR ESTIMATED 2020 GROSS INCOME';
-  readonly spSectionTitle = `SPOUSE'S ESTIMATED 2020 GROSS INCOME`;
+  readonly applSectionTitle = 'YOUR ESTIMATED 2020 INCOME';
+  readonly spSectionTitle = `SPOUSE'S ESTIMATED 2020 INCOME`;
   readonly originalIncomeLabel =
     'Before reduction of income<br><strong>(e.g. January - March)<strong>';
   readonly reducedIncomeLabel =
     'During reduction of income<br><strong>(e.g. April - June)</strong>';
-  readonly remainderIncomeLabel = 'Remainder of 2020 (estimated)';
+  readonly remainderIncomeLabel = 'Remainder of 2020<br>(estimated)';
   readonly subtotalLabelLine1to3 = 'SUBTOTAL (lines 1-3)';
-  readonly totalLabelLine1to3 = 'TOTAL (lines 1-3)';
+  readonly totalLabelLine1to3 =
+    '<strong>TOTAL GROSS INCOME (lines 1-3)</stong>';
   readonly subtotalLabelLine5to7 = 'SUBTOTAL (lines 5-7)';
-  readonly totalLabelLine4and8 = '<strong>TOTAL (line 4 + line 8)<strong>';
+  readonly totalLabelLine4and8 =
+    '<strong>TOTAL GROSS INCOME (line 4 + line 8)<strong>';
 
   // Labels for personal info, review and confirmation pages
   readonly applFirstNameLabel = 'First name';
@@ -219,7 +221,7 @@ export class IncomeReviewDataService {
 
   getGrossIncomeSection(printView: boolean = false): ReviewObject {
     const obj = {
-      heading: 'Gross Income',
+      heading: 'Income',
       isPrintView: printView,
       redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
       section: [
@@ -233,6 +235,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '1',
+              valueClass: 'reivew--income-value',
             },
             {
               label: this.reducedIncomeLabel,
@@ -241,6 +244,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '2',
+              valueClass: 'reivew--income-value',
             },
             {
               label: this.remainderIncomeLabel,
@@ -249,6 +253,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '3',
+              valueClass: 'reivew--income-value',
             },
             {
               label: this.hasSpouse
@@ -259,6 +264,7 @@ export class IncomeReviewDataService {
                 this.totalMoneyMask
               ),
               extraInfo: '4',
+              valueClass: 'reivew--income-value review--income-total-color',
             },
           ],
         },
@@ -276,6 +282,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '5',
+            valueClass: 'reivew--income-value',
           },
           {
             label: this.reducedIncomeLabel,
@@ -284,6 +291,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '6',
+            valueClass: 'reivew--income-value',
           },
           {
             label: this.remainderIncomeLabel,
@@ -292,6 +300,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '7',
+            valueClass: 'reivew--income-value',
           },
           {
             label: this.subtotalLabelLine5to7,
@@ -300,6 +309,7 @@ export class IncomeReviewDataService {
               this.totalMoneyMask
             ),
             extraInfo: '8',
+            valueClass: 'reivew--income-value review--income-total-color',
           },
         ],
       };
@@ -310,6 +320,7 @@ export class IncomeReviewDataService {
             label: this.totalLabelLine4and8,
             value: this._currencyFormat(this.incomeTotal, this.totalMoneyMask),
             extraInfo: '9',
+            valueClass: 'reivew--income-value review--income-total-color',
           },
         ],
       };

@@ -24,6 +24,7 @@
           formControlName="originalIncome"
           name="originalIncome"
           [textMask]="{ mask: moneyMask }"
+          autocomplete="off"
         />
         <common-error-container [displayError]="originalIncomeHasError">
           {{ originalIncomeErrorMsg }}
@@ -40,6 +41,7 @@
           formControlName="reducedIncome"
           name="reducedIncome"
           [textMask]="{ mask: moneyMask }"
+          autocomplete="off"
         />
         <common-error-container [displayError]="reducedIncomeHasError">
           {{ reducedIncomeErrorMsg }}
@@ -56,6 +58,7 @@
           formControlName="remainderIncome"
           name="remainderIncome"
           [textMask]="{ mask: moneyMask }"
+          autocomplete="off"
         />
         <common-error-container [displayError]="remainderIncomeHasError">
           {{ remainderIncomeErrorMsg }}
@@ -89,6 +92,7 @@
             formControlName="spOriginalIncome"
             name="spOriginalIncome"
             [textMask]="{ mask: moneyMask }"
+            autocomplete="off"
           />
           <common-error-container [displayError]="spOriginalIncomeHasError">
             {{ originalIncomeErrorMsg }}
@@ -105,6 +109,7 @@
             formControlName="spReducedIncome"
             name="spReducedIncome"
             [textMask]="{ mask: moneyMask }"
+            autocomplete="off"
           />
           <common-error-container [displayError]="spReducedIncomeHasError">
             {{ reducedIncomeErrorMsg }}
@@ -121,6 +126,7 @@
             formControlName="spRemainderIncome"
             name="spRemainderIncome"
             [textMask]="{ mask: moneyMask }"
+            autocomplete="off"
           />
           <common-error-container [displayError]="spRemainderIncomeHasError">
             {{ remainderIncomeErrorMsg }}
@@ -152,7 +158,7 @@
             [textMask]="{ mask: totalMoneyMask }"
           />
         </div>
-        <div class="col-md-4">8</div>
+        <div class="col-md-4">9</div>
       </div>
     </common-page-section>
   </div>

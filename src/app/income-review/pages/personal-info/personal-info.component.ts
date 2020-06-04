@@ -133,6 +133,9 @@ export class PersonalInfoComponent extends BaseForm
       firstName.patchValue(null);
       lastName.patchValue(null);
       spousePhn.patchValue(null);
+
+      // If income was entered and applicant removes spouse, income fields need to be cleared.
+      this.incomeReviewDataService.spouse.clearIncome();
     }
 
     firstName.updateValueAndValidity();

@@ -31,6 +31,12 @@ export class Registrant extends Person {
     );
   }
 
+  clearIncome() {
+    this.originalIncome = undefined;
+    this.reducedIncome = undefined;
+    this.remainderIncome = undefined;
+  }
+
   private _convertNaN(value: number) {
     return isNaN(value) ? 0 : value;
   }
@@ -84,7 +90,7 @@ export class IncomeReviewDataService {
   moneyMask = createNumberMask({
     prefix: '',
     allowDecimal: true,
-    integerLimit: 5, // Max numeric value is 99,999.99
+    integerLimit: 6, // Max numeric value is 999,999.99
   });
 
   totalMoneyMask = createNumberMask({

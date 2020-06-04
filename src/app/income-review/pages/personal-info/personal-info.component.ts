@@ -21,11 +21,13 @@ export class PersonalInfoComponent extends BaseForm
   readonly applFirstNameLabel = 'First name';
   readonly applLastNameLabel = 'Last name';
   readonly applAddressLabel = 'Address';
-  readonly phnLabel = 'PHN';
+  readonly phnLabel = 'Personal Health Number (PHN)';
   readonly spFirstNameLabel = 'Spouse first name';
   readonly spLastNameLabel = 'Spouse last name';
-  readonly spPhnLabel = 'Spouse PHN';
-  readonly hasSpouseQuestion = 'Do you have a spouse / common law partner?';
+  readonly spPhnLabel = 'Spouse Personal Health Number (PHN)';
+  readonly hasSpouseQuestion = 'Do you have a spouse/common-law partner?';
+  // NOTE: Label needs to be fixed in common library, once done this label can be removed.
+  readonly applPostalCodeLabel = 'Postal code';
 
   constructor(
     protected router: Router,

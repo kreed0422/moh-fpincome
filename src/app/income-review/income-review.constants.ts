@@ -4,7 +4,7 @@ import { APP_ROUTES } from '../app.constants';
 const PAGE_NAMES = {
   home: 'requirements',
   personalInfo: 'personal-info',
-  grossIncome: 'gross-income',
+  grossIncome: 'calculate-income',
   supportDocs: 'supporting-docs',
   review: 'review',
   consent: 'consent',

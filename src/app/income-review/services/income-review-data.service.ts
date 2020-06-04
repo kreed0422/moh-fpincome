@@ -8,6 +8,10 @@ import { INCOME_REVIEW_PAGES } from '../income-review.constants';
 import { conformToMask } from 'angular2-text-mask';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
+export enum FpcDocumentTypes {
+  SupportDocument = 'SUPPORTDOCUMENT',
+}
+
 export class Registrant extends Person {
   phn: string;
 
@@ -70,9 +74,9 @@ export class IncomeReviewDataService {
   address: Address = new Address();
 
   // Support documents
-  originalIncomeSupportDocs: CommonImage[] = [];
-  reducedIncomeSupportDocs: CommonImage[] = [];
-  remainderIncomeSupportDocs: CommonImage[] = [];
+  originalIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
+  reducedIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
+  remainderIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
 
   applicationResponse: ServerPayload;
 
@@ -91,14 +95,49 @@ export class IncomeReviewDataService {
 
   // Payload for application
   get applicationPayload() {
-    // Create date
-    this.dateOfSubmission = new Date();
-    return {
+    const payload = {
       applicationUUID: this.applicationUUID,
-      submissionDate: formatISO(this.dateOfSubmission, {
-        representation: 'date',
+
+      fpcIncomeReviewCovid19: {
+        informationConsentAgreement: this.informationCollectionNoticeConsent,
+        submissionDate: formatISO(new Date(), { representation: 'date' }),
+        applicant: {
+          firstName: this.applicant.firstName,
+          lastName: this.applicant.lastName,
+          phn: this._stripFormatting(this.applicant.phn),
+          address: {
+            street: this.address.addressLine1,
+            city: this.address.city,
+            postalCode: this._stripFormatting(this.address.postal),
+          },
+        },
+        grossIncome: {
+          applicantIncome: {
+            originalIncome: this.applicant.originalIncome,
+            reducedIncome: this.applicant.reducedIncome,
+            remainderIncome: this.applicant.remainderIncome,
+            subtotal: this.applicant.incomeSubTotal,
+          },
+          totalIncome: this.incomeTotal,
+        },
+        applicantConsent: this.applicant.consent,
+      },
+      attachments: this._consolidateDocuments().map((x) => {
+        return x.toJSON();
       }),
     };
+
+    if (this.hasSpouse) {
+      payload.fpcIncomeReviewCovid19.grossIncome = Object.assign(
+        payload.fpcIncomeReviewCovid19.grossIncome,
+        this._getSpouseIncome()
+      );
+      payload.fpcIncomeReviewCovid19 = Object.assign(
+        payload.fpcIncomeReviewCovid19,
+        this._getSpouse()
+      );
+    }
+    return payload;
   }
 
   get incomeTotal() {
@@ -280,5 +319,56 @@ export class IncomeReviewDataService {
     const _currency = isNaN(currency) ? 0 : currency;
     const mask = conformToMask(_currency.toFixed(2), moneyMask, {});
     return `$ ${mask.conformedValue}`;
+  }
+
+  private _stripFormatting(value: string) {
+    return value ? value.replace(/ /g, '') : null;
+  }
+
+  private _consolidateDocuments() {
+    let consolidatedDocs: CommonImage<FpcDocumentTypes>[] = [
+      ...this.originalIncomeSupportDocs,
+    ];
+
+    if (this.reducedIncomeSupportDocs.length > 0) {
+      consolidatedDocs = consolidatedDocs.concat([
+        ...this.reducedIncomeSupportDocs,
+      ]);
+    }
+
+    if (this.remainderIncomeSupportDocs.length > 0) {
+      consolidatedDocs = consolidatedDocs.concat([
+        ...this.remainderIncomeSupportDocs,
+      ]);
+    }
+
+    // update attachment order and document type
+    consolidatedDocs.forEach((x, idx) => {
+      x.attachmentOrder = idx + 1;
+      x.documentType = FpcDocumentTypes.SupportDocument;
+    });
+    return consolidatedDocs;
+  }
+
+  private _getSpouse() {
+    return {
+      spouse: {
+        firstName: this.spouse.firstName,
+        lastName: this.spouse.lastName,
+        phn: this._stripFormatting(this.spouse.phn),
+      },
+      spouseConsent: this.spouse.consent,
+    };
+  }
+
+  private _getSpouseIncome() {
+    return {
+      spouseIncome: {
+        originalIncome: this.spouse.originalIncome,
+        reducedIncome: this.spouse.reducedIncome,
+        remainderIncome: this.spouse.remainderIncome,
+        subtotal: this.spouse.incomeSubTotal,
+      },
+    };
   }
 }

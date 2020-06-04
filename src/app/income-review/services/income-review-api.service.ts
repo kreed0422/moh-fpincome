@@ -40,10 +40,36 @@ export class IncomeReviewApiService extends AbstractHttpService {
    * @param jsonPayLoad Information for income review application
    */
   public submitApplication(jsonPayLoad: any) {
-    // TODO: Inital Request - to be updated in next sprint
-    const url = `${environment.api.baseAPIUrl}/initialRequest`;
-    return this.post(url, jsonPayLoad);
+    const url = `${environment.api.baseAPIUrl}/${environment.api.application}`;
+
+    // Add requestUUID to json payload object
+    const payload = Object.assign(jsonPayLoad, {
+      requestUUID: this.generateUUID(),
+    });
+
+    return this.post(url, payload);
   }
+
+  /*
+  public uploadDocuments(attachment: CommonImage, applicationUUID) {
+    let url = `${environment.api.attachments}/${applicationUUID}/attachments/${attachment.uuid}`;
+
+    url += `?attachmentdocumenttype=${FpcDocumentTypes.SupportDocument}&programArea=PHARMANET&contentType=1`;
+
+    return this.uploadAttachment(url, attachment);
+  }
+
+    submitForm(jsonPayLoad, supportDocuments: CommonImage<FpcDocumentTypes>[], applicationUUID) {
+      TODO: update to handle an array of documents
+    return this.uploadSignature(signature, applicationUUID)
+      .pipe(
+        flatMap(attachRes => this.submitJson(jsonPayLoad, applicationUUID, signature)),
+        catchError(this.handleError.bind(this))
+      );
+  }
+
+
+  */
 
   protected handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

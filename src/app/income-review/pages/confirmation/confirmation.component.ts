@@ -9,6 +9,7 @@ import {
 } from '../../income-review.constants';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
 import { ReviewContainerComponent } from '../../component/review-container/review-container.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'fpir-confirmation',
@@ -24,6 +25,7 @@ export class ConfirmationComponent extends Base implements OnInit {
   supportDocs: ReviewContainerComponent;
 
   readonly printView: boolean = true;
+  readonly hibc = environment.links.hibc;
 
   // Default to error state
   displayIcon: ApiStatusCodes = ApiStatusCodes.ERROR;

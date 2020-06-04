@@ -53,6 +53,7 @@ export class IncomeReviewDataService {
    */
   readonly applicationUUID: string = UUID.UUID();
 
+  // Labels for calculate income, review and confirmation pages
   readonly applSectionTitle = 'YOUR ESTIMATED 2020 GROSS INCOME';
   readonly spSectionTitle = `SPOUSE'S ESTIMATED 2020 GROSS INCOME`;
   readonly originalIncomeLabel =
@@ -64,6 +65,16 @@ export class IncomeReviewDataService {
   readonly totalLabelLine1to3 = 'TOTAL (lines 1-3)';
   readonly subtotalLabelLine5to7 = 'SUBTOTAL (lines 5-7)';
   readonly totalLabelLine4and8 = '<strong>TOTAL (line 4 + line 8)<strong>';
+
+  // Labels for personal info, review and confirmation pages
+  readonly applFirstNameLabel = 'First name';
+  readonly applLastNameLabel = 'Last name';
+  readonly applAddressLabel = 'Address';
+  readonly phnLabel = 'Personal Health Number (PHN)';
+  readonly spFirstNameLabel = 'Spouse first name';
+  readonly spLastNameLabel = 'Spouse last name';
+  readonly spPhnLabel = 'Spouse Personal Health Number (PHN)';
+  readonly applPostalCodeLabel = 'Postal code';
 
   dateOfSubmission: Date;
 
@@ -168,12 +179,24 @@ export class IncomeReviewDataService {
       section: [
         {
           sectionItems: [
-            { label: 'First name:', value: this.applicant.firstName },
-            { label: 'Last name:', value: this.applicant.lastName },
-            { label: 'Address:', value: this.address.addressLine1 },
+            {
+              label: `${this.applFirstNameLabel}:`,
+              value: this.applicant.firstName,
+            },
+            {
+              label: `${this.applLastNameLabel}:`,
+              value: this.applicant.lastName,
+            },
+            {
+              label: `${this.applAddressLabel}:`,
+              value: this.address.addressLine1,
+            },
             { label: 'City:', value: this.address.city },
-            { label: 'Postal code:', value: this.address.postal },
-            { label: 'PHN:', value: this.applicant.phn },
+            {
+              label: `${this.applPostalCodeLabel}:`,
+              value: this.address.postal,
+            },
+            { label: `${this.phnLabel}:`, value: this.applicant.phn },
           ],
         },
       ],
@@ -182,9 +205,9 @@ export class IncomeReviewDataService {
     if (this.hasSpouse) {
       const spouseSection = {
         sectionItems: [
-          { label: 'Spouse first name:', value: this.spouse.firstName },
-          { label: 'Spouse last name:', value: this.spouse.lastName },
-          { label: 'Spouse PHN:', value: this.spouse.phn },
+          { label: `${this.spFirstNameLabel}:`, value: this.spouse.firstName },
+          { label: `${this.spLastNameLabel}:`, value: this.spouse.lastName },
+          { label: `${this.spPhnLabel}:`, value: this.spouse.phn },
         ],
       };
 

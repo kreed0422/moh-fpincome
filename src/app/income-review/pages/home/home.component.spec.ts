@@ -1,4 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  inject,
+} from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +14,13 @@ import { CollectionNoticeComponent } from '../../component/collection-notice/col
 import { ModalModule } from 'ngx-bootstrap';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
+import { IncomeReviewDataService } from '../../services/income-review-data.service';
+
+class MockDataService {
+  isRegistered: boolean;
+  isIncomeLess: boolean;
+  informationCollectionNoticeConsent: boolean = true;
+}
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -50,21 +62,14 @@ describe('HomeComponent', () => {
     expect(button.nativeElement.disabled).toBeTruthy();
   });
 
-  it('should have button on collection notice enabled when token is set', () => {
+  it('should be able to close the collection notice when button is enabled', () => {
     component.setToken('12345');
     fixture.detectChanges();
     const button = fixture.debugElement.query(
       By.css('fpir-collection-notice .modal-footer button')
     );
     expect(button.nativeElement.disabled).toBeFalsy();
-  });
 
-  it('should close collection notice when button clicked', () => {
-    component.setToken('12345');
-    fixture.detectChanges();
-    const button = fixture.debugElement.query(
-      By.css('fpir-collection-notice .modal-footer button')
-    );
     button.nativeElement.click();
     fixture.detectChanges();
     const dialog = fixture.debugElement.query(
@@ -74,95 +79,82 @@ describe('HomeComponent', () => {
   });
 
   // Logic test for continuing
-  it('should display required field errors', () => {
-    component.setToken('12345');
-    fixture.detectChanges();
-    const button = fixture.debugElement.query(
-      By.css('fpir-collection-notice .modal-footer button')
-    );
-    button.nativeElement.click();
-    fixture.detectChanges();
-    expect(component.canContinue()).toBeFalsy();
-    component.continue();
-    fixture.detectChanges();
-    const errors = fixture.debugElement.queryAll(
-      By.css('common-error-container .error--container')
-    );
-    expect(errors.length).toBe(2);
-    errors.forEach((x) => {
-      expect(x.nativeElement.textContent).toContain('required');
-    });
-  });
-
-  it('should indicate user is not eligible when not registered and income less than 10%', () => {
-    component.setToken('12345');
-    fixture.detectChanges();
-    const button = fixture.debugElement.query(
-      By.css('fpir-collection-notice .modal-footer button')
-    );
-    button.nativeElement.click();
-    component.formGroup.controls.isRegistered.setValue(false);
-    component.formGroup.controls.isIncomeLess.setValue(false);
-    component.formGroup.updateValueAndValidity();
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
+  it('should display required field errors', inject(
+    [IncomeReviewDataService],
+    (service: MockDataService) => {
       expect(component.canContinue()).toBeFalsy();
       component.continue();
       fixture.detectChanges();
       const errors = fixture.debugElement.queryAll(
         By.css('common-error-container .error--container')
       );
-      expect(errors.length).toBe(1);
+      expect(errors.length).toBe(2);
       errors.forEach((x) => {
-        expect(x.nativeElement.textContent).toContain('not eligible');
+        expect(x.nativeElement.textContent).toContain('required');
       });
-    });
-  });
+    }
+  ));
 
-  it('should indicate user is not eligible when not income less than 10%, but registered', () => {
-    component.setToken('12345');
-    fixture.detectChanges();
-    const button = fixture.debugElement.query(
-      By.css('fpir-collection-notice .modal-footer button')
-    );
-    button.nativeElement.click();
-    component.formGroup.controls.isRegistered.setValue(true);
-    component.formGroup.controls.isIncomeLess.setValue(false);
-    component.formGroup.updateValueAndValidity();
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(component.canContinue()).toBeFalsy();
-      component.continue();
+  it('should indicate user is not eligible when not registered and income less than 10%', inject(
+    [IncomeReviewDataService],
+    (service: MockDataService) => {
+      component.formGroup.controls.isRegistered.setValue(false);
+      component.formGroup.controls.isIncomeLess.setValue(false);
+      component.formGroup.updateValueAndValidity();
       fixture.detectChanges();
-      const errors = fixture.debugElement.queryAll(
-        By.css('common-error-container .error--container')
-      );
-      expect(errors.length).toBe(1);
-      errors.forEach((x) => {
-        expect(x.nativeElement.textContent).toContain('not eligible');
+      fixture.whenStable().then(() => {
+        expect(component.canContinue()).toBeFalsy();
+        component.continue();
+        fixture.detectChanges();
+        const errors = fixture.debugElement.queryAll(
+          By.css('common-error-container .error--container')
+        );
+        expect(errors.length).toBe(1);
+        errors.forEach((x) => {
+          expect(x.nativeElement.textContent).toContain('not eligible');
+        });
       });
-    });
-  });
+    }
+  ));
 
-  it('should coninue when registered and income is less than 10%', () => {
-    component.setToken('12345');
-    fixture.detectChanges();
-    const button = fixture.debugElement.query(
-      By.css('fpir-collection-notice .modal-footer button')
-    );
-    button.nativeElement.click();
-    component.formGroup.controls.isRegistered.setValue(true);
-    component.formGroup.controls.isIncomeLess.setValue(true);
-    component.formGroup.updateValueAndValidity();
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(component.canContinue()).toBeTruthy();
-      component.continue();
+  it('should indicate user is not eligible when not income less than 10%, but registered', inject(
+    [IncomeReviewDataService],
+    (service: MockDataService) => {
+      component.formGroup.controls.isRegistered.setValue(true);
+      component.formGroup.controls.isIncomeLess.setValue(false);
+      component.formGroup.updateValueAndValidity();
       fixture.detectChanges();
-      const errors = fixture.debugElement.queryAll(
-        By.css('common-error-container .error--container')
-      );
-      expect(errors.length).toBe(0);
-    });
-  });
+      fixture.whenStable().then(() => {
+        expect(component.canContinue()).toBeFalsy();
+        component.continue();
+        fixture.detectChanges();
+        const errors = fixture.debugElement.queryAll(
+          By.css('common-error-container .error--container')
+        );
+        expect(errors.length).toBe(1);
+        errors.forEach((x) => {
+          expect(x.nativeElement.textContent).toContain('not eligible');
+        });
+      });
+    }
+  ));
+
+  it('should coninue when registered and income is less than 10%', inject(
+    [IncomeReviewDataService],
+    (service: MockDataService) => {
+      component.formGroup.controls.isRegistered.setValue(true);
+      component.formGroup.controls.isIncomeLess.setValue(true);
+      component.formGroup.updateValueAndValidity();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(component.canContinue()).toBeTruthy();
+        component.continue();
+        fixture.detectChanges();
+        const errors = fixture.debugElement.queryAll(
+          By.css('common-error-container .error--container')
+        );
+        expect(errors.length).toBe(0);
+      });
+    }
+  ));
 });

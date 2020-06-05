@@ -14,10 +14,15 @@ import {
   getDebugElement,
   setInput,
   clickRadioButton,
-  MockComponent,
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
+import { Component } from '@angular/core';
 
+@Component({
+  selector: 'fpir-mock',
+  template: ` <p>Mock Income Page</p> `,
+})
+class MockIncomeComponent {}
 class MockDataService {
   hasSpouse: boolean = true;
 }
@@ -28,14 +33,14 @@ describe('PersonalInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalInfoComponent, MockComponent],
+      declarations: [PersonalInfoComponent, MockIncomeComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([
           {
             path: INCOME_REVIEW_PAGES.INCOME.fullpath,
-            component: MockComponent,
+            component: MockIncomeComponent,
           },
         ]),
         SharedCoreModule,

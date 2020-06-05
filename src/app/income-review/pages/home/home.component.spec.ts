@@ -20,9 +20,15 @@ import {
   getDebugInlineError,
   setInput,
   clickRadioButton,
-  MockComponent,
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'fpir-mock',
+  template: ` <p>Mock Personal Page</p> `,
+})
+class MockPersonalInfoComponent {}
 
 class MockDataService {
   isRegistered: boolean;
@@ -36,14 +42,18 @@ describe('HomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent, CollectionNoticeComponent, MockComponent],
+      declarations: [
+        HomeComponent,
+        CollectionNoticeComponent,
+        MockPersonalInfoComponent,
+      ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([
           {
             path: INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath,
-            component: MockComponent,
+            component: MockPersonalInfoComponent,
           },
         ]),
         SharedCoreModule,

@@ -43,9 +43,3 @@ export function clickRadioButton(de: DebugElement, value: string) {
   const _de = de.query(By.css('input[value=' + value + ']'));
   _de.nativeElement.click();
 }
-
-@Component({
-  selector: 'fpir-mock',
-  template: ` <p>Hello World</p> `,
-})
-export class MockComponent {}

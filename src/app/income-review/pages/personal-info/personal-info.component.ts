@@ -18,6 +18,8 @@ export class PersonalInfoComponent extends BaseForm
   implements OnInit, AfterViewInit {
   readonly firstNameLen = 20;
   readonly lastNameLen = 35;
+  readonly cityNameLen = 25;
+  readonly addressLen = 75;
   readonly hasSpouseQuestion = 'Do you have a spouse/common-law partner?';
 
   constructor(

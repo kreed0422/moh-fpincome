@@ -3,6 +3,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
+  ComponentFixtureAutoDetect,
 } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -15,6 +16,11 @@ import { ModalModule } from 'ngx-bootstrap';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
+import {
+  getDebugElement,
+  getDebugInlineError,
+  getAllDebugElements,
+} from '../../../_developmentHelpers/test-helpers';
 
 class MockDataService {
   isRegistered: boolean;
@@ -38,6 +44,7 @@ describe('HomeComponent', () => {
         CaptchaModule,
         ModalModule.forRoot(),
       ],
+      providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
     }).compileComponents();
   }));
 
@@ -56,8 +63,9 @@ describe('HomeComponent', () => {
   });
 
   it('should have button on collection notice disabled', () => {
-    const button = fixture.debugElement.query(
-      By.css('fpir-collection-notice .modal-footer button')
+    const button = getDebugElement(
+      fixture,
+      'fpir-collection-notice .modal-footer button'
     );
     expect(button.nativeElement.disabled).toBeTruthy();
   });
@@ -65,16 +73,15 @@ describe('HomeComponent', () => {
   it('should be able to close the collection notice when button is enabled', () => {
     component.setToken('12345');
     fixture.detectChanges();
-    const button = fixture.debugElement.query(
-      By.css('fpir-collection-notice .modal-footer button')
+    const button = getDebugElement(
+      fixture,
+      'fpir-collection-notice .modal-footer button'
     );
     expect(button.nativeElement.disabled).toBeFalsy();
 
     button.nativeElement.click();
     fixture.detectChanges();
-    const dialog = fixture.debugElement.query(
-      By.css('fpir-collection-notice .modal')
-    );
+    const dialog = getDebugElement(fixture, 'fpir-collection-notice .modal');
     expect(dialog.nativeElement.visable).toBeFalsy();
   });
 
@@ -85,13 +92,29 @@ describe('HomeComponent', () => {
       expect(component.canContinue()).toBeFalsy();
       component.continue();
       fixture.detectChanges();
-      const errors = fixture.debugElement.queryAll(
-        By.css('common-error-container .error--container')
+
+      expect(
+        component.formGroup.controls.isRegistered.hasError('required')
+      ).toBeTruthy();
+      expect(
+        component.formGroup.controls.isIncomeLess.hasError('required')
+      ).toBeTruthy();
+
+      const isRegistered = getDebugElement(
+        fixture,
+        'common-radio',
+        'isRegistered'
       );
-      expect(errors.length).toBe(2);
-      errors.forEach((x) => {
-        expect(x.nativeElement.textContent).toContain('required');
-      });
+      const isRegisteredError = getDebugInlineError(isRegistered);
+      expect(isRegisteredError).toContain('required');
+
+      const isIncomeLess = getDebugElement(
+        fixture,
+        'common-radio',
+        'isIncomeLess'
+      );
+      const isIncomeLessError = getDebugInlineError(isIncomeLess);
+      expect(isIncomeLessError).toContain('required');
     }
   ));
 
@@ -102,17 +125,23 @@ describe('HomeComponent', () => {
       component.formGroup.controls.isIncomeLess.setValue(false);
       component.formGroup.updateValueAndValidity();
       fixture.detectChanges();
+
       fixture.whenStable().then(() => {
+        expect(
+          component.formGroup.controls.isRegistered.hasError('required')
+        ).toBeFalsy();
+        expect(
+          component.formGroup.controls.isIncomeLess.hasError('required')
+        ).toBeFalsy();
         expect(component.canContinue()).toBeFalsy();
         component.continue();
+
         fixture.detectChanges();
-        const errors = fixture.debugElement.queryAll(
-          By.css('common-error-container .error--container')
+        const formError = getDebugElement(
+          fixture,
+          'form common-error-container .error--container'
         );
-        expect(errors.length).toBe(1);
-        errors.forEach((x) => {
-          expect(x.nativeElement.textContent).toContain('not eligible');
-        });
+        expect(formError.nativeElement.textContent).toContain('not eligible');
       });
     }
   ));
@@ -124,17 +153,23 @@ describe('HomeComponent', () => {
       component.formGroup.controls.isIncomeLess.setValue(false);
       component.formGroup.updateValueAndValidity();
       fixture.detectChanges();
+
       fixture.whenStable().then(() => {
+        expect(
+          component.formGroup.controls.isRegistered.hasError('required')
+        ).toBeFalsy();
+        expect(
+          component.formGroup.controls.isIncomeLess.hasError('required')
+        ).toBeFalsy();
         expect(component.canContinue()).toBeFalsy();
         component.continue();
+
         fixture.detectChanges();
-        const errors = fixture.debugElement.queryAll(
-          By.css('common-error-container .error--container')
+        const formError = getDebugElement(
+          fixture,
+          'form common-error-container .error--container'
         );
-        expect(errors.length).toBe(1);
-        errors.forEach((x) => {
-          expect(x.nativeElement.textContent).toContain('not eligible');
-        });
+        expect(formError.nativeElement.textContent).toContain('not eligible');
       });
     }
   ));
@@ -146,12 +181,15 @@ describe('HomeComponent', () => {
       component.formGroup.controls.isIncomeLess.setValue(true);
       component.formGroup.updateValueAndValidity();
       fixture.detectChanges();
+
       fixture.whenStable().then(() => {
         expect(component.canContinue()).toBeTruthy();
         component.continue();
         fixture.detectChanges();
-        const errors = fixture.debugElement.queryAll(
-          By.css('common-error-container .error--container')
+
+        const errors = getAllDebugElements(
+          fixture,
+          'common-error-container .error--container'
         );
         expect(errors.length).toBe(0);
       });

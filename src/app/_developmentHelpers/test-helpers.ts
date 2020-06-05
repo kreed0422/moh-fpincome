@@ -1,20 +1,6 @@
-import { DebugElement } from '@angular/core';
-import { ComponentFixture, tick } from '@angular/core/testing';
+import { DebugElement, Component } from '@angular/core';
+import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
-export function tickAndDetectChanges(fixture: ComponentFixture<any>) {
-  tick();
-  fixture.detectChanges();
-}
-
-export function getInputDebugElement(de: DebugElement, name: string) {
-  let _de = de.nativeElement.querySelector('input[name=' + name + ']');
-  if (!_de) {
-    // Inputs that use 'value' instead of 'ngModel'
-    _de = de.nativeElement.querySelector('input[id=' + name + ']');
-  }
-  return _de;
-}
 
 export function getDebugInlineError(de: DebugElement) {
   const _de = de.nativeElement.querySelector('common-error-container');
@@ -39,3 +25,27 @@ export function getAllDebugElements(
 ) {
   return fixture.debugElement.queryAll(By.css(componentHtml));
 }
+
+export function setInput(de: DebugElement, name: string, value: any) {
+  let _de = de.nativeElement.querySelector('input[name=' + name + ']');
+  if (!_de) {
+    // Inputs that use 'value' instead of 'ngModel'
+    _de = de.nativeElement.querySelector('input[id=' + name + ']');
+  }
+  _de.focus();
+  _de.value = value;
+  _de.dispatchEvent(new Event('input'));
+  _de.dispatchEvent(new Event('change'));
+  _de.dispatchEvent(new Event('blur'));
+}
+
+export function clickRadioButton(de: DebugElement, value: string) {
+  const _de = de.query(By.css('input[value=' + value + ']'));
+  _de.nativeElement.click();
+}
+
+@Component({
+  selector: 'fpir-mock',
+  template: ` <p>Hello World</p> `,
+})
+export class MockComponent {}

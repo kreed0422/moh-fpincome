@@ -14,7 +14,7 @@ export const environment = {
     captchaBaseURL: '/fpcare/api/captcha', // captcha for authorization
     baseAPIUrl: '/fpcare/api/fpcareIncome', // middleware url to send requests
     application: 'application', // end point for submitting income review applications
-    attachments: 'fpcareAttachment', // end point for submitting supporting documents
+    attachments: '/fpcare/api/fpcareAttachment', // end point for submitting supporting documents
   },
 
   /**
@@ -50,7 +50,7 @@ export const environment = {
      * When enabled = true, mockBackend can be used when mockBackend: {enabled = true}, loads provider for a fake backend
      */
     mockBackend: {
-      enabled: true,
+      enabled: false,
 
       // YYYY-MM-DD 24H:mm:ss
       maintModeStart: '2020-05-13 21:45:00',

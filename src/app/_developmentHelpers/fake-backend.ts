@@ -44,10 +44,12 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             if (request.url.endsWith(environment.api.application)) {
               console.log('Fake-backend for application');
               payload = this.fakebackendService.processApplication(request);
-            } else if (request.url.includes(environment.api.attachments)) {
-              console.log('Fake-backend for attachments');
-              payload = this.fakebackendService.processAttachment(request);
             }
+          }
+
+          if (request.url.includes(environment.api.attachments)) {
+            console.log('Fake-backend for attachments');
+            payload = this.fakebackendService.processAttachment(request);
           }
 
           if (payload) {

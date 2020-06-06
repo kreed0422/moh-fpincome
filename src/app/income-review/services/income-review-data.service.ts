@@ -141,9 +141,6 @@ export class IncomeReviewDataService {
         },
         applicantConsent: this.applicant.consent,
       },
-      attachments: this._consolidateDocuments().map((x) => {
-        return x.toJSON();
-      }),
     };
 
     if (this.hasSpouse) {
@@ -169,6 +166,31 @@ export class IncomeReviewDataService {
       this.reducedIncomeSupportDocs.length +
       this.remainderIncomeSupportDocs.length;
     return Number(cnt).toString();
+  }
+
+  get consolidateDocuments() {
+    let consolidatedDocs: CommonImage<FpcDocumentTypes>[] = [
+      ...this.originalIncomeSupportDocs,
+    ];
+
+    if (this.reducedIncomeSupportDocs.length > 0) {
+      consolidatedDocs = consolidatedDocs.concat([
+        ...this.reducedIncomeSupportDocs,
+      ]);
+    }
+
+    if (this.remainderIncomeSupportDocs.length > 0) {
+      consolidatedDocs = consolidatedDocs.concat([
+        ...this.remainderIncomeSupportDocs,
+      ]);
+    }
+
+    // update attachment order and document type
+    consolidatedDocs.forEach((x, idx) => {
+      x.attachmentOrder = idx + 1;
+      x.documentType = FpcDocumentTypes.SupportDocument;
+    });
+    return consolidatedDocs;
   }
 
   constructor() {}
@@ -363,31 +385,6 @@ export class IncomeReviewDataService {
 
   private _stripFormatting(value: string) {
     return value ? value.replace(/ /g, '') : null;
-  }
-
-  private _consolidateDocuments() {
-    let consolidatedDocs: CommonImage<FpcDocumentTypes>[] = [
-      ...this.originalIncomeSupportDocs,
-    ];
-
-    if (this.reducedIncomeSupportDocs.length > 0) {
-      consolidatedDocs = consolidatedDocs.concat([
-        ...this.reducedIncomeSupportDocs,
-      ]);
-    }
-
-    if (this.remainderIncomeSupportDocs.length > 0) {
-      consolidatedDocs = consolidatedDocs.concat([
-        ...this.remainderIncomeSupportDocs,
-      ]);
-    }
-
-    // update attachment order and document type
-    consolidatedDocs.forEach((x, idx) => {
-      x.attachmentOrder = idx + 1;
-      x.documentType = FpcDocumentTypes.SupportDocument;
-    });
-    return consolidatedDocs;
   }
 
   private _getSpouse() {

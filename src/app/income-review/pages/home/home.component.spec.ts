@@ -146,68 +146,64 @@ describe('HomeComponent', () => {
   it('should indicate user is not eligible when not registered and income less than 10%', inject(
     [IncomeReviewDataService],
     () => {
-      setRadioButton(fixture, 'isRegistered', 'false'),
-        setRadioButton(fixture, 'isIncomeLess', 'false'),
-        fixture.whenStable().then(() => {
-          expect(
-            component.formGroup.controls.isRegistered.hasError('required')
-          ).toBeFalsy();
-          expect(
-            component.formGroup.controls.isIncomeLess.hasError('required')
-          ).toBeFalsy();
-          expect(component.canContinue()).toBeFalsy();
-          component.continue();
+      setRadioButton(fixture, 'isRegistered', 'false');
+      setRadioButton(fixture, 'isIncomeLess', 'false');
+      fixture.whenStable().then(() => {
+        expect(
+          component.formGroup.controls.isRegistered.hasError('required')
+        ).toBeFalsy();
+        expect(
+          component.formGroup.controls.isIncomeLess.hasError('required')
+        ).toBeFalsy();
+        expect(component.canContinue()).toBeFalsy();
+        component.continue();
 
-          fixture.whenStable().then(() => {
-            const formError = getDebugElement(
-              fixture,
-              'form common-error-container .error--container'
-            );
-            expect(formError.nativeElement.textContent).toContain(
-              'not eligible'
-            );
-          });
+        fixture.whenStable().then(() => {
+          const formError = getDebugElement(
+            fixture,
+            'form common-error-container .error--container'
+          );
+          expect(formError.nativeElement.textContent).toContain('not eligible');
         });
+      });
     }
   ));
 
   it('should indicate user is not eligible when not income less than 10%, but registered', inject(
     [IncomeReviewDataService],
     () => {
-      setRadioButton(fixture, 'isRegistered', 'true'),
-        setRadioButton(fixture, 'isIncomeLess', 'false'),
-        fixture.whenStable().then(() => {
-          expect(
-            component.formGroup.controls.isRegistered.hasError('required')
-          ).toBeFalsy();
-          expect(
-            component.formGroup.controls.isIncomeLess.hasError('required')
-          ).toBeFalsy();
-          expect(component.canContinue()).toBeFalsy();
-          component.continue();
+      setRadioButton(fixture, 'isRegistered', 'true');
+      setRadioButton(fixture, 'isIncomeLess', 'false');
+      fixture.whenStable().then(() => {
+        expect(
+          component.formGroup.controls.isRegistered.hasError('required')
+        ).toBeFalsy();
+        expect(
+          component.formGroup.controls.isIncomeLess.hasError('required')
+        ).toBeFalsy();
+        expect(component.canContinue()).toBeFalsy();
+        component.continue();
 
-          fixture.whenStable().then(() => {
-            const formError = getDebugElement(
-              fixture,
-              'form common-error-container .error--container'
-            );
-            expect(formError.nativeElement.textContent).toContain(
-              'not eligible'
-            );
-          });
+        fixture.whenStable().then(() => {
+          const formError = getDebugElement(
+            fixture,
+            'form common-error-container .error--container'
+          );
+          expect(formError.nativeElement.textContent).toContain('not eligible');
         });
+      });
     }
   ));
 
   it('should coninue when registered and income is less than 10%', inject(
     [IncomeReviewDataService],
     () => {
-      setRadioButton(fixture, 'isRegistered', 'true'),
-        setRadioButton(fixture, 'isIncomeLess', 'true'),
-        fixture.whenStable().then(() => {
-          expect(component.canContinue()).toBeTruthy();
-          fixture.ngZone.run(() => component.continue());
-        });
+      setRadioButton(fixture, 'isRegistered', 'true');
+      setRadioButton(fixture, 'isIncomeLess', 'true');
+      fixture.whenStable().then(() => {
+        expect(component.canContinue()).toBeTruthy();
+        fixture.ngZone.run(() => component.continue());
+      });
     }
   ));
 });

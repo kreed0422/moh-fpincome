@@ -39,11 +39,19 @@ export class ConsentComponent extends BaseForm
   }
 
   get registrantConsentStmt() {
-    return `I consent [${this.incomeReviewDataService.applicant.name}]`;
+    return `I consent ${
+      this.incomeReviewDataService.applicant.name
+        ? this.incomeReviewDataService.applicant.name
+        : ''
+    }`;
   }
 
   get spouseConsentStmt() {
-    return `I consent [${this.incomeReviewDataService.spouse.name}]`;
+    return `I consent ${
+      this.incomeReviewDataService.spouse.name
+        ? this.incomeReviewDataService.spouse.name
+        : ''
+    }`;
   }
 
   /**

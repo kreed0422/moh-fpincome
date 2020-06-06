@@ -26,6 +26,8 @@ export const environment = {
     fpcRegStatus: 'my.gov.bc.ca/fpcare/registration-status/request-status',
     hibc:
       'http://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents-contact-us',
+    collectionNoticeEmail:
+      'mailto:HLTHPSDCORR@gov.bc.ca?subject=FPC Income Review Inoformation Collection Notice',
   },
 
   /**

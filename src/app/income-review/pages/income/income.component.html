@@ -1,15 +1,13 @@
-<h1>Estimate your 2020 Gross Income</h1>
+<h1>Estimate your 2020 Income</h1>
 <p>
-  If you are a new resident of Canada: If you have not yet filed a tax return in
-  Canada for a full year of income, you must submit an affidavit. Call Health
-  Insurance BC at the phone numbers shown on page 1 before completing this form.
+  Enter zero (0) for each period for which you and/or your spouse/common-law
+  partner did not have any income.
 </p>
 <p>
-  Provide, the income you received from all sources prior to your loss of
-  income, the income you expect to receive during the period of your reduced
-  income, and the income you expect to receive for the remainder of 2020
-  (following resumption of employment or end of temporary benefits). If no
-  income received for any of the periods, please type 0.
+  If you are a new resident of Canada: if you have not yet filed a tax return in
+  Canada for a full year of income, you must submit an affidavit. Call Health
+  Insurance BC before completing this form (toll-free: 1 800 663-7100; Lower
+  Mainland: 604 683-7151).
 </p>
 
 <form [formGroup]="formGroup">
@@ -17,64 +15,83 @@
 
   <common-page-section layout="tips">
     <div class="row pb-2">
-      <div class="col-md-4" [innerHTML]="originalIncomeLabel"></div>
-      <div class="col-md-4">
+      <div class="col-md-5" [innerHTML]="originalIncomeLabel"></div>
+      <div class="input-group mb-3 col-md-5">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
         <input
+          class="text-right"
           type="text"
           formControlName="originalIncome"
           name="originalIncome"
           [textMask]="{ mask: moneyMask }"
+          autocomplete="off"
         />
         <common-error-container [displayError]="originalIncomeHasError">
           {{ originalIncomeErrorMsg }}
         </common-error-container>
       </div>
-      <div class="col-md-4">1</div>
+      <div class="col-md-2">1</div>
     </div>
 
     <div class="row pb-2">
-      <div class="col-md-4" [innerHTML]="reducedIncomeLabel"></div>
-      <div class="col-md-4">
+      <div class="col-md-5" [innerHTML]="reducedIncomeLabel"></div>
+      <div class="input-group mb-3 col-md-5">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
         <input
+          class="text-right"
           type="text"
           formControlName="reducedIncome"
           name="reducedIncome"
           [textMask]="{ mask: moneyMask }"
+          autocomplete="off"
         />
         <common-error-container [displayError]="reducedIncomeHasError">
           {{ reducedIncomeErrorMsg }}
         </common-error-container>
       </div>
-      <div class="col-md-4">2</div>
+      <div class="col-md-2">2</div>
     </div>
 
     <div class="row pb-2">
-      <div class="col-md-4" [innerHTML]="remainderIncomeLabel"></div>
-      <div class="col-md-4">
+      <div class="col-md-5" [innerHTML]="remainderIncomeLabel"></div>
+      <div class="input-group mb-3 col-md-5">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
         <input
+          class="text-right"
           type="text"
           formControlName="remainderIncome"
           name="remainderIncome"
           [textMask]="{ mask: moneyMask }"
+          autocomplete="off"
         />
         <common-error-container [displayError]="remainderIncomeHasError">
           {{ remainderIncomeErrorMsg }}
         </common-error-container>
       </div>
-      <div class="col-md-4">3</div>
+      <div class="col-md-2">3</div>
     </div>
 
     <div class="row pb-2">
-      <div class="col-md-4" [innerHTML]="line1to3Label"></div>
-      <div class="col-md-4">
+      <div class="col-md-5" [innerHTML]="line1to3Label"></div>
+      <div class="input-group mb-3 col-md-5">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
         <input
+          class="text-right"
           type="text"
           formControlName="subtotal"
           name="subtotal"
           [textMask]="{ mask: totalMoneyMask }"
         />
       </div>
-      <div class="col-md-4">4</div>
+      <div class="col-md-2">4</div>
     </div>
   </common-page-section>
 
@@ -82,77 +99,100 @@
     <h2 class="border-bottom">{{ spSectionTitle }}</h2>
     <common-page-section layout="tips">
       <div class="row pb-2">
-        <div class="col-md-4" [innerHTML]="originalIncomeLabel"></div>
-        <div class="col-md-4">
+        <div class="col-md-5" [innerHTML]="originalIncomeLabel"></div>
+        <div class="input-group mb-3 col-md-5">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
           <input
+            class="text-right"
             type="text"
             formControlName="spOriginalIncome"
             name="spOriginalIncome"
             [textMask]="{ mask: moneyMask }"
+            autocomplete="off"
           />
           <common-error-container [displayError]="spOriginalIncomeHasError">
             {{ originalIncomeErrorMsg }}
           </common-error-container>
         </div>
-        <div class="col-md-4">5</div>
+        <div class="col-md-2">5</div>
       </div>
 
       <div class="row pb-2">
-        <div class="col-md-4" [innerHTML]="reducedIncomeLabel"></div>
-        <div class="col-md-4">
+        <div class="col-md-5" [innerHTML]="reducedIncomeLabel"></div>
+        <div class="input-group mb-3 col-md-5">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
           <input
+            class="text-right"
             type="text"
             formControlName="spReducedIncome"
             name="spReducedIncome"
             [textMask]="{ mask: moneyMask }"
+            autocomplete="off"
           />
           <common-error-container [displayError]="spReducedIncomeHasError">
             {{ reducedIncomeErrorMsg }}
           </common-error-container>
         </div>
-        <div class="col-md-4">6</div>
+        <div class="col-md-2">6</div>
       </div>
 
       <div class="row pb-2">
-        <div class="col-md-4" [innerHTML]="remainderIncomeLabel"></div>
-        <div class="col-md-4">
+        <div class="col-md-5" [innerHTML]="remainderIncomeLabel"></div>
+        <div class="input-group mb-3 col-md-5">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
           <input
+            class="text-right"
             type="text"
             formControlName="spRemainderIncome"
             name="spRemainderIncome"
             [textMask]="{ mask: moneyMask }"
+            autocomplete="off"
           />
           <common-error-container [displayError]="spRemainderIncomeHasError">
             {{ remainderIncomeErrorMsg }}
           </common-error-container>
         </div>
-        <div class="col-md-4">7</div>
+        <div class="col-md-2">7</div>
       </div>
 
       <div class="row pb-2">
-        <div class="col-md-4" [innerHTML]="line5to7Label"></div>
-        <div class="col-md-4">
+        <div class="col-md-5" [innerHTML]="line5to7Label"></div>
+        <div class="input-group mb-3 col-md-5">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
           <input
+            class="text-right"
             type="text"
             formControlName="spSubtotal"
             name="spSubtotal"
             [textMask]="{ mask: totalMoneyMask }"
           />
         </div>
-        <div class="col-md-4">8</div>
+        <div class="col-md-2">8</div>
       </div>
 
       <div class="row pb-2">
-        <div class="col-md-4" [innerHTML]="line4and8Label"></div>
-        <div class="col-md-4">
+        <div class="col-md-5" [innerHTML]="line4and8Label"></div>
+        <div class="input-group mb-3 col-md-5">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
           <input
+            class="text-right"
             type="text"
             formControlName="total"
             name="total"
             [textMask]="{ mask: totalMoneyMask }"
           />
         </div>
-        <div class="col-md-4">8</div>
+        <div class="col-md-2">9</div>
       </div>
     </common-page-section>
   </div>

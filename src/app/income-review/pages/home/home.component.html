@@ -3,28 +3,14 @@
   <h2 collectModalTitle>Information Collection Notice</h2>
   <div collectModalBody>
     <p>
-      <strong
-        >Keep your personal information secure - especially when using a shared
-        device like a computer at a library, school or café.</strong
-      >
-      To delete any information that was entered, either complete the
-      application and submit it or, if you don't finish, close the web browser.
-    </p>
-    <p>
-      <strong>Need to take a break and come back later?</strong> The data you
-      enter on this form is saved locally to the computer or device you are
-      using until you close the web browser or submit your application.
-    </p>
-    <p>
-      Personal information is collected under the authority of the
-      <em>Medicare Protection Act</em> and section 2;6 (a), (c) and (e) of the
-      <em>Freedom of Information and Protection of Privacy Act</em>
-      for the purposes of administration of the Medical Services Plan. If you
-      have any questions about the collection and use of your personal
-      information, please contact the Health Insurance BC Chief Privacy Office
-      at Health Insurance BC, Chief Privacy Office, PO Box 9035 STN Prov Govt,
-      Victoria BC V8W 9E3 or call 604-683-7151 (Vancouver) or 1-800-663-7100
-      (toll free).
+      The personal information you provide to the PharmaCare program is
+      collected by the British Columbia Ministry of Health under the authority
+      of s. 22 of the Pharmaceutical Services Act and s. 26 of the Freedom of
+      Information and Protection of Privacy Act. If you have any questions about
+      the collection and use of your personal information, please contact the
+      Director of Information and PharmaNet Innovation, Ministry of Health, at
+      <a href="{{ collectionNoticeEmail }}">HLTHPSDCORR@gov.bc.ca</a>, or
+      250-952-2790, or PO Box 9652, STN PROV GOVT, Victoria, BC V8W 9P4.
     </p>
 
     <div>
@@ -52,7 +38,7 @@
       your income from two years ago as verified by the Canada Revenue Agency.
     </li>
   </ul>
-  For income reviews not related to COVID-19, use Fair PharmaCare Plan:
+  For income reviews not related to COVID-19, use the following form:
   <a href="{{ hlth5355 }}" target="_blank" rel="noopener noreferrer"
     >Application for Income Review (HLTH 5355)</a
   >.
@@ -63,20 +49,20 @@
   <ul>
     <li>
       If you are unable to provide required supporting documents, you must
-      submit a letter signed by you (and your spouse, including common-law
-      partner, if applicable) declaring the following:<br />
+      submit a letter signed by you (and your spouse/common-law partner, if
+      applicable) declaring the following:<br />
       <ul>
         <li>
           The types of document(s) you are unable to provide and why they are
           not available;
         </li>
         <li>
-          the source of the income received, e.g., Canadian Emergency Response
-          Benefit (CERB) (see p. 2, "Include your supporting documents");
+          The source of the income received, e.g., Canadian Emergency Response
+          Benefit (CERB);
         </li>
-        <li>the gross income you received from this source each month;</li>
+        <li>The gross income you received from this source each month; and</li>
         <li>
-          how many months of the year you have received this income, and how
+          How many months of the year you have received this income, and how
           many additional months you expect to receive it;
         </li>
         <li>
@@ -91,15 +77,24 @@
       cannot request more assistance for a previous year.
     </li>
     <li>
-      For more information, visit
+      To confirm you are registered with Fair PharmaCare, check your status
+      here:
+      <a
+        href="{{ fpcRegistrationStatus }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        >my.gov.bc.ca/fpcare/registration-status/request-status</a
+      >.
+    </li>
+    <li>
+      The Medical Services Plan (MSP), which covers physician visits and
+      hospital services, etc., offers supplementary benefits to households with
+      lower incomes. For more information, visit
       <a href="{{ mspSuppBenefits }}" target="_blank" rel="noopener noreferrer"
         >www.gov.bc.ca/MSP/supplementarybenefits</a
       >.
     </li>
   </ul>
-
-  In order to start your application process, please answer the following two
-  questions.
 </div>
 
 <form [formGroup]="formGroup">

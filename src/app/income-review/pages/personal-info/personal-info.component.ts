@@ -18,14 +18,9 @@ export class PersonalInfoComponent extends BaseForm
   implements OnInit, AfterViewInit {
   readonly firstNameLen = 20;
   readonly lastNameLen = 35;
-  readonly applFirstNameLabel = 'First name';
-  readonly applLastNameLabel = 'Last name';
-  readonly applAddressLabel = 'Address';
-  readonly phnLabel = 'PHN';
-  readonly spFirstNameLabel = 'Spouse first name';
-  readonly spLastNameLabel = 'Spouse last name';
-  readonly spPhnLabel = 'Spouse PHN';
-  readonly hasSpouseQuestion = 'Do you have a spouse / common law partner?';
+  readonly cityNameLen = 25;
+  readonly addressLen = 75;
+  readonly hasSpouseQuestion = 'Do you have a spouse/common-law partner?';
 
   constructor(
     protected router: Router,
@@ -39,6 +34,33 @@ export class PersonalInfoComponent extends BaseForm
 
   get hasSpouseFlag() {
     return this.incomeReviewDataService.hasSpouse;
+  }
+
+  // Labels stored in data service since used on multiple pages
+  get applFirstNameLabel() {
+    return this.incomeReviewDataService.applFirstNameLabel;
+  }
+  get applLastNameLabel() {
+    return this.incomeReviewDataService.applLastNameLabel;
+  }
+  get applAddressLabel() {
+    return this.incomeReviewDataService.applAddressLabel;
+  }
+  get phnLabel() {
+    return this.incomeReviewDataService.phnLabel;
+  }
+  get spFirstNameLabel() {
+    return this.incomeReviewDataService.spFirstNameLabel;
+  }
+  get spLastNameLabel() {
+    return this.incomeReviewDataService.spLastNameLabel;
+  }
+  get spPhnLabel() {
+    return this.incomeReviewDataService.spPhnLabel;
+  }
+  // NOTE: Label needs to be fixed in common library, once done this label can be removed.
+  get applPostalCodeLabel() {
+    return this.incomeReviewDataService.applPostalCodeLabel;
   }
 
   ngOnInit() {
@@ -133,6 +155,9 @@ export class PersonalInfoComponent extends BaseForm
       firstName.patchValue(null);
       lastName.patchValue(null);
       spousePhn.patchValue(null);
+
+      // If income was entered and applicant removes spouse, income fields need to be cleared.
+      this.incomeReviewDataService.spouse.clearIncome();
     }
 
     firstName.updateValueAndValidity();

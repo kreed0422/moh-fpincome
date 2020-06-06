@@ -39,11 +39,19 @@ export class ConsentComponent extends BaseForm
   }
 
   get registrantConsentStmt() {
-    return `I consent [${this.incomeReviewDataService.applicant.name}]`;
+    return `I consent ${
+      this.incomeReviewDataService.applicant.name
+        ? this.incomeReviewDataService.applicant.name
+        : ''
+    }`;
   }
 
   get spouseConsentStmt() {
-    return `I consent [${this.incomeReviewDataService.spouse.name}]`;
+    return `I consent ${
+      this.incomeReviewDataService.spouse.name
+        ? this.incomeReviewDataService.spouse.name
+        : ''
+    }`;
   }
 
   /**
@@ -104,33 +112,46 @@ export class ConsentComponent extends BaseForm
     if (this.canContinue() && this.isChecked) {
       this.containerService.setIsLoading(true);
       const jsonPayload = this.incomeReviewDataService.applicationPayload;
+      const supportDocuments = this.incomeReviewDataService
+        .consolidateDocuments;
 
-      this.incomeReviewApiService.submitApplication(jsonPayload).subscribe(
-        (res: ServerPayload) => {
-          this.incomeReviewDataService.applicationResponse = res;
+      this.incomeReviewApiService
+        .submitApplication(jsonPayload, supportDocuments)
+        .then(
+          (res: ServerPayload) => {
+            this.incomeReviewDataService.applicationResponse = res;
+            this.splunkLoggingService.log({
+              event: CommonLogEvents.submission,
+              request: 'Income Review Application',
+              success:
+                this.incomeReviewDataService.applicationResponse.success ||
+                this.incomeReviewDataService.applicationResponse.warning,
+              response: res,
+            });
+
+            this.containerService.setIsLoading(false);
+            this.navigate(INCOME_REVIEW_PAGES.CONFIRMATION.fullpath);
+          },
+          (error) => {
+            this.containerService.setIsLoading(false);
+
+            this.splunkLoggingService.log({
+              event: CommonLogEvents.submission,
+              request: 'Income Review Application - failure',
+              response: error,
+            });
+            this.navigate(INCOME_REVIEW_PAGES.CONFIRMATION.fullpath);
+          }
+        )
+        .catch((err: Response | any) => {
+          this.containerService.setIsLoading(false);
+
           this.splunkLoggingService.log({
             event: CommonLogEvents.submission,
-            request: 'Income Review Application',
-            success:
-              this.incomeReviewDataService.applicationResponse.success ||
-              this.incomeReviewDataService.applicationResponse.warning,
-            response: res,
+            request: 'Income Review Application - failure (catch stmt)',
+            response: err,
           });
-
-          this.containerService.setIsLoading(false);
-          this.navigate(INCOME_REVIEW_PAGES.CONFIRMATION.fullpath);
-        },
-        (error) => {
-          this.containerService.setIsLoading(false);
-
-          this.splunkLoggingService.log({
-            event: CommonLogEvents.submission,
-            request: 'Income Review Application - failure',
-            response: error,
-          });
-          this.navigate(INCOME_REVIEW_PAGES.CONFIRMATION.fullpath);
-        }
-      );
+        });
     }
   }
 }

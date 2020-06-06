@@ -22,6 +22,8 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   readonly captchaApiUrl = environment.api.captchaBaseURL;
   readonly mspSuppBenefits = environment.links.mspSuppBenefits;
   readonly hlth5355 = environment.links.hlth5355;
+  readonly fpcRegistrationStatus = environment.links.fpcRegStatus;
+  readonly collectionNoticeEmail = environment.links.collectionNoticeEmail;
 
   // Use the UUID as a cryptographic client nonce to avoid replay attacks.
   nonce: string = UUID.UUID();
@@ -29,7 +31,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   // Radio button questions
   isRegisteredQuestion: string = 'Are you registered for Fair PharmaCare?';
   isIncomeLessQuestion: string =
-    'Is your net income for last year or this year at least 10% less than your income from two years ago?';
+    'Is your gross income for this year at least 10% less than your income from two years ago?';
 
   constructor(
     protected router: Router,

@@ -8,6 +8,10 @@ import { INCOME_REVIEW_PAGES } from '../income-review.constants';
 import { conformToMask } from 'angular2-text-mask';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
+export enum FpcDocumentTypes {
+  SupportDocument = 'SUPPORTDOCUMENT',
+}
+
 export class Registrant extends Person {
   phn: string;
 
@@ -27,6 +31,12 @@ export class Registrant extends Person {
     );
   }
 
+  clearIncome() {
+    this.originalIncome = undefined;
+    this.reducedIncome = undefined;
+    this.remainderIncome = undefined;
+  }
+
   private _convertNaN(value: number) {
     return isNaN(value) ? 0 : value;
   }
@@ -43,17 +53,30 @@ export class IncomeReviewDataService {
    */
   readonly applicationUUID: string = UUID.UUID();
 
-  readonly applSectionTitle = 'YOUR ESTIMATED 2020 GROSS INCOME';
-  readonly spSectionTitle = `SPOUSE'S ESTIMATED 2020 GROSS INCOME`;
+  // Labels for calculate income, review and confirmation pages
+  readonly applSectionTitle = 'YOUR ESTIMATED 2020 INCOME';
+  readonly spSectionTitle = `SPOUSE'S ESTIMATED 2020 INCOME`;
   readonly originalIncomeLabel =
     'Before reduction of income<br><strong>(e.g. January - March)<strong>';
   readonly reducedIncomeLabel =
     'During reduction of income<br><strong>(e.g. April - June)</strong>';
-  readonly remainderIncomeLabel = 'Remainder of 2020 (estimated)';
+  readonly remainderIncomeLabel = 'Remainder of 2020<br>(estimated)';
   readonly subtotalLabelLine1to3 = 'SUBTOTAL (lines 1-3)';
-  readonly totalLabelLine1to3 = 'TOTAL (lines 1-3)';
+  readonly totalLabelLine1to3 =
+    '<strong>TOTAL GROSS INCOME (lines 1-3)</stong>';
   readonly subtotalLabelLine5to7 = 'SUBTOTAL (lines 5-7)';
-  readonly totalLabelLine4and8 = '<strong>TOTAL (line 4 + line 8)<strong>';
+  readonly totalLabelLine4and8 =
+    '<strong>TOTAL GROSS INCOME (line 4 + line 8)<strong>';
+
+  // Labels for personal info, review and confirmation pages
+  readonly applFirstNameLabel = 'First name';
+  readonly applLastNameLabel = 'Last name';
+  readonly applAddressLabel = 'Address';
+  readonly phnLabel = 'Personal Health Number (PHN)';
+  readonly spFirstNameLabel = 'Spouse first name';
+  readonly spLastNameLabel = 'Spouse last name';
+  readonly spPhnLabel = 'Spouse Personal Health Number (PHN)';
+  readonly applPostalCodeLabel = 'Postal code';
 
   dateOfSubmission: Date;
 
@@ -70,9 +93,9 @@ export class IncomeReviewDataService {
   address: Address = new Address();
 
   // Support documents
-  originalIncomeSupportDocs: CommonImage[] = [];
-  reducedIncomeSupportDocs: CommonImage[] = [];
-  remainderIncomeSupportDocs: CommonImage[] = [];
+  originalIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
+  reducedIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
+  remainderIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
 
   applicationResponse: ServerPayload;
 
@@ -80,7 +103,7 @@ export class IncomeReviewDataService {
   moneyMask = createNumberMask({
     prefix: '',
     allowDecimal: true,
-    integerLimit: 5, // Max numeric value is 99,999.99
+    integerLimit: 6, // Max numeric value is 999,999.99
   });
 
   totalMoneyMask = createNumberMask({
@@ -91,14 +114,46 @@ export class IncomeReviewDataService {
 
   // Payload for application
   get applicationPayload() {
-    // Create date
-    this.dateOfSubmission = new Date();
-    return {
+    const payload = {
       applicationUUID: this.applicationUUID,
-      submissionDate: formatISO(this.dateOfSubmission, {
-        representation: 'date',
-      }),
+
+      fpcIncomeReviewCovid19: {
+        informationConsentAgreement: this.informationCollectionNoticeConsent,
+        submissionDate: formatISO(new Date(), { representation: 'date' }),
+        applicant: {
+          firstName: this.applicant.firstName,
+          lastName: this.applicant.lastName,
+          phn: this._stripFormatting(this.applicant.phn),
+          address: {
+            street: this.address.addressLine1,
+            city: this.address.city,
+            postalCode: this._stripFormatting(this.address.postal),
+          },
+        },
+        grossIncome: {
+          applicantIncome: {
+            originalIncome: this.applicant.originalIncome,
+            reducedIncome: this.applicant.reducedIncome,
+            remainderIncome: this.applicant.remainderIncome,
+            subtotal: this.applicant.incomeSubTotal,
+          },
+          totalIncome: this.incomeTotal,
+        },
+        applicantConsent: this.applicant.consent,
+      },
     };
+
+    if (this.hasSpouse) {
+      payload.fpcIncomeReviewCovid19.grossIncome = Object.assign(
+        payload.fpcIncomeReviewCovid19.grossIncome,
+        this._getSpouseIncome()
+      );
+      payload.fpcIncomeReviewCovid19 = Object.assign(
+        payload.fpcIncomeReviewCovid19,
+        this._getSpouse()
+      );
+    }
+    return payload;
   }
 
   get incomeTotal() {
@@ -113,6 +168,31 @@ export class IncomeReviewDataService {
     return Number(cnt).toString();
   }
 
+  get consolidateDocuments() {
+    let consolidatedDocs: CommonImage<FpcDocumentTypes>[] = [
+      ...this.originalIncomeSupportDocs,
+    ];
+
+    if (this.reducedIncomeSupportDocs.length > 0) {
+      consolidatedDocs = consolidatedDocs.concat([
+        ...this.reducedIncomeSupportDocs,
+      ]);
+    }
+
+    if (this.remainderIncomeSupportDocs.length > 0) {
+      consolidatedDocs = consolidatedDocs.concat([
+        ...this.remainderIncomeSupportDocs,
+      ]);
+    }
+
+    // update attachment order and document type
+    consolidatedDocs.forEach((x, idx) => {
+      x.attachmentOrder = idx + 1;
+      x.documentType = FpcDocumentTypes.SupportDocument;
+    });
+    return consolidatedDocs;
+  }
+
   constructor() {}
 
   getPersonalInformationSection(printView: boolean = false): ReviewObject {
@@ -123,12 +203,24 @@ export class IncomeReviewDataService {
       section: [
         {
           sectionItems: [
-            { label: 'First name:', value: this.applicant.firstName },
-            { label: 'Last name:', value: this.applicant.lastName },
-            { label: 'Address:', value: this.address.addressLine1 },
+            {
+              label: `${this.applFirstNameLabel}:`,
+              value: this.applicant.firstName,
+            },
+            {
+              label: `${this.applLastNameLabel}:`,
+              value: this.applicant.lastName,
+            },
+            {
+              label: `${this.applAddressLabel}:`,
+              value: this.address.addressLine1,
+            },
             { label: 'City:', value: this.address.city },
-            { label: 'Postal code:', value: this.address.postal },
-            { label: 'PHN:', value: this.applicant.phn },
+            {
+              label: `${this.applPostalCodeLabel}:`,
+              value: this.address.postal,
+            },
+            { label: `${this.phnLabel}:`, value: this.applicant.phn },
           ],
         },
       ],
@@ -137,9 +229,9 @@ export class IncomeReviewDataService {
     if (this.hasSpouse) {
       const spouseSection = {
         sectionItems: [
-          { label: 'Spouse first name:', value: this.spouse.firstName },
-          { label: 'Spouse last name:', value: this.spouse.lastName },
-          { label: 'Spouse PHN:', value: this.spouse.phn },
+          { label: `${this.spFirstNameLabel}:`, value: this.spouse.firstName },
+          { label: `${this.spLastNameLabel}:`, value: this.spouse.lastName },
+          { label: `${this.spPhnLabel}:`, value: this.spouse.phn },
         ],
       };
 
@@ -151,7 +243,7 @@ export class IncomeReviewDataService {
 
   getGrossIncomeSection(printView: boolean = false): ReviewObject {
     const obj = {
-      heading: 'Gross Income',
+      heading: 'Income',
       isPrintView: printView,
       redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
       section: [
@@ -165,6 +257,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '1',
+              valueClass: 'reivew--income-value',
             },
             {
               label: this.reducedIncomeLabel,
@@ -173,6 +266,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '2',
+              valueClass: 'reivew--income-value',
             },
             {
               label: this.remainderIncomeLabel,
@@ -181,6 +275,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '3',
+              valueClass: 'reivew--income-value',
             },
             {
               label: this.hasSpouse
@@ -191,6 +286,7 @@ export class IncomeReviewDataService {
                 this.totalMoneyMask
               ),
               extraInfo: '4',
+              valueClass: 'reivew--income-value review--income-total-color',
             },
           ],
         },
@@ -208,6 +304,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '5',
+            valueClass: 'reivew--income-value',
           },
           {
             label: this.reducedIncomeLabel,
@@ -216,6 +313,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '6',
+            valueClass: 'reivew--income-value',
           },
           {
             label: this.remainderIncomeLabel,
@@ -224,6 +322,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '7',
+            valueClass: 'reivew--income-value',
           },
           {
             label: this.subtotalLabelLine5to7,
@@ -232,6 +331,7 @@ export class IncomeReviewDataService {
               this.totalMoneyMask
             ),
             extraInfo: '8',
+            valueClass: 'reivew--income-value review--income-total-color',
           },
         ],
       };
@@ -242,6 +342,7 @@ export class IncomeReviewDataService {
             label: this.totalLabelLine4and8,
             value: this._currencyFormat(this.incomeTotal, this.totalMoneyMask),
             extraInfo: '9',
+            valueClass: 'reivew--income-value review--income-total-color',
           },
         ],
       };
@@ -280,5 +381,31 @@ export class IncomeReviewDataService {
     const _currency = isNaN(currency) ? 0 : currency;
     const mask = conformToMask(_currency.toFixed(2), moneyMask, {});
     return `$ ${mask.conformedValue}`;
+  }
+
+  private _stripFormatting(value: string) {
+    return value ? value.replace(/ /g, '') : null;
+  }
+
+  private _getSpouse() {
+    return {
+      spouse: {
+        firstName: this.spouse.firstName,
+        lastName: this.spouse.lastName,
+        phn: this._stripFormatting(this.spouse.phn),
+      },
+      spouseConsent: this.spouse.consent,
+    };
+  }
+
+  private _getSpouseIncome() {
+    return {
+      spouseIncome: {
+        originalIncome: this.spouse.originalIncome,
+        reducedIncome: this.spouse.reducedIncome,
+        remainderIncome: this.spouse.remainderIncome,
+        subtotal: this.spouse.incomeSubTotal,
+      },
+    };
   }
 }

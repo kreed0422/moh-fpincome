@@ -29,6 +29,13 @@
   background-color: $gray;
 }
 
+.reivew--income-value {
+  text-align: right;
+}
+.review--income-total-color {
+  background-color: lightgrey;
+}
+
 @media print {
   :host .review--container {
     page-break-inside: avoid;

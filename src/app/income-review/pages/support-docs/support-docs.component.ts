@@ -6,7 +6,10 @@ import {
   CommonImage,
 } from 'moh-common-lib';
 import { Router } from '@angular/router';
-import { IncomeReviewDataService } from '../../services/income-review-data.service';
+import {
+  IncomeReviewDataService,
+  FpcDocumentTypes,
+} from '../../services/income-review-data.service';
 import { NgForm } from '@angular/forms';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { UUID } from 'angular2-uuid';
@@ -48,7 +51,7 @@ export class SupportDocsComponent extends BaseForm
   get originalIncomeSupportDocs() {
     return this.incomeReviewDataService.originalIncomeSupportDocs;
   }
-  set originalIncomeSupportDocs(images: CommonImage[]) {
+  set originalIncomeSupportDocs(images: CommonImage<FpcDocumentTypes>[]) {
     this.incomeReviewDataService.originalIncomeSupportDocs = images
       ? images
       : [];
@@ -57,7 +60,7 @@ export class SupportDocsComponent extends BaseForm
   get reducedIncomeSupportDocs() {
     return this.incomeReviewDataService.reducedIncomeSupportDocs;
   }
-  set reducedIncomeSupportDocs(images: CommonImage[]) {
+  set reducedIncomeSupportDocs(images: CommonImage<FpcDocumentTypes>[]) {
     this.incomeReviewDataService.reducedIncomeSupportDocs = images
       ? images
       : [];
@@ -66,7 +69,7 @@ export class SupportDocsComponent extends BaseForm
   get remainderIncomeSupportDocs() {
     return this.incomeReviewDataService.remainderIncomeSupportDocs;
   }
-  set remainderIncomeSupportDocs(images: CommonImage[]) {
+  set remainderIncomeSupportDocs(images: CommonImage<FpcDocumentTypes>[]) {
     this.incomeReviewDataService.remainderIncomeSupportDocs = images
       ? images
       : [];

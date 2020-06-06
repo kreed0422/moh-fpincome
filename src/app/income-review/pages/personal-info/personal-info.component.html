@@ -1,8 +1,7 @@
 <h1>Personal Information</h1>
 
 <p class="border-bottom mb-4">
-  Enter the following details (enter your name as it appears on your income tax
-  return):
+  Enter your name as it appears on your income tax return.
 </p>
 
 <form [formGroup]="formGroup">
@@ -24,12 +23,13 @@
           maxlength="{{ lastNameLen }}"
         ></common-name>
       </div>
-      <!-- TODO: When library is updated placeholder fields can be removed -->
+      <!-- NOTE: When library is updated placeholder fields can be removed -->
       <div class="p-2">
         <common-street
           formControlName="address"
           name="address"
           label="{{ applAddressLabel }}"
+          maxlength="{{ addressLen }}"
           placeholder=""
         ></common-street>
       </div>
@@ -37,6 +37,7 @@
         <common-city
           formControlName="city"
           name="city"
+          maxlength="{{ cityNameLen }}"
           placeholder=""
         ></common-city>
       </div>
@@ -46,6 +47,7 @@
         <common-postal-code
           formControlName="postalCode"
           name="postalCode"
+          label="{{ applPostalCodeLabel }}"
         ></common-postal-code>
       </div>
       <div class="p-2">

@@ -20,15 +20,10 @@ import {
   getDebugInlineError,
   setInput,
   clickRadioButton,
+  MockRouter,
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'fpir-mock',
-  template: ` <p>Mock Personal Page</p> `,
-})
-class MockPersonalInfoComponent {}
+import { Router } from '@angular/router';
 
 class MockDataService {
   isRegistered: boolean;
@@ -50,32 +45,41 @@ function getRadioErrorMsg(fixture: ComponentFixture<any>, btnName: string) {
   return getDebugInlineError(btn);
 }
 
+function getErrorMsg(fixture: ComponentFixture<any>) {
+  const formError = getDebugElement(
+    fixture,
+    'form common-error-container .error--container'
+  );
+  return formError.nativeElement.textContent;
+}
+
+function getCollectionNoticeButton(fixture: ComponentFixture<any>) {
+  return getDebugElement(
+    fixture,
+    'fpir-collection-notice .modal-footer button'
+  );
+}
+
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        HomeComponent,
-        CollectionNoticeComponent,
-        MockPersonalInfoComponent,
-      ],
+      declarations: [HomeComponent, CollectionNoticeComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath,
-            component: MockPersonalInfoComponent,
-          },
-        ]),
+        RouterTestingModule,
         SharedCoreModule,
         HttpClientTestingModule,
         CaptchaModule,
         ModalModule.forRoot(),
       ],
-      providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
+      providers: [
+        { provide: ComponentFixtureAutoDetect, useValue: true },
+        { provide: Router, useClass: MockRouter },
+      ],
     }).compileComponents();
   }));
 
@@ -93,117 +97,81 @@ describe('HomeComponent', () => {
   });
 
   it('should have button on collection notice disabled', () => {
-    const button = getDebugElement(
-      fixture,
-      'fpir-collection-notice .modal-footer button'
-    );
+    const button = getCollectionNoticeButton(fixture);
     expect(button.nativeElement.disabled).toBeTruthy();
   });
 
   it('should be able to close the collection notice when button is enabled', () => {
     setInput(fixture.debugElement, 'answer', 'irobot');
-    fixture.whenStable().then(() => {
-      const button = getDebugElement(
-        fixture,
-        'fpir-collection-notice .modal-footer button'
-      );
+    fixture.detectChanges();
+    fixture.whenRenderingDone().then(() => {
+      const button = getCollectionNoticeButton(fixture);
       expect(button.nativeElement.disabled).toBeFalsy();
 
       button.nativeElement.click();
-      fixture.whenStable().then(() => {
-        const dialog = getDebugElement(
-          fixture,
-          'fpir-collection-notice .modal'
-        );
-        expect(dialog.nativeElement.visable).toBeFalsy();
-      });
+      fixture.detectChanges();
+
+      const dialog = getDebugElement(fixture, 'fpir-collection-notice .modal');
+      expect(dialog.nativeElement.visable).toBeFalsy();
     });
   });
 
   // Logic test for continuing
-  it('should display required field errors', inject(
+  it('should display required error when mandatory fields are empty', inject(
     [IncomeReviewDataService],
-    () => {
+    (mockDataService: MockDataService) => {
+      mockDataService.informationCollectionNoticeConsent = true;
+
       expect(component.canContinue()).toBeFalsy();
       component.continue();
-      fixture.whenStable().then(() => {
-        expect(
-          component.formGroup.controls.isRegistered.hasError('required')
-        ).toBeTruthy();
-        expect(
-          component.formGroup.controls.isIncomeLess.hasError('required')
-        ).toBeTruthy();
+      fixture.detectChanges();
 
-        const isRegisteredError = getRadioErrorMsg(fixture, 'isRegistered');
-        expect(isRegisteredError).toContain('required');
-
-        const isIncomeLessError = getRadioErrorMsg(fixture, 'isIncomeLess');
-        expect(isIncomeLessError).toContain('required');
-      });
+      expect(getRadioErrorMsg(fixture, 'isRegistered')).toContain('required');
+      expect(getRadioErrorMsg(fixture, 'isIncomeLess')).toContain('required');
     }
   ));
 
-  it('should indicate user is not eligible when not registered and income less than 10%', inject(
+  it('should display not eligible when requirements are not satisfied', inject(
     [IncomeReviewDataService],
-    () => {
+    (mockDataService: MockDataService) => {
+      mockDataService.informationCollectionNoticeConsent = true;
+
+      // Not registered and income is not 10% less
       setRadioButton(fixture, 'isRegistered', 'false');
       setRadioButton(fixture, 'isIncomeLess', 'false');
-      fixture.whenStable().then(() => {
-        expect(
-          component.formGroup.controls.isRegistered.hasError('required')
-        ).toBeFalsy();
-        expect(
-          component.formGroup.controls.isIncomeLess.hasError('required')
-        ).toBeFalsy();
-        expect(component.canContinue()).toBeFalsy();
-        component.continue();
+      component.continue();
+      fixture.detectChanges();
 
-        fixture.whenStable().then(() => {
-          const formError = getDebugElement(
-            fixture,
-            'form common-error-container .error--container'
-          );
-          expect(formError.nativeElement.textContent).toContain('not eligible');
-        });
-      });
-    }
-  ));
+      expect(getErrorMsg(fixture)).toContain('not eligible');
 
-  it('should indicate user is not eligible when not income less than 10%, but registered', inject(
-    [IncomeReviewDataService],
-    () => {
+      // Registered but income not 10% less
       setRadioButton(fixture, 'isRegistered', 'true');
-      setRadioButton(fixture, 'isIncomeLess', 'false');
-      fixture.whenStable().then(() => {
-        expect(
-          component.formGroup.controls.isRegistered.hasError('required')
-        ).toBeFalsy();
-        expect(
-          component.formGroup.controls.isIncomeLess.hasError('required')
-        ).toBeFalsy();
-        expect(component.canContinue()).toBeFalsy();
-        component.continue();
+      component.canContinue();
+      fixture.detectChanges();
 
-        fixture.whenStable().then(() => {
-          const formError = getDebugElement(
-            fixture,
-            'form common-error-container .error--container'
-          );
-          expect(formError.nativeElement.textContent).toContain('not eligible');
-        });
-      });
+      expect(getErrorMsg(fixture)).toContain('not eligible');
+
+      // Not registered but income is 10% less
+      setRadioButton(fixture, 'isRegistered', 'false');
+      setRadioButton(fixture, 'isIncomeLess', 'true');
+      component.continue();
+      fixture.detectChanges();
+
+      expect(getErrorMsg(fixture)).toContain('not eligible');
     }
   ));
 
-  it('should coninue when registered and income is less than 10%', inject(
-    [IncomeReviewDataService],
-    () => {
+  it('should coninue when eligibility requirements are satisfied', inject(
+    [IncomeReviewDataService, Router],
+    (mockDataService: MockDataService, mockRouter: MockRouter) => {
+      mockDataService.informationCollectionNoticeConsent = true;
+
       setRadioButton(fixture, 'isRegistered', 'true');
       setRadioButton(fixture, 'isIncomeLess', 'true');
-      fixture.whenStable().then(() => {
-        expect(component.canContinue()).toBeTruthy();
-        fixture.ngZone.run(() => component.continue());
-      });
+
+      expect(component.canContinue()).toBeTruthy();
+      component.continue();
+      expect(mockRouter.url).toBe(INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath);
     }
   ));
 });

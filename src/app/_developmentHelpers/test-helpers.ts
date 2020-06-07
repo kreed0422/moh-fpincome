@@ -1,6 +1,7 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { NavigationExtras } from '@angular/router';
 
 export function getDebugInlineError(de: DebugElement) {
   const _de = de.nativeElement.querySelector('common-error-container');
@@ -42,4 +43,15 @@ export function setInput(de: DebugElement, name: string, value: any) {
 export function clickRadioButton(de: DebugElement, value: string) {
   const _de = de.query(By.css('input[value=' + value + ']'));
   _de.nativeElement.click();
+}
+
+export class MockRouter {
+  url = '/';
+
+  navigate(commands: any[], extra?: NavigationExtras): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this.url = commands[0];
+      return resolve(true);
+    }).then((res) => res);
+  }
 }

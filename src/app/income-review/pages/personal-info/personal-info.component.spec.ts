@@ -3,6 +3,7 @@ import {
   ComponentFixture,
   TestBed,
   ComponentFixtureAutoDetect,
+  inject,
 } from '@angular/core/testing';
 
 import { PersonalInfoComponent } from './personal-info.component';
@@ -14,17 +15,39 @@ import {
   getDebugElement,
   setInput,
   clickRadioButton,
+  MockRouter,
+  getDebugInlineError,
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
-import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { IncomeReviewDataService } from '../../services/income-review-data.service';
 
-@Component({
-  selector: 'fpir-mock',
-  template: ` <p>Mock Income Page</p> `,
-})
-class MockIncomeComponent {}
 class MockDataService {
   hasSpouse: boolean = true;
+}
+
+function setHasSpouse(fixture: ComponentFixture<any>, valueName: string) {
+  const btn = getDebugElement(fixture, 'common-radio', 'hasSpouse');
+  clickRadioButton(btn, valueName);
+}
+
+function setInputField(
+  fixture: ComponentFixture<any>,
+  selector: string,
+  fieldName: string,
+  value: string = null
+) {
+  const _de = getDebugElement(fixture, selector, fieldName);
+  setInput(_de, _de.componentInstance.labelforId, value);
+}
+
+function getInputErrorMsg(
+  fixture: ComponentFixture<any>,
+  selector: string,
+  fieldName: string
+) {
+  const _de = getDebugElement(fixture, selector, fieldName);
+  return getDebugInlineError(_de);
 }
 
 describe('PersonalInfoComponent', () => {
@@ -33,20 +56,21 @@ describe('PersonalInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalInfoComponent, MockIncomeComponent],
+      declarations: [PersonalInfoComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: INCOME_REVIEW_PAGES.INCOME.fullpath,
-            component: MockIncomeComponent,
-          },
-        ]),
+        RouterTestingModule,
         SharedCoreModule,
         HttpClientTestingModule,
       ],
-      providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
+      providers: [
+        {
+          provide: ComponentFixtureAutoDetect,
+          useValue: true,
+        },
+        { provide: Router, useClass: MockRouter },
+      ],
     }).compileComponents();
   }));
 
@@ -59,80 +83,114 @@ describe('PersonalInfoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not be able to continue when no data entered (no spouse)', () => {
+  it('should not display fields related to spouse when no spouse indicated', inject(
+    [IncomeReviewDataService],
+    (mockDataService: MockDataService) => {
+      mockDataService.hasSpouse = false;
+      fixture.detectChanges();
+
+      expect(getDebugElement(fixture, 'common-name', 'spFirstName')).toBeNull();
+      expect(getDebugElement(fixture, 'common-name', 'spLastName')).toBeNull();
+      expect(getDebugElement(fixture, 'common-phn', 'spPhn')).toBeNull();
+    }
+  ));
+
+  it('should display fields related to spouse when spouse indicated', inject(
+    [IncomeReviewDataService],
+    (mockDataService: MockDataService) => {
+      mockDataService.hasSpouse = true;
+      fixture.detectChanges();
+
+      expect(
+        getDebugElement(fixture, 'common-name', 'spFirstName')
+      ).not.toBeNull();
+      expect(
+        getDebugElement(fixture, 'common-name', 'spLastName')
+      ).not.toBeNull();
+      expect(getDebugElement(fixture, 'common-phn', 'spPhn')).not.toBeNull();
+    }
+  ));
+
+  it('should display required error when mandatory fields are empty (initial page)', () => {
     expect(component.canContinue()).toBeFalsy();
     component.continue();
-    fixture.whenStable().then(() => {
-      expect(
-        component.formGroup.controls.firstName.hasError('required')
-      ).toBeTruthy();
-      expect(
-        component.formGroup.controls.lastName.hasError('required')
-      ).toBeTruthy();
-      expect(
-        component.formGroup.controls.address.hasError('required')
-      ).toBeTruthy();
-      expect(
-        component.formGroup.controls.city.hasError('required')
-      ).toBeTruthy();
-      expect(
-        component.formGroup.controls.postalCode.hasError('required')
-      ).toBeTruthy();
-      expect(
-        component.formGroup.controls.phn.hasError('required')
-      ).toBeTruthy();
-      expect(
-        component.formGroup.controls.hasSpouse.hasError('required')
-      ).toBeTruthy();
+    fixture.detectChanges();
 
-      // No spouse - fields have no validators set therefore should be valid
-      expect(component.formGroup.controls.spFirstName.valid).toBeTruthy();
-      expect(component.formGroup.controls.spLastName.valid).toBeTruthy();
-      expect(component.formGroup.controls.spPhn.valid).toBeTruthy();
+    expect(getInputErrorMsg(fixture, 'common-name', 'firstName')).toContain(
+      'required'
+    );
+    expect(getInputErrorMsg(fixture, 'common-name', 'lastName')).toContain(
+      'required'
+    );
+    expect(getInputErrorMsg(fixture, 'common-phn', 'phn')).toContain(
+      'required'
+    );
+    expect(getInputErrorMsg(fixture, 'common-street', 'address')).toContain(
+      'required'
+    );
+    expect(getInputErrorMsg(fixture, 'common-city', 'city')).toContain(
+      'required'
+    );
+    expect(
+      getInputErrorMsg(fixture, 'common-postal-code', 'postalCode')
+    ).toContain('required');
+    expect(getInputErrorMsg(fixture, 'common-radio', 'hasSpouse')).toContain(
+      'required'
+    );
+  });
 
-      // Should not appear
-      const spFirstName = getDebugElement(
+  it('should be able to continue when data entered (no spouse)', inject(
+    [Router],
+    (mockRouter: MockRouter) => {
+      // Set values for elements on page
+      setInputField(fixture, 'common-name', 'firstName', 'Applicant');
+      setInputField(fixture, 'common-name', 'lastName', 'Test');
+      setInputField(fixture, 'common-phn', 'phn', '9999999998');
+      setInputField(fixture, 'common-street', 'address', '123 York Street');
+      setInputField(fixture, 'common-city', 'city', 'Victoria');
+      setInputField(fixture, 'common-postal-code', 'postalCode', 'V9V9V9');
+      setHasSpouse(fixture, 'false');
+      fixture.detectChanges();
+
+      expect(component.canContinue()).toBeTruthy();
+      component.continue();
+      expect(mockRouter.url).toBe(INCOME_REVIEW_PAGES.INCOME.fullpath);
+    }
+  ));
+
+  it('should be able to continue when data entered (spouse)', inject(
+    [Router],
+    (mockRouter: MockRouter) => {
+      // Set values for elements on page
+      setInputField(
         fixture,
         'common-name',
-        'spFirstName'
+        'firstName',
+        'Applicant-withSpouse'
       );
-      const spLastName = getDebugElement(fixture, 'common-name', 'spLastName');
-      const spPhn = getDebugElement(fixture, 'common-phn', 'spPhn');
-      expect(spFirstName).toBeNull();
-      expect(spLastName).toBeNull();
-      expect(spPhn).toBeNull();
-    });
-  });
+      setInputField(fixture, 'common-name', 'lastName', 'Test-two');
+      setInputField(fixture, 'common-phn', 'phn', '9999999927');
+      setInputField(fixture, 'common-street', 'address', '123 Redwood Street');
+      setInputField(fixture, 'common-city', 'city', 'Victoria');
+      setInputField(fixture, 'common-postal-code', 'postalCode', 'V9V8V9');
+      setHasSpouse(fixture, 'true');
+      fixture.autoDetectChanges();
 
-  it('should be able to continue when data entered (no spouse)', () => {
-    // Retrieve elements on page
-    const firstName = getDebugElement(fixture, 'common-name', 'firstName');
-    const lastName = getDebugElement(fixture, 'common-name', 'lastName');
-    const phn = getDebugElement(fixture, 'common-phn', 'phn');
-    const address = getDebugElement(fixture, 'common-street', 'address');
-    const city = getDebugElement(fixture, 'common-city', 'city');
-    const postalCode = getDebugElement(
-      fixture,
-      'common-postal-code',
-      'postalCode'
-    );
-    const hasSpouse = getDebugElement(fixture, 'common-radio', 'hasSpouse');
+      fixture.whenRenderingDone().then(() => {
+        setInputField(
+          fixture,
+          'common-name',
+          'spFirstName',
+          'Spouse-for-applicant'
+        );
+        setInputField(fixture, 'common-name', 'spLastName', 'Test-two');
+        setInputField(fixture, 'common-phn', 'spPhn', '9999999998');
+        fixture.detectChanges();
 
-    // Set input value
-    setInput(firstName, firstName.componentInstance.labelforId, 'Applicant');
-    setInput(lastName, lastName.componentInstance.labelforId, 'Test');
-    setInput(phn, phn.componentInstance.labelforId, '9999 999 998');
-    setInput(address, address.componentInstance.labelforId, '123 York Street');
-    setInput(city, city.componentInstance.labelforId, 'Victoria');
-    setInput(postalCode, postalCode.componentInstance.labelforId, 'V9V 9V9');
-    clickRadioButton(hasSpouse, 'false');
-
-    fixture.whenStable().then(() => {
-      expect(component.canContinue()).toBeTruthy();
-
-      fixture.ngZone.run(() => component.continue());
-
-      // TODO: Figure out who to detect route url - need to do this for all tests
-    });
-  });
+        expect(component.canContinue()).toBeTruthy();
+        component.continue();
+        expect(mockRouter.url).toBe(INCOME_REVIEW_PAGES.INCOME.fullpath);
+      });
+    }
+  ));
 });

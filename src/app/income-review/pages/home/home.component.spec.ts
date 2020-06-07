@@ -20,18 +20,11 @@ import {
   getDebugInlineError,
   setInput,
   clickRadioButton,
+  MockRouter,
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
-import { Component, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
-@Component({
-  template: ` <p>Mock Personal Page</p> `,
-})
-class MockPersonalInfoComponent {
-  constructor() {}
-}
-
-@Injectable()
 class MockDataService {
   isRegistered: boolean;
   isIncomeLess: boolean;
@@ -73,30 +66,20 @@ describe('HomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        HomeComponent,
-        CollectionNoticeComponent,
-        MockPersonalInfoComponent,
-      ],
+      declarations: [HomeComponent, CollectionNoticeComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: INCOME_REVIEW_PAGES.HOME.fullpath,
-            component: HomeComponent,
-          },
-          {
-            path: INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath,
-            component: MockPersonalInfoComponent,
-          },
-        ]),
+        RouterTestingModule,
         SharedCoreModule,
         HttpClientTestingModule,
         CaptchaModule,
         ModalModule.forRoot(),
       ],
-      providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
+      providers: [
+        { provide: ComponentFixtureAutoDetect, useValue: true },
+        { provide: Router, useClass: MockRouter },
+      ],
     }).compileComponents();
   }));
 
@@ -120,78 +103,75 @@ describe('HomeComponent', () => {
 
   it('should be able to close the collection notice when button is enabled', () => {
     setInput(fixture.debugElement, 'answer', 'irobot');
-    fixture.whenStable().then(() => {
+    fixture.detectChanges();
+    fixture.whenRenderingDone().then(() => {
       const button = getCollectionNoticeButton(fixture);
       expect(button.nativeElement.disabled).toBeFalsy();
 
       button.nativeElement.click();
-      fixture.whenStable().then(() => {
-        const dialog = getDebugElement(
-          fixture,
-          'fpir-collection-notice .modal'
-        );
-        expect(dialog.nativeElement.visable).toBeFalsy();
-      });
+      fixture.detectChanges();
+
+      const dialog = getDebugElement(fixture, 'fpir-collection-notice .modal');
+      expect(dialog.nativeElement.visable).toBeFalsy();
     });
   });
 
   // Logic test for continuing
   it('should display required error when mandatory fields are empty', inject(
     [IncomeReviewDataService],
-    (useClass: MockDataService) => {
+    (mockDataService: MockDataService) => {
+      mockDataService.informationCollectionNoticeConsent = true;
+
       expect(component.canContinue()).toBeFalsy();
       component.continue();
-      fixture.whenStable().then(() => {
-        const isRegisteredError = getRadioErrorMsg(fixture, 'isRegistered');
-        expect(isRegisteredError).toContain('required');
+      fixture.detectChanges();
 
-        const isIncomeLessError = getRadioErrorMsg(fixture, 'isIncomeLess');
-        expect(isIncomeLessError).toContain('required');
-      });
+      expect(getRadioErrorMsg(fixture, 'isRegistered')).toContain('required');
+      expect(getRadioErrorMsg(fixture, 'isIncomeLess')).toContain('required');
     }
   ));
 
   it('should display not eligible when requirements are not satisfied', inject(
     [IncomeReviewDataService],
-    (useClass: MockDataService) => {
+    (mockDataService: MockDataService) => {
+      mockDataService.informationCollectionNoticeConsent = true;
+
       // Not registered and income is not 10% less
       setRadioButton(fixture, 'isRegistered', 'false');
       setRadioButton(fixture, 'isIncomeLess', 'false');
       component.continue();
+      fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        let error = getErrorMsg(fixture);
-        expect(error).toContain('not eligible');
+      expect(getErrorMsg(fixture)).toContain('not eligible');
 
-        // Registered but income not 10% less
-        setRadioButton(fixture, 'isRegistered', 'true');
-        component.canContinue();
+      // Registered but income not 10% less
+      setRadioButton(fixture, 'isRegistered', 'true');
+      component.canContinue();
+      fixture.detectChanges();
 
-        fixture.whenStable().then(() => {
-          error = getErrorMsg(fixture);
-          expect(error).toContain('not eligible');
+      expect(getErrorMsg(fixture)).toContain('not eligible');
 
-          // Not registered but income is 10% less
-          setRadioButton(fixture, 'isRegistered', 'false');
-          setRadioButton(fixture, 'isIncomeLess', 'true');
-          component.continue();
+      // Not registered but income is 10% less
+      setRadioButton(fixture, 'isRegistered', 'false');
+      setRadioButton(fixture, 'isIncomeLess', 'true');
+      component.continue();
+      fixture.detectChanges();
 
-          fixture.whenStable().then(() => {
-            error = getErrorMsg(fixture);
-            expect(error).toContain('not eligible');
-          });
-        });
-      });
+      expect(getErrorMsg(fixture)).toContain('not eligible');
     }
   ));
 
   it('should coninue when eligibility requirements are satisfied', inject(
-    [IncomeReviewDataService],
-    (useClass: MockDataService) => {
+    [IncomeReviewDataService, Router],
+    (mockDataService: MockDataService, mockRouter: MockRouter) => {
+      mockDataService.informationCollectionNoticeConsent = true;
+
       setRadioButton(fixture, 'isRegistered', 'true');
       setRadioButton(fixture, 'isIncomeLess', 'true');
+
       expect(component.canContinue()).toBeTruthy();
       component.continue();
+      expect(mockRouter.url).toBe(INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath);
     }
   ));
 });

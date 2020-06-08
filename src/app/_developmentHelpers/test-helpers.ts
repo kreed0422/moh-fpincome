@@ -3,6 +3,8 @@ import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NavigationExtras } from '@angular/router';
 
+export const partialRequiredMsg = 'is required';
+
 export function getDebugInlineError(de: DebugElement) {
   const _de = de.nativeElement.querySelector('common-error-container');
   // console.log( '_de: ', _de );

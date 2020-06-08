@@ -9,7 +9,7 @@ import {
 import { PersonalInfoComponent } from './personal-info.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SharedCoreModule, Address } from 'moh-common-lib';
+import { SharedCoreModule } from 'moh-common-lib';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
   getDebugElement,
@@ -21,10 +21,7 @@ import {
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { Router } from '@angular/router';
-import {
-  IncomeReviewDataService,
-  Registrant,
-} from '../../services/income-review-data.service';
+import { IncomeReviewDataService } from '../../services/income-review-data.service';
 
 class MockDataService {
   hasSpouse: boolean;

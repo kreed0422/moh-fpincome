@@ -257,7 +257,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '1',
-              valueClass: 'reivew--income-value',
+              valueClass: 'review--income-value',
             },
             {
               label: this.reducedIncomeLabel,
@@ -266,7 +266,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '2',
-              valueClass: 'reivew--income-value',
+              valueClass: 'review--income-value',
             },
             {
               label: this.remainderIncomeLabel,
@@ -275,7 +275,7 @@ export class IncomeReviewDataService {
                 this.moneyMask
               ),
               extraInfo: '3',
-              valueClass: 'reivew--income-value',
+              valueClass: 'review--income-value',
             },
             {
               label: this.hasSpouse
@@ -286,7 +286,7 @@ export class IncomeReviewDataService {
                 this.totalMoneyMask
               ),
               extraInfo: '4',
-              valueClass: 'reivew--income-value review--income-total-color',
+              valueClass: 'review--income-value review--income-total-color',
             },
           ],
         },
@@ -304,7 +304,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '5',
-            valueClass: 'reivew--income-value',
+            valueClass: 'review--income-value',
           },
           {
             label: this.reducedIncomeLabel,
@@ -313,7 +313,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '6',
-            valueClass: 'reivew--income-value',
+            valueClass: 'review--income-value',
           },
           {
             label: this.remainderIncomeLabel,
@@ -322,7 +322,7 @@ export class IncomeReviewDataService {
               this.moneyMask
             ),
             extraInfo: '7',
-            valueClass: 'reivew--income-value',
+            valueClass: 'review--income-value',
           },
           {
             label: this.subtotalLabelLine5to7,
@@ -331,7 +331,7 @@ export class IncomeReviewDataService {
               this.totalMoneyMask
             ),
             extraInfo: '8',
-            valueClass: 'reivew--income-value review--income-total-color',
+            valueClass: 'review--income-value review--income-total-color',
           },
         ],
       };
@@ -342,7 +342,7 @@ export class IncomeReviewDataService {
             label: this.totalLabelLine4and8,
             value: this._currencyFormat(this.incomeTotal, this.totalMoneyMask),
             extraInfo: '9',
-            valueClass: 'reivew--income-value review--income-total-color',
+            valueClass: 'review--income-value review--income-total-color',
           },
         ],
       };

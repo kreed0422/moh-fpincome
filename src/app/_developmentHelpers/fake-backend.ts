@@ -37,7 +37,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
           if (request.url.includes(environment.api.loggingURL)) {
             console.log('Fake-backend for logging - nothing logged');
-            payload = 'success';
+            payload = this.fakebackendService.logMessage(request);
           }
 
           if (request.url.includes(environment.api.baseAPIUrl)) {

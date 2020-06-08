@@ -139,7 +139,7 @@
       ]
     },
     "ReturnCodeType": {
-      "$comment": "Return code to indicate success ('0)', errror ('1') or warning ('2')",
+      "$comment": "Return code to indicate success ('0)', error ('1') or warning ('2')",
       "$type": "string"
     },
     "fpcIncomeReviewCovid19Type": {

@@ -47,6 +47,7 @@ export const environment = {
      */
     mockBackend: {
       enabled: false,
+      executeErrorScenario: false,
 
       // YYYY-MM-DD 24H:mm:ss
       maintModeStart: '',

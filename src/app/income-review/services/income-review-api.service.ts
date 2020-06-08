@@ -106,11 +106,11 @@ export class IncomeReviewApiService extends AbstractHttpService {
             resolve(responses);
           },
           (_error: Response | any) => {
-            return reject();
+            return reject(_error);
           }
         )
         .catch((_error: Response | any) => {
-          return _error;
+          return reject(_error);
         });
     });
   }

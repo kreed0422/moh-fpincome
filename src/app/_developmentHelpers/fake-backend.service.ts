@@ -61,9 +61,21 @@ export class FakeBackendService {
     };
   }
 
+  logMessage(request: HttpRequest<any>): any {
+    console.log('log message: ', request.body);
+    return 'success';
+  }
+
   // Application Response
   processApplication(request: HttpRequest<any>): any {
     console.log('Application request: ', request);
+    if (environment.developmentMode.mockBackend.executeErrorScenario) {
+      return {
+        applicationUUID: request.body.applicationUUID,
+        requestUUID: request.body.requestUUID,
+        returnCode: ApiStatusCodes.ERROR,
+      };
+    }
     return {
       applicationUUID: request.body.applicationUUID,
       requestUUID: request.body.requestUUID,
@@ -75,9 +87,18 @@ export class FakeBackendService {
   // Attachment response
   processAttachment(request: HttpRequest<any>): any {
     // Information is in the URL
-    const start = request.url.indexOf('bcpAttachment');
+    const start = request.url.indexOf('fpcareAttachment');
     const end = request.url.indexOf('?');
     const items = request.url.substring(start, end).split('/');
+
+    if (environment.developmentMode.mockBackend.executeErrorScenario) {
+      return JSON.stringify({
+        documentuuid: items[1],
+        attachmentuuid: items[3],
+        errorMessage: 'Attachment UUIDs must be unique. - Fake-backend',
+        returnCode: 500,
+      });
+    }
 
     return JSON.stringify({
       documentuuid: items[1],

@@ -65,13 +65,13 @@ export class IncomeReviewApiService extends AbstractHttpService {
             },
             (error) => {
               console.log('submit error: ', error);
-              return resolve(error);
+              return reject(error);
             }
           );
         })
         .catch((err: Response | any) => {
           console.log('submit catch: ', err);
-          return resolve(err);
+          return reject(err);
         });
     });
   }

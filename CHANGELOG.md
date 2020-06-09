@@ -1,3 +1,21 @@
+<a name="0.3.0"></a>
+
+# [0.3.0](https://github.com/bcgov/moh-fpincome/compare/v0.2.1...v0.3.0) (2020-06-09)
+
+### Features
+
+- **api:** add check for negative return codes ([6fb4244](https://github.com/bcgov/moh-fpincome/commit/6fb4244))
+- **collection:** update wording ([0a41d61](https://github.com/bcgov/moh-fpincome/commit/0a41d61))
+- **fpcir-66:** populate json message for application ([6d9a4be](https://github.com/bcgov/moh-fpincome/commit/6d9a4be))
+- **fpcir-67:** update content on requirements page ([92bcd83](https://github.com/bcgov/moh-fpincome/commit/92bcd83))
+- **fpcir-68:** update content on personal info page ([dde5a8c](https://github.com/bcgov/moh-fpincome/commit/dde5a8c))
+- **fpcir-69:** update income page content and input boxes ([f9e4cc0](https://github.com/bcgov/moh-fpincome/commit/f9e4cc0))
+- **fpcir-70:** update content on supporting documents page ([acad59f](https://github.com/bcgov/moh-fpincome/commit/acad59f))
+- **fpcir-71:** update content on review page ([b6ea65f](https://github.com/bcgov/moh-fpincome/commit/b6ea65f))
+- **fpcir-72:** add next steps to confirmation page ([eb2f282](https://github.com/bcgov/moh-fpincome/commit/eb2f282))
+- **fpir-66:** submit attachments ([cce5e9e](https://github.com/bcgov/moh-fpincome/commit/cce5e9e))
+- **fpir-67:** update collection notice content ([ca95be3](https://github.com/bcgov/moh-fpincome/commit/ca95be3))
+
 <a name="0.2.1"></a>
 
 ## 0.2.1 (2020-06-03)

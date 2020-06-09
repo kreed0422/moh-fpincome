@@ -5,6 +5,7 @@ import {
   ContainerService,
   PageStateService,
   CommonLogEvents,
+  ApiStatusCodes,
 } from 'moh-common-lib';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
 import {
@@ -120,14 +121,34 @@ export class ConsentComponent extends BaseForm
         .then(
           (res: ServerPayload) => {
             this.incomeReviewDataService.applicationResponse = res;
-            this.splunkLoggingService.log({
-              event: CommonLogEvents.submission,
-              request: 'Income Review Application',
-              success:
-                this.incomeReviewDataService.applicationResponse.success ||
-                this.incomeReviewDataService.applicationResponse.warning,
-              response: res,
-            });
+
+            // Check for negative errors -1 (DB exception), -2 (JSON validation error), -3 (unhandled error)
+            const returnCode = Number(res.returnCode);
+            if (returnCode < 0) {
+              const error =
+                returnCode === -1
+                  ? 'Database exception'
+                  : returnCode === -2
+                  ? 'JSON validation exception'
+                  : 'Unhandled error';
+              this.splunkLoggingService.log({
+                event: CommonLogEvents.submission,
+                request: 'Income Review Application - Error',
+                message: error,
+                response: res,
+              });
+              this.incomeReviewDataService.applicationResponse.returnCode =
+                ApiStatusCodes.ERROR;
+            } else {
+              this.splunkLoggingService.log({
+                event: CommonLogEvents.submission,
+                request: 'Income Review Application',
+                success:
+                  this.incomeReviewDataService.applicationResponse.success ||
+                  this.incomeReviewDataService.applicationResponse.warning,
+                response: res,
+              });
+            }
 
             this.containerService.setIsLoading(false);
             this.navigate(INCOME_REVIEW_PAGES.CONFIRMATION.fullpath);

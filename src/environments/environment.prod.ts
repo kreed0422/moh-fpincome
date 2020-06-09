@@ -23,7 +23,7 @@ export const environment = {
     hibc:
       'http://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents-contact-us',
     collectionNoticeEmail:
-      'mailto:HLTHPSDCORR@gov.bc.ca?subject=FPC Income Review Inoformation Collection Notice',
+      'mailto:Pharma@Gov.bc.ca?subject=FPC Income Review Inoformation Collection Notice',
   },
 
   /**

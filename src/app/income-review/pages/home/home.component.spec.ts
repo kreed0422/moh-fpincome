@@ -21,6 +21,7 @@ import {
   setInput,
   clickRadioButton,
   MockRouter,
+  partialRequiredMsg,
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { Router } from '@angular/router';
@@ -28,7 +29,7 @@ import { Router } from '@angular/router';
 class MockDataService {
   isRegistered: boolean;
   isIncomeLess: boolean;
-  informationCollectionNoticeConsent: boolean = true;
+  informationCollectionNoticeConsent: boolean;
 }
 
 function setRadioButton(
@@ -126,8 +127,12 @@ describe('HomeComponent', () => {
       component.continue();
       fixture.detectChanges();
 
-      expect(getRadioErrorMsg(fixture, 'isRegistered')).toContain('required');
-      expect(getRadioErrorMsg(fixture, 'isIncomeLess')).toContain('required');
+      expect(getRadioErrorMsg(fixture, 'isRegistered')).toContain(
+        partialRequiredMsg
+      );
+      expect(getRadioErrorMsg(fixture, 'isIncomeLess')).toContain(
+        partialRequiredMsg
+      );
     }
   ));
 

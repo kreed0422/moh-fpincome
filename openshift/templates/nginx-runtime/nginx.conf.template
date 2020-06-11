@@ -71,7 +71,7 @@ http {
         add_header X-Frame-Options DENY;
 
         # serve our angular app here
-        location / {
+        location /fpcare/income-review {
       rewrite ^/fpcare(/.*)$ $1;
             root   /tmp/app/dist;
             index  index.html index.htm;

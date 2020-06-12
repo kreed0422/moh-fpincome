@@ -88,6 +88,7 @@
           type="text"
           formControlName="subtotal"
           name="subtotal"
+          [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
         />
       </div>
       <div class="col-sm-2">4</div>
@@ -171,6 +172,7 @@
             type="text"
             formControlName="spSubtotal"
             name="spSubtotal"
+            [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
           />
         </div>
         <div class="col-sm-2">8</div>
@@ -187,6 +189,7 @@
             type="text"
             formControlName="total"
             name="total"
+            [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
           />
         </div>
         <div class="col-sm-2">9</div>

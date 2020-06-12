@@ -1,5 +1,5 @@
 {
-  "/fpcare/income-reivew/api/": {
+  "/fpcare/income-review/api/": {
       "target": "https://moh-fpcare-income-dev.pathfinder.gov.bc.ca",
       "changeOrigin": true,
       "secure": false,

@@ -220,17 +220,23 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   }
 
   updateTotals() {
-    this.formGroup.controls.subtotal.setValue(
-      this.incomeReviewDataService.applicant.incomeSubTotal
+    let _income = this.incomeReviewDataService.formatIncomeTotal(
+      this.incomeReviewDataService.applicant.incomeSubTotal,
+      false
     );
+    this.formGroup.controls.subtotal.setValue(_income);
 
     if (this.hasSpouse) {
-      this.formGroup.controls.spSubtotal.setValue(
-        this.incomeReviewDataService.spouse.incomeSubTotal
+      _income = this.incomeReviewDataService.formatIncomeTotal(
+        this.incomeReviewDataService.spouse.incomeSubTotal,
+        false
       );
-      this.formGroup.controls.total.setValue(
-        this.incomeReviewDataService.incomeTotal
+      this.formGroup.controls.spSubtotal.setValue(_income);
+      _income = this.incomeReviewDataService.formatIncomeTotal(
+        this.incomeReviewDataService.incomeTotal,
+        false
       );
+      this.formGroup.controls.total.setValue(_income);
     }
   }
 

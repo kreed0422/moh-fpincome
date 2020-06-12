@@ -1,6 +1,6 @@
 // Route constants for main app
 export const APP_ROUTES = {
-  income_review: 'income-review',
+  income_review: 'application',
   maintenance: 'maintenance',
 };
 

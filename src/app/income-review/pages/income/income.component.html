@@ -15,8 +15,8 @@
 
   <common-page-section layout="tips">
     <div class="row pb-2">
-      <div class="col-md-5" [innerHTML]="originalIncomeLabel"></div>
-      <div class="input-group mb-3 col-md-5">
+      <div class="col-sm-5" [innerHTML]="originalIncomeLabel"></div>
+      <div class="input-group mb-3 col-sm-5">
         <div class="input-group-prepend">
           <span class="input-group-text">$</span>
         </div>
@@ -25,19 +25,19 @@
           type="text"
           formControlName="originalIncome"
           name="originalIncome"
-          [textMask]="{ mask: moneyMask }"
+          [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
           autocomplete="off"
         />
         <common-error-container [displayError]="originalIncomeHasError">
           {{ originalIncomeErrorMsg }}
         </common-error-container>
       </div>
-      <div class="col-md-2">1</div>
+      <div class="col-sm-2">1</div>
     </div>
 
     <div class="row pb-2">
-      <div class="col-md-5" [innerHTML]="reducedIncomeLabel"></div>
-      <div class="input-group mb-3 col-md-5">
+      <div class="col-sm-5" [innerHTML]="reducedIncomeLabel"></div>
+      <div class="input-group mb-3 col-sm-5">
         <div class="input-group-prepend">
           <span class="input-group-text">$</span>
         </div>
@@ -46,19 +46,19 @@
           type="text"
           formControlName="reducedIncome"
           name="reducedIncome"
-          [textMask]="{ mask: moneyMask }"
+          [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
           autocomplete="off"
         />
         <common-error-container [displayError]="reducedIncomeHasError">
           {{ reducedIncomeErrorMsg }}
         </common-error-container>
       </div>
-      <div class="col-md-2">2</div>
+      <div class="col-sm-2">2</div>
     </div>
 
     <div class="row pb-2">
-      <div class="col-md-5" [innerHTML]="remainderIncomeLabel"></div>
-      <div class="input-group mb-3 col-md-5">
+      <div class="col-sm-5" [innerHTML]="remainderIncomeLabel"></div>
+      <div class="input-group mb-3 col-sm-5">
         <div class="input-group-prepend">
           <span class="input-group-text">$</span>
         </div>
@@ -67,19 +67,19 @@
           type="text"
           formControlName="remainderIncome"
           name="remainderIncome"
-          [textMask]="{ mask: moneyMask }"
+          [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
           autocomplete="off"
         />
         <common-error-container [displayError]="remainderIncomeHasError">
           {{ remainderIncomeErrorMsg }}
         </common-error-container>
       </div>
-      <div class="col-md-2">3</div>
+      <div class="col-sm-2">3</div>
     </div>
 
     <div class="row pb-2">
-      <div class="col-md-5" [innerHTML]="line1to3Label"></div>
-      <div class="input-group mb-3 col-md-5">
+      <div class="col-sm-5" [innerHTML]="line1to3Label"></div>
+      <div class="input-group mb-3 col-sm-5">
         <div class="input-group-prepend">
           <span class="input-group-text">$</span>
         </div>
@@ -88,10 +88,9 @@
           type="text"
           formControlName="subtotal"
           name="subtotal"
-          [textMask]="{ mask: totalMoneyMask }"
         />
       </div>
-      <div class="col-md-2">4</div>
+      <div class="col-sm-2">4</div>
     </div>
   </common-page-section>
 
@@ -99,8 +98,8 @@
     <h2 class="border-bottom">{{ spSectionTitle }}</h2>
     <common-page-section layout="tips">
       <div class="row pb-2">
-        <div class="col-md-5" [innerHTML]="originalIncomeLabel"></div>
-        <div class="input-group mb-3 col-md-5">
+        <div class="col-sm-5" [innerHTML]="originalIncomeLabel"></div>
+        <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
@@ -109,19 +108,19 @@
             type="text"
             formControlName="spOriginalIncome"
             name="spOriginalIncome"
-            [textMask]="{ mask: moneyMask }"
+            [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
             autocomplete="off"
           />
           <common-error-container [displayError]="spOriginalIncomeHasError">
             {{ originalIncomeErrorMsg }}
           </common-error-container>
         </div>
-        <div class="col-md-2">5</div>
+        <div class="col-sm-2">5</div>
       </div>
 
       <div class="row pb-2">
-        <div class="col-md-5" [innerHTML]="reducedIncomeLabel"></div>
-        <div class="input-group mb-3 col-md-5">
+        <div class="col-sm-5" [innerHTML]="reducedIncomeLabel"></div>
+        <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
@@ -130,19 +129,19 @@
             type="text"
             formControlName="spReducedIncome"
             name="spReducedIncome"
-            [textMask]="{ mask: moneyMask }"
+            [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
             autocomplete="off"
           />
           <common-error-container [displayError]="spReducedIncomeHasError">
             {{ reducedIncomeErrorMsg }}
           </common-error-container>
         </div>
-        <div class="col-md-2">6</div>
+        <div class="col-sm-2">6</div>
       </div>
 
       <div class="row pb-2">
-        <div class="col-md-5" [innerHTML]="remainderIncomeLabel"></div>
-        <div class="input-group mb-3 col-md-5">
+        <div class="col-sm-5" [innerHTML]="remainderIncomeLabel"></div>
+        <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
@@ -151,19 +150,19 @@
             type="text"
             formControlName="spRemainderIncome"
             name="spRemainderIncome"
-            [textMask]="{ mask: moneyMask }"
+            [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
             autocomplete="off"
           />
           <common-error-container [displayError]="spRemainderIncomeHasError">
             {{ remainderIncomeErrorMsg }}
           </common-error-container>
         </div>
-        <div class="col-md-2">7</div>
+        <div class="col-sm-2">7</div>
       </div>
 
       <div class="row pb-2">
-        <div class="col-md-5" [innerHTML]="line5to7Label"></div>
-        <div class="input-group mb-3 col-md-5">
+        <div class="col-sm-5" [innerHTML]="line5to7Label"></div>
+        <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
@@ -172,15 +171,14 @@
             type="text"
             formControlName="spSubtotal"
             name="spSubtotal"
-            [textMask]="{ mask: totalMoneyMask }"
           />
         </div>
-        <div class="col-md-2">8</div>
+        <div class="col-sm-2">8</div>
       </div>
 
       <div class="row pb-2">
-        <div class="col-md-5" [innerHTML]="line4and8Label"></div>
-        <div class="input-group mb-3 col-md-5">
+        <div class="col-sm-5" [innerHTML]="line4and8Label"></div>
+        <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
@@ -189,10 +187,9 @@
             type="text"
             formControlName="total"
             name="total"
-            [textMask]="{ mask: totalMoneyMask }"
           />
         </div>
-        <div class="col-md-2">9</div>
+        <div class="col-sm-2">9</div>
       </div>
     </common-page-section>
   </div>

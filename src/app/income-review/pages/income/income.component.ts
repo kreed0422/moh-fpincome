@@ -3,7 +3,10 @@ import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { BaseForm } from '../../models/base-form';
 import { Router } from '@angular/router';
 import { ContainerService, PageStateService } from 'moh-common-lib';
-import { IncomeReviewDataService } from '../../services/income-review-data.service';
+import {
+  IncomeReviewDataService,
+  createCurrencyMask,
+} from '../../services/income-review-data.service';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -11,6 +14,28 @@ import { FormBuilder, Validators } from '@angular/forms';
   templateUrl: './income.component.html',
 })
 export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
+  // Append decimal to number entered
+  readonly decimalPipeMask = (value: any) => {
+    let _value = value;
+
+    if (!isNaN(Number(value))) {
+      const _decimalLimit = 2;
+      const decimalsRegex = /\.([0-9]{0,2})/;
+
+      const result = decimalsRegex.exec(_value);
+      let addNumZeros = _decimalLimit;
+
+      if (result) {
+        addNumZeros = _decimalLimit - result[1].length;
+      }
+
+      for (let i = 0; i < addNumZeros; i++) {
+        _value = _value.concat('0');
+      }
+    }
+    return _value;
+  };
+
   constructor(
     protected router: Router,
     protected containerService: ContainerService,
@@ -55,10 +80,15 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   }
 
   get moneyMask() {
-    return this.incomeReviewDataService.moneyMask;
+    return createCurrencyMask(
+      this.incomeReviewDataService.getMaskOptsForIncomes(false)
+    );
   }
-  get totalMoneyMask() {
-    return this.incomeReviewDataService.totalMoneyMask;
+
+  get totalsMask() {
+    return createCurrencyMask(
+      this.incomeReviewDataService.getMaskOptsForTotals(false)
+    );
   }
 
   get originalIncomeErrorMsg() {
@@ -212,15 +242,15 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   updateTotals() {
     this.formGroup.controls.subtotal.setValue(
-      this.incomeReviewDataService.applicant.incomeSubTotal
+      this.incomeReviewDataService.formatApplicantIncomeTotal(false)
     );
 
     if (this.hasSpouse) {
       this.formGroup.controls.spSubtotal.setValue(
-        this.incomeReviewDataService.spouse.incomeSubTotal
+        this.incomeReviewDataService.formatSpouseIncomeTotal(false)
       );
       this.formGroup.controls.total.setValue(
-        this.incomeReviewDataService.incomeTotal
+        this.incomeReviewDataService.formatIncomeTotal(false)
       );
     }
   }

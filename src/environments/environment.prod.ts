@@ -17,9 +17,10 @@ export const environment = {
    * URL links for other sites
    */
   links: {
-    mspSuppBenefits: 'www.gov.bc.ca/MSP/supplementarybenefits',
+    mspSuppBenefits: 'https://www.gov.bc.ca/MSP/supplementarybenefits',
     hlth5355: 'https://www2.gov.bc.ca/assets/gov/health/forms/5355fil.pdf',
-    fpcRegStatus: 'my.gov.bc.ca/fpcare/registration-status/request-status',
+    fpcRegStatus:
+      'https://my.gov.bc.ca/fpcare/registration-status/request-status',
     hibc:
       'http://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents-contact-us',
     collectionNoticeEmail:

@@ -1,3 +1,17 @@
+<a name="0.3.1"></a>
+
+## [0.3.1](https://github.com/bcgov/moh-fpincome/compare/v0.3.0...v0.3.1) (2020-06-12)
+
+### Bug Fixes
+
+- **api:** modify resolve to reject for error cases ([491b927](https://github.com/bcgov/moh-fpincome/commit/491b927))
+- **fpcir-86:** fix income value display and calculation ([a133f41](https://github.com/bcgov/moh-fpincome/commit/a133f41))
+- **fpir-61:** minor fix on home and support-doc pages ([da45d61](https://github.com/bcgov/moh-fpincome/commit/da45d61))
+- **links:** fix url links on requirements page ([876b63f](https://github.com/bcgov/moh-fpincome/commit/876b63f))
+- **nginx:** append income-review to fpcare ([63adfba](https://github.com/bcgov/moh-fpincome/commit/63adfba))
+- **nginx:** set back to fpcare ([e2d39a1](https://github.com/bcgov/moh-fpincome/commit/e2d39a1))
+- **nginx:** set path to income-review ([0432868](https://github.com/bcgov/moh-fpincome/commit/0432868))
+
 <a name="0.3.0"></a>
 
 # [0.3.0](https://github.com/bcgov/moh-fpincome/compare/v0.2.1...v0.3.0) (2020-06-09)

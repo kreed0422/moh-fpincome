@@ -1,3 +1,12 @@
+<a name="0.3.2"></a>
+
+## [0.3.2](https://github.com/bcgov/moh-fpincome/compare/v0.3.1...v0.3.2) (2020-06-12)
+
+### Bug Fixes
+
+- **fpir-61:** income input masks ([93c3641](https://github.com/bcgov/moh-fpincome/commit/93c3641))
+- **income:** fix income totals to display correctly ([20c40fb](https://github.com/bcgov/moh-fpincome/commit/20c40fb))
+
 <a name="0.3.1"></a>
 
 ## [0.3.1](https://github.com/bcgov/moh-fpincome/compare/v0.3.0...v0.3.1) (2020-06-12)

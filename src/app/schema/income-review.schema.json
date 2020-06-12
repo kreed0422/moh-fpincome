@@ -13,6 +13,11 @@
       "minimum": 0,
       "maximum": 999999.99
     },
+    "CurrencyTotalType": {
+      "type": "number",
+      "minimum": 0,
+       "maximum": 9999999.99
+    },
     "IncomeInfoType": {
       "$comment": "Financial information for income review",
       "type": "object",
@@ -23,7 +28,7 @@
         },
         "reducedIncome":  {
           "$comment": "During reduction of income",
-          "$ref": "#/definitions/CurrencyType"
+          "$ref": "#/definitions/CurrencyTotalType"
         },
         "remainderIncome":  {
           "$comment": "Remainder of the year",
@@ -174,9 +179,7 @@
             },
             "totalIncome":  {
               "$comment": "Total of income",
-              "type": "number",
-              "minimum": 0,
-              "maximum": 9999999.99
+              "$ref": "#/definitions/CurrencyTotalType"
             }
           },
           "required": [

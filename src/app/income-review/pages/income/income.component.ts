@@ -14,26 +14,11 @@ import { FormBuilder, Validators } from '@angular/forms';
   templateUrl: './income.component.html',
 })
 export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
-  // Append decimal to number entered
   readonly decimalPipeMask = (value: any) => {
-    let _value = value;
-
-    if (!isNaN(Number(value))) {
-      const _decimalLimit = 2;
-      const decimalsRegex = /\.([0-9]{0,2})/;
-
-      const result = decimalsRegex.exec(_value);
-      let addNumZeros = _decimalLimit;
-
-      if (result) {
-        addNumZeros = _decimalLimit - result[1].length;
-      }
-
-      for (let i = 0; i < addNumZeros; i++) {
-        _value = _value.concat('0');
-      }
+    if (!isNaN(value)) {
+      return Number(value).toFixed(2);
     }
-    return _value;
+    return value;
   };
 
   constructor(
@@ -82,12 +67,6 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   get moneyMask() {
     return createCurrencyMask(
       this.incomeReviewDataService.getMaskOptsForIncomes(false)
-    );
-  }
-
-  get totalsMask() {
-    return createCurrencyMask(
-      this.incomeReviewDataService.getMaskOptsForTotals(false)
     );
   }
 
@@ -242,15 +221,24 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   updateTotals() {
     this.formGroup.controls.subtotal.setValue(
-      this.incomeReviewDataService.formatApplicantIncomeTotal(false)
+      this.incomeReviewDataService.formatIncomeTotal(
+        this.incomeReviewDataService.applicant.incomeSubTotal,
+        false
+      )
     );
 
     if (this.hasSpouse) {
       this.formGroup.controls.spSubtotal.setValue(
-        this.incomeReviewDataService.formatSpouseIncomeTotal(false)
+        this.incomeReviewDataService.formatIncomeTotal(
+          this.incomeReviewDataService.spouse.incomeSubTotal,
+          false
+        )
       );
       this.formGroup.controls.total.setValue(
-        this.incomeReviewDataService.formatIncomeTotal(false)
+        this.incomeReviewDataService.formatIncomeTotal(
+          this.incomeReviewDataService.incomeTotal,
+          false
+        )
       );
     }
   }

@@ -5,8 +5,20 @@ import { ServerPayload } from '../models/review-income-api';
 import { formatISO } from 'date-fns';
 import { Person, Address, CommonImage } from 'moh-common-lib';
 import { INCOME_REVIEW_PAGES } from '../income-review.constants';
-import { conformToMask } from 'angular2-text-mask';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { conformToMask } from 'angular2-text-mask';
+
+export const createCurrencyMask = (opts = {}) => {
+  const numberMask = createNumberMask({
+    allowDecimal: true,
+    requireDecimal: true,
+    ...opts,
+  });
+
+  return (rawValue) => {
+    return numberMask(rawValue);
+  };
+};
 
 export enum FpcDocumentTypes {
   SupportDocument = 'SUPPORTDOCUMENT',
@@ -99,19 +111,6 @@ export class IncomeReviewDataService {
 
   applicationResponse: ServerPayload;
 
-  // Money masks
-  moneyMask = createNumberMask({
-    prefix: '',
-    allowDecimal: true,
-    integerLimit: 6, // Max numeric value is 999,999.99
-  });
-
-  totalMoneyMask = createNumberMask({
-    prefix: '',
-    allowDecimal: true,
-    integerLimit: 7, // Max numeric value is 9,999,999.99
-  });
-
   // Payload for application
   get applicationPayload() {
     const payload = {
@@ -195,6 +194,37 @@ export class IncomeReviewDataService {
 
   constructor() {}
 
+  getMaskOptsForIncomes(dollarSign: boolean = true) {
+    const opts = { integerLimit: 6 };
+    return dollarSign ? opts : Object.assign(opts, { prefix: '' });
+  }
+
+  getMaskOptsForTotals(dollarSign: boolean = true) {
+    const opts = { integerLimit: 7 };
+    return dollarSign ? opts : Object.assign(opts, { prefix: '' });
+  }
+
+  formatIncomeTotal(dollarSign: boolean = true) {
+    return this._currencyFormat(
+      this.incomeTotal,
+      this.getMaskOptsForTotals(dollarSign)
+    );
+  }
+
+  formatApplicantIncomeTotal(dollarSign: boolean = true) {
+    return this._currencyFormat(
+      this.applicant.incomeSubTotal,
+      this.getMaskOptsForTotals(dollarSign)
+    );
+  }
+
+  formatSpouseIncomeTotal(dollarSign: boolean = true) {
+    return this._currencyFormat(
+      this.spouse.incomeSubTotal,
+      this.getMaskOptsForTotals(dollarSign)
+    );
+  }
+
   getPersonalInformationSection(printView: boolean = false): ReviewObject {
     const obj = {
       heading: 'Personal Information',
@@ -254,7 +284,7 @@ export class IncomeReviewDataService {
               label: this.originalIncomeLabel,
               value: this._currencyFormat(
                 this.applicant.originalIncome,
-                this.moneyMask
+                this.getMaskOptsForIncomes()
               ),
               extraInfo: '1',
               valueClass: 'review--income-value',
@@ -263,7 +293,7 @@ export class IncomeReviewDataService {
               label: this.reducedIncomeLabel,
               value: this._currencyFormat(
                 this.applicant.reducedIncome,
-                this.moneyMask
+                this.getMaskOptsForIncomes()
               ),
               extraInfo: '2',
               valueClass: 'review--income-value',
@@ -272,7 +302,7 @@ export class IncomeReviewDataService {
               label: this.remainderIncomeLabel,
               value: this._currencyFormat(
                 this.applicant.remainderIncome,
-                this.moneyMask
+                this.getMaskOptsForIncomes()
               ),
               extraInfo: '3',
               valueClass: 'review--income-value',
@@ -281,10 +311,7 @@ export class IncomeReviewDataService {
               label: this.hasSpouse
                 ? this.subtotalLabelLine1to3
                 : this.totalLabelLine1to3,
-              value: this._currencyFormat(
-                this.applicant.incomeSubTotal,
-                this.totalMoneyMask
-              ),
+              value: this.formatApplicantIncomeTotal(),
               extraInfo: '4',
               valueClass: 'review--income-value review--income-total-color',
             },
@@ -301,7 +328,7 @@ export class IncomeReviewDataService {
             label: this.originalIncomeLabel,
             value: this._currencyFormat(
               this.spouse.originalIncome,
-              this.moneyMask
+              this.getMaskOptsForIncomes()
             ),
             extraInfo: '5',
             valueClass: 'review--income-value',
@@ -310,7 +337,7 @@ export class IncomeReviewDataService {
             label: this.reducedIncomeLabel,
             value: this._currencyFormat(
               this.spouse.reducedIncome,
-              this.moneyMask
+              this.getMaskOptsForIncomes()
             ),
             extraInfo: '6',
             valueClass: 'review--income-value',
@@ -319,17 +346,14 @@ export class IncomeReviewDataService {
             label: this.remainderIncomeLabel,
             value: this._currencyFormat(
               this.spouse.remainderIncome,
-              this.moneyMask
+              this.getMaskOptsForIncomes()
             ),
             extraInfo: '7',
             valueClass: 'review--income-value',
           },
           {
             label: this.subtotalLabelLine5to7,
-            value: this._currencyFormat(
-              this.spouse.incomeSubTotal,
-              this.totalMoneyMask
-            ),
+            value: this.formatSpouseIncomeTotal(),
             extraInfo: '8',
             valueClass: 'review--income-value review--income-total-color',
           },
@@ -340,7 +364,7 @@ export class IncomeReviewDataService {
         sectionItems: [
           {
             label: this.totalLabelLine4and8,
-            value: this._currencyFormat(this.incomeTotal, this.totalMoneyMask),
+            value: this.formatIncomeTotal(),
             extraInfo: '9',
             valueClass: 'review--income-value review--income-total-color',
           },
@@ -372,15 +396,22 @@ export class IncomeReviewDataService {
     if (strValue) {
       let value = strValue.replace(/,/g, '');
       value = value.replace('$', '');
+      value = Number(value).toFixed(2);
       return Number(value);
     }
     return 0;
   }
 
-  private _currencyFormat(currency: number, moneyMask: string): string {
-    const _currency = isNaN(currency) ? 0 : currency;
-    const mask = conformToMask(_currency.toFixed(2), moneyMask, {});
-    return `$ ${mask.conformedValue}`;
+  private _currencyFormat(currency: number, opts: any): string {
+    // Rounding issue in mask
+    const _currency = isNaN(currency) ? 0 : Math.round(currency * 100) / 100;
+
+    const mask = conformToMask(
+      _currency.toFixed(2),
+      createCurrencyMask(opts),
+      {}
+    );
+    return mask.conformedValue;
   }
 
   private _stripFormatting(value: string) {

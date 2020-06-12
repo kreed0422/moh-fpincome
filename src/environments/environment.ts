@@ -9,12 +9,12 @@ export const environment = {
    * URLs for API rest calls
    */
   api: {
-    envServerUrl: '/fpcare/api/env', // spa-env service - splash page information
-    loggingURL: '/fpcare/api/logging', // splunk forwarder service
-    captchaBaseURL: '/fpcare/api/captcha', // captcha for authorization
-    baseAPIUrl: '/fpcare/api/fpcareIncome', // middleware url to send requests
+    envServerUrl: '/fpcare/income-review/api/env', // spa-env service - splash page information
+    loggingURL: '/fpcare/income-review/api/logging', // splunk forwarder service
+    captchaBaseURL: '/fpcare/income-review/api/captcha', // captcha for authorization
+    baseAPIUrl: '/fpcare/income-review/api/fpcareIncome', // middleware url to send requests
     application: 'application', // end point for submitting income review applications
-    attachments: '/fpcare/api/fpcareAttachment', // end point for submitting supporting documents
+    attachments: '/fpcare/income-review/api/fpcareAttachment', // end point for submitting supporting documents
   },
 
   /**

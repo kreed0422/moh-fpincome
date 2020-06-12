@@ -127,6 +127,12 @@ export class IncomeReviewDataService {
 
   // Payload for application
   get applicationPayload() {
+    /* Typescript numbers with decimals have rounding issue when adding
+     * e.g. 10000.97 + 9999.01 = 19999.97999999
+     */
+    const incomeSubTotal = Number(this.applicant.incomeSubTotal.toFixed(2));
+    const incomeTotal = Number(this.incomeTotal.toFixed(2));
+
     const payload = {
       applicationUUID: this.applicationUUID,
 
@@ -148,9 +154,9 @@ export class IncomeReviewDataService {
             originalIncome: this.applicant.originalIncome,
             reducedIncome: this.applicant.reducedIncome,
             remainderIncome: this.applicant.remainderIncome,
-            subtotal: this.applicant.incomeSubTotal,
+            subtotal: incomeSubTotal,
           },
-          totalIncome: this.incomeTotal,
+          totalIncome: incomeTotal,
         },
         applicantConsent: this.applicant.consent,
       },
@@ -395,8 +401,8 @@ export class IncomeReviewDataService {
   ): string {
     // Rounding issue in mask
     const _currency = isNaN(currency) ? 0 : Math.round(currency * 100) / 100;
-
-    const _mask = conformToMask(_currency.toFixed(2), mask, {});
+    const _strValue = _currency.toFixed(2);
+    const _mask = conformToMask(_strValue, mask, {});
     return _mask.conformedValue;
   }
 
@@ -416,12 +422,13 @@ export class IncomeReviewDataService {
   }
 
   private _getSpouseIncome() {
+    const incomeSubTotal = Number(this.spouse.incomeSubTotal.toFixed(2));
     return {
       spouseIncome: {
         originalIncome: this.spouse.originalIncome,
         reducedIncome: this.spouse.reducedIncome,
         remainderIncome: this.spouse.remainderIncome,
-        subtotal: this.spouse.incomeSubTotal,
+        subtotal: incomeSubTotal,
       },
     };
   }

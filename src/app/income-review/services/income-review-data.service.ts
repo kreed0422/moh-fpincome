@@ -11,6 +11,7 @@ import { conformToMask } from 'angular2-text-mask';
 export const createCurrencyMask = (opts = {}) => {
   const numberMask = createNumberMask({
     allowDecimal: true,
+    requireDecimal: true,
     includeThousandsSeparator: true,
     thousandsSeparatorSymbol: ',',
     decimalSymbol: '.',
@@ -115,6 +116,15 @@ export class IncomeReviewDataService {
 
   applicationResponse: ServerPayload;
 
+  // Masks for displaying currency
+  private _incomeMask = createCurrencyMask({ integerLimit: 6, prefix: '' });
+  private _incomeDollarSignMask = createCurrencyMask({ integerLimit: 6 });
+  private _incomeTotalMask = createCurrencyMask({
+    integerLimit: 7,
+    prefix: '',
+  });
+  private _incomeTotalDollarSignMask = createCurrencyMask({ integerLimit: 7 });
+
   // Payload for application
   get applicationPayload() {
     const payload = {
@@ -196,22 +206,28 @@ export class IncomeReviewDataService {
     return consolidatedDocs;
   }
 
+  get incomeInputMask() {
+    return this._incomeMask;
+  }
+
+  get incomeDisplayMask() {
+    return this._incomeTotalMask;
+  }
+
   constructor() {}
 
-  getMaskOptsForIncomes(dollarSign: boolean = true) {
-    const opts = { integerLimit: 6 };
-    return dollarSign ? opts : Object.assign(opts, { prefix: '' });
-  }
   formatIncome(value: number, dollarSign: boolean = true) {
-    return this._currencyFormat(value, this.getMaskOptsForIncomes(dollarSign));
+    return this._currencyFormat(
+      value,
+      dollarSign ? this._incomeDollarSignMask : this._incomeMask
+    );
   }
 
-  getMaskOptsForTotals(dollarSign: boolean = true) {
-    const opts = { integerLimit: 7 };
-    return dollarSign ? opts : Object.assign(opts, { prefix: '' });
-  }
   formatIncomeTotal(value: number, dollarSign: boolean = true) {
-    return this._currencyFormat(value, this.getMaskOptsForTotals(dollarSign));
+    return this._currencyFormat(
+      value,
+      dollarSign ? this._incomeTotalDollarSignMask : this._incomeTotalMask
+    );
   }
 
   getPersonalInformationSection(printView: boolean = false): ReviewObject {
@@ -373,16 +389,15 @@ export class IncomeReviewDataService {
     return 0;
   }
 
-  private _currencyFormat(currency: number, opts: any): string {
+  private _currencyFormat(
+    currency: number,
+    mask: (rawValue: any) => any
+  ): string {
     // Rounding issue in mask
     const _currency = isNaN(currency) ? 0 : Math.round(currency * 100) / 100;
 
-    const mask = conformToMask(
-      _currency.toFixed(2),
-      createCurrencyMask(opts),
-      {}
-    );
-    return mask.conformedValue;
+    const _mask = conformToMask(_currency.toFixed(2), mask, {});
+    return _mask.conformedValue;
   }
 
   private _stripFormatting(value: string) {

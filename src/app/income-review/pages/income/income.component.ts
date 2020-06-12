@@ -3,10 +3,7 @@ import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { BaseForm } from '../../models/base-form';
 import { Router } from '@angular/router';
 import { ContainerService, PageStateService } from 'moh-common-lib';
-import {
-  IncomeReviewDataService,
-  createCurrencyMask,
-} from '../../services/income-review-data.service';
+import { IncomeReviewDataService } from '../../services/income-review-data.service';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -14,11 +11,12 @@ import { FormBuilder, Validators } from '@angular/forms';
   templateUrl: './income.component.html',
 })
 export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
-  readonly decimalPipeMask = (value: any) => {
+  decimalPipeMask = (value: any) => {
     if (!isNaN(value)) {
       return Number(value).toFixed(2);
     }
     return value;
+    // tslint:disable-next-line: semicolon
   };
 
   constructor(
@@ -65,9 +63,11 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   }
 
   get moneyMask() {
-    return createCurrencyMask(
-      this.incomeReviewDataService.getMaskOptsForIncomes(false)
-    );
+    return this.incomeReviewDataService.incomeInputMask;
+  }
+
+  get moneyTotalMask() {
+    return this.incomeReviewDataService.incomeDisplayMask;
   }
 
   get originalIncomeErrorMsg() {
@@ -221,24 +221,15 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   updateTotals() {
     this.formGroup.controls.subtotal.setValue(
-      this.incomeReviewDataService.formatIncomeTotal(
-        this.incomeReviewDataService.applicant.incomeSubTotal,
-        false
-      )
+      this.incomeReviewDataService.applicant.incomeSubTotal
     );
 
     if (this.hasSpouse) {
       this.formGroup.controls.spSubtotal.setValue(
-        this.incomeReviewDataService.formatIncomeTotal(
-          this.incomeReviewDataService.spouse.incomeSubTotal,
-          false
-        )
+        this.incomeReviewDataService.spouse.incomeSubTotal
       );
       this.formGroup.controls.total.setValue(
-        this.incomeReviewDataService.formatIncomeTotal(
-          this.incomeReviewDataService.incomeTotal,
-          false
-        )
+        this.incomeReviewDataService.incomeTotal
       );
     }
   }

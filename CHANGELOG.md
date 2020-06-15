@@ -1,3 +1,16 @@
+<a name="0.3.4"></a>
+
+## [0.3.4](https://github.com/bcgov/moh-fpincome/compare/v0.3.3...v0.3.4) (2020-06-15)
+
+### Bug Fixes
+
+- **consent:** modify to I, [name], consent ([ba8b0de](https://github.com/bcgov/moh-fpincome/commit/ba8b0de))
+- **home:** remove colon from important ([6ef2c9e](https://github.com/bcgov/moh-fpincome/commit/6ef2c9e))
+- **income:** update content as per discussion ([aae3f2b](https://github.com/bcgov/moh-fpincome/commit/aae3f2b))
+- **support-doc:** add cerb example back in ([81baae2](https://github.com/bcgov/moh-fpincome/commit/81baae2))
+- **support-doc:** add instructions to mitigate issue with lib component ([4449a86](https://github.com/bcgov/moh-fpincome/commit/4449a86))
+- **support-doc:** display error messages ([72f5c7d](https://github.com/bcgov/moh-fpincome/commit/72f5c7d))
+
 <a name="0.3.3"></a>
 
 ## [0.3.3](https://github.com/bcgov/moh-fpincome/compare/v0.3.2...v0.3.3) (2020-06-15)

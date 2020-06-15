@@ -5,11 +5,11 @@
     <p>
       The personal information you provide to the PharmaCare program is
       collected by the British Columbia Ministry of Health under the authority
-      of s. 22 of the Pharmaceutical Services Act and s. 26 of the Freedom of
-      Information and Protection of Privacy Act for the purpose of registering
-      you in Fair PharmaCare. If you have any questions about the collection and
-      use of your personal information, please contact the Director of
-      Information and PharmaNet Innovation, Ministry of Health,
+      of s. 22 of the <em>Pharmaceutical Services Act</em> and s. 26 of the
+      <em>Freedom of Information and Protection of Privacy Act</em> for the
+      purpose of registering you in Fair PharmaCare. If you have any questions
+      about the collection and use of your personal information, please contact
+      the Director of Information and PharmaNet Innovation, Ministry of Health,
       <a href="{{ collectionNoticeEmail }}">Pharma@Gov.bc.ca</a> or
       250-952-2790, or PO Box 9652, STN PROV GOVT, Victoria, BC V8W 9P4
     </p>
@@ -19,13 +19,14 @@
         [apiBaseUrl]="captchaApiUrl"
         [nonce]="nonce"
         (onValidToken)="setToken($event)"
+        [successMessage]="successMessage"
       ></common-captcha>
     </div>
   </div>
 </fpir-collection-notice>
 
 <!-- HOME PAGE -->
-<h1>Use this form if:</h1>
+<h1>Use this form if</h1>
 
 <div class="pb-4">
   <ul>
@@ -87,16 +88,22 @@
         >my.gov.bc.ca/fpcare/registration-status/request-status</a
       >.
     </li>
-    <li>
-      The Medical Services Plan (MSP), which covers physician visits and
-      hospital services, etc., offers supplementary benefits to households with
-      lower incomes. For more information, visit
-      <a href="{{ mspSuppBenefits }}" target="_blank" rel="noopener noreferrer"
-        >www.gov.bc.ca/MSP/supplementarybenefits</a
-      >.
-    </li>
   </ul>
 </div>
+<p>
+  If you are a new resident of Canada: if you have not yet filed a tax return in
+  Canada for a full year of income, you must submit an affidavit. Call Health
+  Insurance BC before completing this form (toll-free: 1 800 663-7100; Lower
+  Mainland: 604 683-7151).
+</p>
+<p>
+  The Medical Services Plan (MSP), which covers physician visits and hospital
+  services, etc., offers supplementary benefits to households with lower
+  incomes. For more information, visit
+  <a href="{{ mspSuppBenefits }}" target="_blank" rel="noopener noreferrer"
+    >www.gov.bc.ca/MSP/supplementarybenefits</a
+  >.
+</p>
 
 <form [formGroup]="formGroup">
   <h2 class="border-bottom">Fair PharmaCare Registration</h2>

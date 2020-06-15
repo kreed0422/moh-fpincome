@@ -1,3 +1,14 @@
+<a name="0.3.3"></a>
+
+## [0.3.3](https://github.com/bcgov/moh-fpincome/compare/v0.3.2...v0.3.3) (2020-06-15)
+
+### Bug Fixes
+
+- **confirmation:** update content as per mockup ([4045aef](https://github.com/bcgov/moh-fpincome/commit/4045aef))
+- **consent:** update content as per mockup ([0321ff2](https://github.com/bcgov/moh-fpincome/commit/0321ff2))
+- **home:** update content as per mockup ([82d1d5f](https://github.com/bcgov/moh-fpincome/commit/82d1d5f))
+- **income:** update content as per mockup ([71c322c](https://github.com/bcgov/moh-fpincome/commit/71c322c))
+
 <a name="0.3.2"></a>
 
 ## [0.3.2](https://github.com/bcgov/moh-fpincome/compare/v0.3.1...v0.3.2) (2020-06-12)

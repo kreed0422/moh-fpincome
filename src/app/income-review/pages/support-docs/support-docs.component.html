@@ -52,52 +52,7 @@
       class="tips--background-color"
       aria-labelledby="OriginalIncomeDocumentTip"
     >
-      <div>
-        <strong>Examples of supporting documents</strong>
-        <ul>
-          <li>
-            <strong>For employment:</strong> Letter from your employer (on
-            letterhead) showing your gross income this period.
-          </li>
-          <li>
-            <strong>For self-employment:</strong> A letter from your accountant,
-            if you have one, and copies of your invoices or cheque stubs to
-            date.
-          </li>
-          <li>
-            <strong>For unemployment:</strong> Record of Employment, final pay
-            stub showing gross year-to-date income, and letter from Employment
-            Insurance (EI) showing the EI coverage start date, end date and
-            gross weekly benefit amount. These letters can be requested through
-            Service Canada.
-          </li>
-          <li>
-            <strong
-              >For pensions, workers compensation or disability
-              payments:</strong
-            >
-            Letter from Canada Pension Plan, Old Age Security, Guaranteed Income
-            Supplement showing your current gross monthly benefit amount. These
-            letters can be requested through Service Canada, or by logging in to
-            your Service Canada account: www.canada.ca.
-          </li>
-          <li>
-            Letter from WorkSafeBC showing your current gross monthly benefit
-            amount.
-          </li>
-          <li>
-            Letter from disability insurance or pension provider showing your
-            current gross monthly benefit amount.
-          </li>
-          <li>
-            <strong>Gross income from other sources:</strong> Documents for
-            investments (such as interest and mutual fund payments); income from
-            RRSPs, RIFs, LIFs, annuities, etc.; income earned outside of Canada;
-            business income (rental income including the BC-TRS, partnerships,
-            etc.); support payments.
-          </li>
-        </ul>
-      </div>
+      <div [innerHTML]="exampleSupportDocs"></div>
     </aside>
   </common-page-section>
 
@@ -115,23 +70,7 @@
       class="tips--background-color"
       aria-labelledby="ReducedIncomeDocumentTips"
     >
-      <div>
-        <p><strong>Examples of supporting documents</strong></p>
-        <p>Upload each document once only.</p>
-        <ul>
-          <li>
-            <strong>
-              Canada Emergency Response Benefit (CERB) and the BC Emergency
-              Benefit for Workers:</strong
-            >
-            Statement from the CERB and/or the BC Emergency Benefit for Workers
-            confirming payment of the benefit.
-          </li>
-          <li>
-            <strong>Other income:</strong> See above for supporting documents.
-          </li>
-        </ul>
-      </div>
+      <div [innerHTML]="exampleSupportDocs2"></div>
     </aside>
   </common-page-section>
 
@@ -149,23 +88,7 @@
       class="tips--background-color"
       aria-labelledby="RemainderIncomeDocumentTips"
     >
-      <div>
-        <p><strong>Examples of supporting documents</strong></p>
-        <p>Upload each document once only.</p>
-        <ul>
-          <li>
-            <strong>
-              Canada Emergency Response Benefit (CERB) and the BC Emergency
-              Benefit for Workers:</strong
-            >
-            Statement from the CERB and/or the BC Emergency Benefit for Workers
-            confirming payment of the benefit.
-          </li>
-          <li>
-            <strong>Other income:</strong> See above for supporting documents.
-          </li>
-        </ul>
-      </div>
+      <div [innerHTML]="exampleSupportDocs2"></div>
     </aside>
   </common-page-section>
 </form>

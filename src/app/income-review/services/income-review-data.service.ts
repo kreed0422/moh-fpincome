@@ -7,6 +7,7 @@ import { Person, Address, CommonImage } from 'moh-common-lib';
 import { INCOME_REVIEW_PAGES } from '../income-review.constants';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { conformToMask } from 'angular2-text-mask';
+import { environment } from '../../../environments/environment';
 
 export const createCurrencyMask = (opts = {}) => {
   const numberMask = createNumberMask({
@@ -85,7 +86,7 @@ export class IncomeReviewDataService {
   readonly totalLabelLine4and8 =
     '<strong>TOTAL GROSS INCOME (line 4 + line 8)<strong>';
 
-  // Labels for personal info, review and confirmation pages
+  // Labels for personal info, review, and confirmation pages
   readonly applFirstNameLabel = 'First name';
   readonly applLastNameLabel = 'Last name';
   readonly applAddressLabel = 'Address';
@@ -94,6 +95,25 @@ export class IncomeReviewDataService {
   readonly spLastNameLabel = 'Spouse last name';
   readonly spPhnLabel = 'Spouse Personal Health Number (PHN)';
   readonly applPostalCodeLabel = 'Postal code';
+
+  // Example documents for income and support document pages
+  readonly serviceCanada = environment.links.serviceCanada;
+  readonly exampleSupportDocs =
+    `<strong>Examples of supporting documents</strong><ul><li>` +
+    `<strong>For employment:</strong> Letter from your employer (on letterhead) showing your gross income this period.` +
+    `</li><li><strong>For self-employment:</strong> A letter from your accountant, if you have one, and copies ` +
+    `of your invoices or cheque stubs to date.</li><li><strong>For unemployment:</strong> Record of Employment, ` +
+    `final pay stub showing gross year-to-date income, and letter from Employment Insurance (EI) showing the EI ` +
+    `coverage start date, end date and gross weekly benefit amount. These letters can be requested through ` +
+    `Service Canada.</li><li><strong>For pensions, workers compensation or disability payments:</strong> ` +
+    `Letter from Canada Pension Plan, Old Age Security, Guaranteed Income Supplement showing your current ` +
+    `gross monthly benefit amount. These letters can be requested through Service Canada, or by logging in to ` +
+    `your Service Canada account: <a href=\"${this.serviceCanada}\" target="_blank" rel="noopener noreferrer">` +
+    `www.canada.ca</a>.</li><li>Letter from WorkSafeBC showing your current gross monthly benefit amount.</li>` +
+    `<li>Letter from disability insurance or pension provider showing your current gross monthly benefit amount.</li>` +
+    `<li><strong>Gross income from other sources:</strong> Documents for investments (such as interest and mutual ` +
+    `fund payments); income from RRSPs, RIFs, LIFs, annuities, etc.; income earned outside of Canada; business ` +
+    `income (rental income including the BC-TRS, partnerships, etc.); support payments.</li></ul>`;
 
   dateOfSubmission: Date;
 

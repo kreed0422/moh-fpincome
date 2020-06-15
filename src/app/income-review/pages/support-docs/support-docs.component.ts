@@ -4,6 +4,7 @@ import {
   ContainerService,
   PageStateService,
   CommonImage,
+  CommonImageError,
 } from 'moh-common-lib';
 import { Router } from '@angular/router';
 import {
@@ -45,6 +46,14 @@ export class SupportDocsComponent extends BaseForm
     'Statement from the CERB and/or the BC Emergency Benefit for Workers confirming payment of the benefit.' +
     '</li><li><strong>Other income:</strong> See above for supporting documents.</li></ul>';
 
+  // Store document errors
+  originalIncomeUploadDocError: CommonImage = null;
+  reducedIncomeUploadDocError: CommonImage = null;
+  remainderIncomeUploadDocError: CommonImage = null;
+  originalIncomeUploadDocErrorMsg: string = null;
+  reducedIncomeUploadDocErrorMsg: string = null;
+  remainderIncomeUploadDocErrorMsg: string = null;
+
   constructor(
     protected router: Router,
     protected containerService: ContainerService,
@@ -62,6 +71,9 @@ export class SupportDocsComponent extends BaseForm
     return this.incomeReviewDataService.originalIncomeSupportDocs;
   }
   set originalIncomeSupportDocs(images: CommonImage<FpcDocumentTypes>[]) {
+    // Set file error to null - hide error container
+    this.originalIncomeUploadDocError = null;
+    // Save updated document array
     this.incomeReviewDataService.originalIncomeSupportDocs = images
       ? images
       : [];
@@ -71,6 +83,9 @@ export class SupportDocsComponent extends BaseForm
     return this.incomeReviewDataService.reducedIncomeSupportDocs;
   }
   set reducedIncomeSupportDocs(images: CommonImage<FpcDocumentTypes>[]) {
+    // Set file error to null - hide error container
+    this.reducedIncomeUploadDocError = null;
+    // Save updated document array
     this.incomeReviewDataService.reducedIncomeSupportDocs = images
       ? images
       : [];
@@ -80,6 +95,9 @@ export class SupportDocsComponent extends BaseForm
     return this.incomeReviewDataService.remainderIncomeSupportDocs;
   }
   set remainderIncomeSupportDocs(images: CommonImage<FpcDocumentTypes>[]) {
+    // Set file error to null - hide error container
+    this.remainderIncomeUploadDocError = null;
+    // Save updated document array
     this.incomeReviewDataService.remainderIncomeSupportDocs = images
       ? images
       : [];
@@ -93,12 +111,57 @@ export class SupportDocsComponent extends BaseForm
     Object.keys(this.form.form.controls).forEach((x) => {
       this.form.form.get(x).markAsTouched();
     });
-    return this.form.valid;
+    return (
+      this.form.valid &&
+      !this.originalIncomeUploadDocError &&
+      !this.reducedIncomeUploadDocError &&
+      !this.remainderIncomeUploadDocError
+    );
   }
 
   continue() {
     if (this.canContinue()) {
       this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
     }
+  }
+
+  // Error handling for file uploads
+  originalIncomeSupportDocError(error: CommonImage) {
+    this.originalIncomeUploadDocErrorMsg = this._uploadErrors(error);
+    this.originalIncomeUploadDocError = error;
+  }
+  reducedIncomeSupportDocError(error: CommonImage) {
+    this.reducedIncomeUploadDocErrorMsg = this._uploadErrors(error);
+    this.reducedIncomeUploadDocError = error;
+  }
+  remainderIncomeSupportDocError(error: CommonImage) {
+    this.remainderIncomeUploadDocErrorMsg = this._uploadErrors(error);
+    this.remainderIncomeUploadDocError = error;
+  }
+
+  private _uploadErrors(error: CommonImage) {
+    if (!error.error) {
+      return null;
+    }
+
+    let _error = null;
+    switch (error.error) {
+      case CommonImageError.CannotOpen:
+      case CommonImageError.CannotOpenPDF:
+        _error = 'Image is invalid or user does not have read permission.';
+        break;
+      case CommonImageError.AlreadyExists:
+        _error = 'Duplicate file.';
+        break;
+      case CommonImageError.TooBig:
+        _error =
+          'Image is too large. Image must be less than 1.2 Megabytes after compression.';
+        break;
+      default:
+        _error = 'Unknown upload error.';
+        break;
+    }
+
+    return _error;
   }
 }

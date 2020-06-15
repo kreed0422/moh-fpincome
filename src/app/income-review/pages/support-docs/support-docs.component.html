@@ -45,8 +45,12 @@
       id="{{ originalIncomeSupDocId }}"
       required="true"
       instructionText="{{ uploadInstructions }}"
+      (errorDocument)="originalIncomeSupportDocError($event)"
     >
     </common-file-uploader>
+    <common-error-container [displayError]="originalIncomeUploadDocError">
+      {{ originalIncomeUploadDocErrorMsg }}
+    </common-error-container>
 
     <aside
       class="tips--background-color"
@@ -63,8 +67,12 @@
       [(images)]="reducedIncomeSupportDocs"
       id="{{ reducedIncomeSupDocId }}"
       instructionText="{{ uploadInstructions }}"
+      (errorDocument)="reducedIncomeSupportDocError($event)"
     >
     </common-file-uploader>
+    <common-error-container [displayError]="reducedIncomeUploadDocError">
+      {{ reducedIncomeUploadDocErrorMsg }}
+    </common-error-container>
 
     <aside
       class="tips--background-color"
@@ -81,8 +89,12 @@
       [(images)]="remainderIncomeSupportDocs"
       id="{{ remainderIncomeSupDocId }}"
       instructionText="{{ uploadInstructions }}"
+      (errorDocument)="remainderIncomeSupportDocError($event)"
     >
     </common-file-uploader>
+    <common-error-container [displayError]="remainderIncomeUploadDocError">
+      {{ remainderIncomeUploadDocErrorMsg }}
+    </common-error-container>
 
     <aside
       class="tips--background-color"

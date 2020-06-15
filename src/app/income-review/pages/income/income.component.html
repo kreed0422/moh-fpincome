@@ -1,19 +1,13 @@
 <h1>Estimate your 2020 Income</h1>
-<p>
-  Enter zero (0) for each period for which you and/or your spouse/common-law
-  partner did not have any income.
-</p>
-<p>
-  If you are a new resident of Canada: if you have not yet filed a tax return in
-  Canada for a full year of income, you must submit an affidavit. Call Health
-  Insurance BC before completing this form (toll-free: 1 800 663-7100; Lower
-  Mainland: 604 683-7151).
-</p>
+
 <div [innerHTML]="exampleSupportDocs"></div>
 
 <form [formGroup]="formGroup">
-  <h2 class="border-bottom">{{ applSectionTitle }}</h2>
-
+  <h2>{{ applSectionTitle }}</h2>
+  <p class="border-bottom">
+    Enter zero (0) for each period for which you and/or your spouse/common-law
+    partner did not have any income.
+  </p>
   <common-page-section layout="tips">
     <div class="row pb-2">
       <div class="col-sm-5" [innerHTML]="originalIncomeLabel"></div>

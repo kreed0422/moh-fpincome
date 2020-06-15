@@ -29,6 +29,7 @@ export const environment = {
       'http://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents-contact-us',
     collectionNoticeEmail:
       'mailto:Pharma@Gov.bc.ca?subject=FPC Income Review Inoformation Collection Notice',
+    serviceCanada: 'https://www.canada.ca/',
   },
 
   /**

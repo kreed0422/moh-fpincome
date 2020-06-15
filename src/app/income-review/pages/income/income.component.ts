@@ -29,6 +29,10 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     super(router, containerService, pageStateService);
   }
 
+  get exampleSupportDocs() {
+    return this.incomeReviewDataService.exampleSupportDocs;
+  }
+
   get applSectionTitle() {
     return this.incomeReviewDataService.applSectionTitle;
   }

@@ -99,8 +99,8 @@ export class IncomeReviewDataService {
   // Example documents for income and support document pages
   readonly serviceCanada = environment.links.serviceCanada;
   readonly exampleSupportDocs =
-    `<strong>Examples of supporting documents</strong><ul><li>` +
-    `<strong>Canada Emergency Response Benefit (CERB) and the BC Emergency Benefit for Workers:</strong> Statement ` +
+    `<ul><li><strong>Canada Emergency Response Benefit (CERB) and the BC Emergency ` +
+    `Benefit for Workers:</strong> Statement ` +
     `from the CERB and/or the BC Emergency Benefit for Workers confirming payment of the benefit.</li><li>` +
     `<strong>For employment:</strong> Letter from your employer (on letterhead) showing your gross income this period.` +
     `</li><li><strong>For self-employment:</strong> A letter from your accountant, if you have one, and copies ` +

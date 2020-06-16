@@ -40,8 +40,9 @@ export class SupportDocsComponent extends BaseForm
   readonly remainderIncomeSupDocId = 'docUploader_' + UUID.UUID();
 
   readonly supportDocumentLabel = 'Supporting document(s)';
+  readonly supportDocumentExampleTilte =
+    '<strong>Examples of supporting documents</strong>';
   readonly exampleSupportDocs2 =
-    '<p><strong>Examples of supporting documents</strong></p>' +
     '<p>Upload each document once only.</p><ul><li>' +
     '<strong>Canada Emergency Response Benefit (CERB) and the BC Emergency Benefit for Workers:</strong> ' +
     'Statement from the CERB and/or the BC Emergency Benefit for Workers confirming payment of the benefit.' +

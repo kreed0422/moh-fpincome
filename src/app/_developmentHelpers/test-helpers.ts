@@ -19,7 +19,15 @@ export function getDebugElement(
   const _selector = name
     ? componentHtml + '[name=' + name + ']'
     : componentHtml;
-  return fixture.debugElement.query(By.css(_selector));
+  let _de = fixture.debugElement.query(By.css(_selector));
+
+  if (!_de) {
+    // Reactive form element
+    _de = fixture.debugElement.query(
+      By.css(componentHtml + '[formControlName=' + name + ']')
+    );
+  }
+  return _de;
 }
 
 export function getAllDebugElements(
@@ -34,6 +42,12 @@ export function setInput(de: DebugElement, name: string, value: any) {
   if (!_de) {
     // Inputs that use 'value' instead of 'ngModel'
     _de = de.nativeElement.querySelector('input[id=' + name + ']');
+    if (!_de) {
+      // Reactive form inputs
+      _de = de.nativeElement.querySelector(
+        'input[formControlName=' + name + ']'
+      );
+    }
   }
   _de.focus();
   _de.value = value;

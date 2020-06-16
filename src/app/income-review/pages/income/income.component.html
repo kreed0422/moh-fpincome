@@ -10,16 +10,20 @@
   </p>
   <common-page-section layout="tips">
     <div class="row pb-2">
-      <div class="col-sm-5" [innerHTML]="originalIncomeLabel"></div>
+      <div
+        class="col-sm-5"
+        [innerHTML]="originalIncomeLabel"
+        id="OriginalIncome"
+      ></div>
       <div class="input-group mb-3 col-sm-5">
         <div class="input-group-prepend">
           <span class="input-group-text">$</span>
         </div>
         <input
+          aria-labelledby="OriginalIncome"
           class="text-right"
           type="text"
           formControlName="originalIncome"
-          name="originalIncome"
           [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
           autocomplete="off"
         />
@@ -31,16 +35,20 @@
     </div>
 
     <div class="row pb-2">
-      <div class="col-sm-5" [innerHTML]="reducedIncomeLabel"></div>
+      <div
+        class="col-sm-5"
+        [innerHTML]="reducedIncomeLabel"
+        id="ReducedIncome"
+      ></div>
       <div class="input-group mb-3 col-sm-5">
         <div class="input-group-prepend">
           <span class="input-group-text">$</span>
         </div>
         <input
+          aria-labelledby="ReducedIncome"
           class="text-right"
           type="text"
           formControlName="reducedIncome"
-          name="reducedIncome"
           [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
           autocomplete="off"
         />
@@ -52,16 +60,20 @@
     </div>
 
     <div class="row pb-2">
-      <div class="col-sm-5" [innerHTML]="remainderIncomeLabel"></div>
+      <div
+        class="col-sm-5"
+        [innerHTML]="remainderIncomeLabel"
+        id="RemainderIncome"
+      ></div>
       <div class="input-group mb-3 col-sm-5">
         <div class="input-group-prepend">
           <span class="input-group-text">$</span>
         </div>
         <input
+          aria-labelledby="RemainderIncome"
           class="text-right"
           type="text"
           formControlName="remainderIncome"
-          name="remainderIncome"
           [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
           autocomplete="off"
         />
@@ -73,16 +85,20 @@
     </div>
 
     <div class="row pb-2">
-      <div class="col-sm-5" [innerHTML]="line1to3Label"></div>
+      <div
+        class="col-sm-5"
+        [innerHTML]="line1to3Label"
+        id="ApplicantTotal"
+      ></div>
       <div class="input-group mb-3 col-sm-5">
         <div class="input-group-prepend">
           <span class="input-group-text">$</span>
         </div>
         <input
+          aria-labelledby="ApplicantTotal"
           class="text-right"
           type="text"
           formControlName="subtotal"
-          name="subtotal"
           [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
         />
       </div>
@@ -94,16 +110,20 @@
     <h2 class="border-bottom">{{ spSectionTitle }}</h2>
     <common-page-section layout="tips">
       <div class="row pb-2">
-        <div class="col-sm-5" [innerHTML]="originalIncomeLabel"></div>
+        <div
+          class="col-sm-5"
+          [innerHTML]="originalIncomeLabel"
+          id="SpouseOriginaIncome"
+        ></div>
         <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
           <input
+            aria-labelledby="SpouseOriginaIncome"
             class="text-right"
             type="text"
             formControlName="spOriginalIncome"
-            name="spOriginalIncome"
             [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
             autocomplete="off"
           />
@@ -115,16 +135,20 @@
       </div>
 
       <div class="row pb-2">
-        <div class="col-sm-5" [innerHTML]="reducedIncomeLabel"></div>
+        <div
+          class="col-sm-5"
+          [innerHTML]="reducedIncomeLabel"
+          id="SpouseReducedIncome"
+        ></div>
         <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
           <input
+            aria-labelledby="SpouseReducedIncome"
             class="text-right"
             type="text"
             formControlName="spReducedIncome"
-            name="spReducedIncome"
             [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
             autocomplete="off"
           />
@@ -136,16 +160,20 @@
       </div>
 
       <div class="row pb-2">
-        <div class="col-sm-5" [innerHTML]="remainderIncomeLabel"></div>
+        <div
+          class="col-sm-5"
+          [innerHTML]="remainderIncomeLabel"
+          id="SpouseReminderIncome"
+        ></div>
         <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
           <input
+            aria-labelledby="SpouseReminderIncome"
             class="text-right"
             type="text"
             formControlName="spRemainderIncome"
-            name="spRemainderIncome"
             [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
             autocomplete="off"
           />
@@ -157,16 +185,20 @@
       </div>
 
       <div class="row pb-2">
-        <div class="col-sm-5" [innerHTML]="line5to7Label"></div>
+        <div
+          class="col-sm-5"
+          [innerHTML]="line5to7Label"
+          id="SpouseSubtotal"
+        ></div>
         <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
           <input
+            aria-labelledby="SpouseSubtotal"
             class="text-right"
             type="text"
             formControlName="spSubtotal"
-            name="spSubtotal"
             [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
           />
         </div>
@@ -174,16 +206,20 @@
       </div>
 
       <div class="row pb-2">
-        <div class="col-sm-5" [innerHTML]="line4and8Label"></div>
+        <div
+          class="col-sm-5"
+          [innerHTML]="line4and8Label"
+          id="ApplicantAndSpouseTotal"
+        ></div>
         <div class="input-group mb-3 col-sm-5">
           <div class="input-group-prepend">
             <span class="input-group-text">$</span>
           </div>
           <input
+            aria-labelledby="ApplicantAndSpouseTotal"
             class="text-right"
             type="text"
             formControlName="total"
-            name="total"
             [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
           />
         </div>

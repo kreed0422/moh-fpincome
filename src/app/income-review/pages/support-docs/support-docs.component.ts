@@ -4,7 +4,6 @@ import {
   ContainerService,
   PageStateService,
   CommonImage,
-  CommonImageError,
 } from 'moh-common-lib';
 import { Router } from '@angular/router';
 import {

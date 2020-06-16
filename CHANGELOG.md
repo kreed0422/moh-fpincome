@@ -1,3 +1,17 @@
+<a name="0.3.5"></a>
+
+## [0.3.5](https://github.com/bcgov/moh-fpincome/compare/v0.3.4...v0.3.5) (2020-06-16)
+
+### Bug Fixes
+
+- **consent:** update title and stepper to have declaration ([0d50e84](https://github.com/bcgov/moh-fpincome/commit/0d50e84))
+- **header:** remove period from application title ([8e95164](https://github.com/bcgov/moh-fpincome/commit/8e95164))
+- **income:** fix accessibility issue with labels ([4a899e3](https://github.com/bcgov/moh-fpincome/commit/4a899e3))
+- **income:** update content as per mockup ([6ccf61e](https://github.com/bcgov/moh-fpincome/commit/6ccf61e))
+- **support-doc:** remove aria-labelledby to fix accessibility error ([aae9798](https://github.com/bcgov/moh-fpincome/commit/aae9798))
+- **support-doc:** update invalid file type message ([64d7d50](https://github.com/bcgov/moh-fpincome/commit/64d7d50))
+- **support-doc:** update to have single error message ([670a48b](https://github.com/bcgov/moh-fpincome/commit/670a48b))
+
 <a name="0.3.4"></a>
 
 ## [0.3.4](https://github.com/bcgov/moh-fpincome/compare/v0.3.3...v0.3.4) (2020-06-15)

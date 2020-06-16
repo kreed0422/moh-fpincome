@@ -52,7 +52,10 @@
       {{ originalIncomeUploadDocErrorMsg }}
     </common-error-container>
 
-    <aside class="tips--background-color">
+    <aside
+      class="tips--background-color"
+      aria-label="OriginalIncomeExampleDocs"
+    >
       <div [innerHTML]="exampleSupportDocs"></div>
     </aside>
   </common-page-section>
@@ -71,7 +74,7 @@
       {{ reducedIncomeUploadDocErrorMsg }}
     </common-error-container>
 
-    <aside class="tips--background-color">
+    <aside class="tips--background-color" aria-label="ReducedIncomeExampleDocs">
       <div [innerHTML]="exampleSupportDocs2"></div>
     </aside>
   </common-page-section>
@@ -90,7 +93,10 @@
       {{ remainderIncomeUploadDocErrorMsg }}
     </common-error-container>
 
-    <aside class="tips--background-color">
+    <aside
+      class="tips--background-color"
+      aria-label="RemainderIncomeExampleDocs"
+    >
       <div [innerHTML]="exampleSupportDocs2"></div>
     </aside>
   </common-page-section>

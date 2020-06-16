@@ -141,7 +141,7 @@ export class SupportDocsComponent extends BaseForm
 
   private _uploadErrors(error: CommonImage) {
     const _instructions =
-      'Press the browser back button and then return to this page.';
+      'Go to previous page, return to this page, and try again.';
 
     if (!error.error) {
       return null;
@@ -151,7 +151,9 @@ export class SupportDocsComponent extends BaseForm
     switch (error.error) {
       case CommonImageError.CannotOpen:
       case CommonImageError.CannotOpenPDF:
-        _error = `Image is invalid or user does not have read permission. ${_instructions}`;
+        _error =
+          `We ran into a problem uploading your document. ` +
+          `Make sure your file is PG, PNG, GIF, BMP or PDF. ${_instructions}`;
         break;
       case CommonImageError.AlreadyExists:
         _error = `Duplicate file. ${_instructions}`;
@@ -160,7 +162,7 @@ export class SupportDocsComponent extends BaseForm
         _error = `Image is too large. Image must be less than 1.2 Megabytes after compression. ${_instructions}`;
         break;
       default:
-        _error = `Unknown upload error. ${_instructions}`;
+        _error = `We ran into a problem uploading your document. ${_instructions}`;
         break;
     }
 

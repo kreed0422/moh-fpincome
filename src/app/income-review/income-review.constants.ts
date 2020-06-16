@@ -7,7 +7,7 @@ const PAGE_NAMES = {
   grossIncome: 'calculate-income',
   supportDocs: 'supporting-docs',
   review: 'review',
-  consent: 'consent',
+  consent: 'declaration',
   confirmation: 'confirmation',
 };
 

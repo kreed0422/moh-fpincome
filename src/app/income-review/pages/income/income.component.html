@@ -1,12 +1,12 @@
 <h1>Estimate your 2020 Income</h1>
 
+<p><strong>Examples of supporting documents</strong></p>
 <div [innerHTML]="exampleSupportDocs"></div>
 
 <form [formGroup]="formGroup">
   <h2>{{ applSectionTitle }}</h2>
   <p class="border-bottom">
-    Enter zero (0) for each period for which you and/or your spouse/common-law
-    partner did not have any income.
+    Enter zero (0) for each period for which you did not have any income.
   </p>
   <common-page-section layout="tips">
     <div class="row pb-2">
@@ -107,7 +107,11 @@
   </common-page-section>
 
   <div *ngIf="hasSpouse">
-    <h2 class="border-bottom">{{ spSectionTitle }}</h2>
+    <h2>{{ spSectionTitle }}</h2>
+    <p class="border-bottom">
+      Enter zero (0) for each period for which your spouse/common-law partner
+      did not have any income.
+    </p>
     <common-page-section layout="tips">
       <div class="row pb-2">
         <div

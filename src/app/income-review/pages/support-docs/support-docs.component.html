@@ -56,6 +56,7 @@
       class="tips--background-color"
       aria-label="OriginalIncomeExampleDocs"
     >
+      <div [innerHTML]="supportDocumentExampleTilte"></div>
       <div [innerHTML]="exampleSupportDocs"></div>
     </aside>
   </common-page-section>
@@ -75,6 +76,7 @@
     </common-error-container>
 
     <aside class="tips--background-color" aria-label="ReducedIncomeExampleDocs">
+      <p [innerHTML]="supportDocumentExampleTilte"></p>
       <div [innerHTML]="exampleSupportDocs2"></div>
     </aside>
   </common-page-section>
@@ -97,6 +99,7 @@
       class="tips--background-color"
       aria-label="RemainderIncomeExampleDocs"
     >
+      <p [innerHTML]="supportDocumentExampleTilte"></p>
       <div [innerHTML]="exampleSupportDocs2"></div>
     </aside>
   </common-page-section>

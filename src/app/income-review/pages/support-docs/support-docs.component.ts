@@ -14,6 +14,7 @@ import {
 import { NgForm } from '@angular/forms';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { UUID } from 'angular2-uuid';
+import { SplunkLoggingService } from '../../../services/splunk-logging.service';
 
 /**
  * NOTE:  Common File Uploader is not reactive form compatiable
@@ -58,7 +59,8 @@ export class SupportDocsComponent extends BaseForm
     protected router: Router,
     protected containerService: ContainerService,
     protected pageStateService: PageStateService,
-    private incomeReviewDataService: IncomeReviewDataService
+    private incomeReviewDataService: IncomeReviewDataService,
+    private splunkLoggingService: SplunkLoggingService
   ) {
     super(router, containerService, pageStateService);
   }
@@ -129,43 +131,42 @@ export class SupportDocsComponent extends BaseForm
   originalIncomeSupportDocError(error: CommonImage) {
     this.originalIncomeUploadDocErrorMsg = this._uploadErrors(error);
     this.originalIncomeUploadDocError = error;
+
+    // Log upload document errors
+    this.splunkLoggingService.logError({
+      event: 'Document Upload - Original Income',
+      errorCode: error.error,
+    });
   }
   reducedIncomeSupportDocError(error: CommonImage) {
     this.reducedIncomeUploadDocErrorMsg = this._uploadErrors(error);
     this.reducedIncomeUploadDocError = error;
+
+    // Log upload document errors
+    this.splunkLoggingService.logError({
+      event: 'Document Upload - Reduced Income',
+      errorCode: error.error,
+    });
   }
   remainderIncomeSupportDocError(error: CommonImage) {
     this.remainderIncomeUploadDocErrorMsg = this._uploadErrors(error);
     this.remainderIncomeUploadDocError = error;
+
+    // Log upload document errors
+    this.splunkLoggingService.logError({
+      event: 'Document Upload - Remainder Income',
+      errorCode: error.error,
+    });
   }
 
   private _uploadErrors(error: CommonImage) {
-    const _instructions =
-      'Go to previous page, return to this page, and try again.';
-
     if (!error.error) {
       return null;
     }
-
-    let _error = null;
-    switch (error.error) {
-      case CommonImageError.CannotOpen:
-      case CommonImageError.CannotOpenPDF:
-        _error =
-          `We ran into a problem uploading your document. ` +
-          `Make sure your file is PG, PNG, GIF, BMP or PDF. ${_instructions}`;
-        break;
-      case CommonImageError.AlreadyExists:
-        _error = `Duplicate file. ${_instructions}`;
-        break;
-      case CommonImageError.TooBig:
-        _error = `Image is too large. Image must be less than 1.2 Megabytes after compression. ${_instructions}`;
-        break;
-      default:
-        _error = `We ran into a problem uploading your document. ${_instructions}`;
-        break;
-    }
-
-    return _error;
+    return (
+      'We ran into a problem uploading your document. ' +
+      'Make sure your file is PG, PNG, GIF, BMP or PDF. ' +
+      'Go to previous page, return to this page, and try again.'
+    );
   }
 }

@@ -1,3 +1,11 @@
+<a name="1.0.0"></a>
+
+# [1.0.0](https://github.com/bcgov/moh-fpincome/compare/v0.3.5...v1.0.0) (2020-06-18)
+
+### Bug Fixes
+
+- **confirmation:** update wording for next steps ([42abbcb](https://github.com/bcgov/moh-fpincome/commit/42abbcb))
+
 <a name="0.3.5"></a>
 
 ## [0.3.5](https://github.com/bcgov/moh-fpincome/compare/v0.3.4...v0.3.5) (2020-06-16)

@@ -2,7 +2,7 @@ import { APP_ROUTES } from '../app.constants';
 
 /** Name of each page */
 const PAGE_NAMES = {
-  home: 'requirements',
+  home: 'get-started',
   personalInfo: 'personal-info',
   grossIncome: 'calculate-income',
   supportDocs: 'supporting-docs',

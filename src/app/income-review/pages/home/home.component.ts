@@ -23,7 +23,6 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   readonly mspSuppBenefits = environment.links.mspSuppBenefits;
   readonly hlth5355 = environment.links.hlth5355;
   readonly fpcRegistrationStatus = environment.links.fpcRegStatus;
-  readonly collectionNoticeEmail = environment.links.collectionNoticeEmail;
   readonly successMessage = 'You can proceed to the form now.';
 
   // Use the UUID as a cryptographic client nonce to avoid replay attacks.

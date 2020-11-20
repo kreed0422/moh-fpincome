@@ -20,7 +20,7 @@ export class PersonalInfoComponent extends BaseForm
   readonly lastNameLen = 35;
   readonly cityNameLen = 25;
   readonly addressLen = 75;
-  readonly hasSpouseQuestion = 'Do you have a spouse/common-law partner?';
+  readonly hasSpouseQuestion = 'Do you have a spouse?';
 
   constructor(
     protected router: Router,

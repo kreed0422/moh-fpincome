@@ -21,7 +21,7 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
   // Value never changed, but can be read outside class
   readonly captchaApiUrl = environment.api.captchaBaseURL;
   readonly mspSuppBenefits = environment.links.mspSuppBenefits;
-  readonly hlth5355 = environment.links.hlth5355;
+  readonly fpcRegistration = environment.links.fpcRegister;
   readonly fpcRegistrationStatus = environment.links.fpcRegStatus;
   readonly successMessage = 'You can proceed to the form now.';
 
@@ -48,25 +48,26 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
     return this.incomeReviewDataService.informationCollectionNoticeConsent;
   }
 
-  get isEligible() {
-    return (
-      this.incomeReviewDataService.isRegistered &&
-      this.incomeReviewDataService.isIncomeLess
-    );
+  get isRegisterError() {
+    if (
+      this.incomeReviewDataService.isRegistered !== null &&
+      this.incomeReviewDataService.isRegistered !== undefined &&
+      this.incomeReviewDataService.isRegistered === false
+    ) {
+      return true;
+    }
+    return false;
   }
 
-  get isTouched() {
-    let _touched =
-      this.formGroup.controls.isRegistered.value !== null &&
-      this.formGroup.controls.isIncomeLess.value !== null;
-
-    if (_touched) {
-      _touched =
-        this.formGroup.controls.isRegistered.touched &&
-        this.formGroup.controls.isIncomeLess.touched;
+  get isIncomeLessError() {
+    if (
+      this.incomeReviewDataService.isIncomeLess !== null &&
+      this.incomeReviewDataService.isIncomeLess !== undefined &&
+      this.incomeReviewDataService.isIncomeLess === false
+    ) {
+      return true;
     }
-
-    return _touched;
+    return false;
   }
 
   ngOnInit() {
@@ -110,7 +111,8 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
     if (
       this.canContinue() &&
       this.incomeReviewDataService.informationCollectionNoticeConsent &&
-      this.isEligible
+      !this.isRegisterError &&
+      !this.isIncomeLessError
     ) {
       this.navigate(INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath);
     }

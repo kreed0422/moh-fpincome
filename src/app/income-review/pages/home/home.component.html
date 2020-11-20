@@ -85,6 +85,15 @@
       [label]="isRegisteredQuestion"
       display="table-row-group"
     ></common-radio>
+
+    <common-error-container [displayError]="isRegisterError">
+      Income reviews are for people who are registered for the income-based Fair
+      PharmaCare plan. You can
+      <a href="{{ fpcRegistration }}" target="_blank" rel="noopener noreferrer"
+        >register here</a
+      >. You can only apply for an income review once you have registered for
+      Fair PharmaCare and received a Confirmation of Assistance letter.
+    </common-error-container>
   </common-page-section>
 
   <h2 class="border-bottom">Income Requirements</h2>
@@ -95,6 +104,11 @@
       [label]="isIncomeLessQuestion"
       display="table-row-group"
     ></common-radio>
+
+    <common-error-container [displayError]="isIncomeLessError">
+      Income reviews are only for Fair PharmaCare registrants whose income has
+      dropped by 10% or more since it was verified two years ago.
+    </common-error-container>
 
     <aside>
       <div class="pb-4">
@@ -110,8 +124,4 @@
       </div>
     </aside>
   </common-page-section>
-
-  <common-error-container [displayError]="!isEligible && isTouched">
-    You are not eligible to apply for Fair PharmaCare Income Review.
-  </common-error-container>
 </form>

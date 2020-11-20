@@ -22,6 +22,7 @@ import {
   clickRadioButton,
   MockRouter,
   partialRequiredMsg,
+  getAllDebugElements,
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { Router } from '@angular/router';
@@ -46,12 +47,12 @@ function getRadioErrorMsg(fixture: ComponentFixture<any>, btnName: string) {
   return getDebugInlineError(btn);
 }
 
-function getErrorMsg(fixture: ComponentFixture<any>) {
-  const formError = getDebugElement(
+function getErrorMsg(fixture: ComponentFixture<any>, pos) {
+  const formError = getAllDebugElements(
     fixture,
     'form common-error-container .error--container'
   );
-  return formError.nativeElement.textContent;
+  return formError[pos].nativeElement.textContent;
 }
 
 function getCollectionNoticeButton(fixture: ComponentFixture<any>) {
@@ -136,10 +137,17 @@ describe('HomeComponent', () => {
     }
   ));
 
-  it('should display not eligible when requirements are not satisfied', inject(
+  it('should display error messages when requirements are not satisfied', inject(
     [IncomeReviewDataService],
     (mockDataService: MockDataService) => {
       mockDataService.informationCollectionNoticeConsent = true;
+      const registError =
+        'Income reviews are for people who are registered for the income-based Fair PharmaCare plan. ' +
+        'You can register here. You can only apply for an income review once you have registered for ' +
+        'Fair PharmaCare and received a Confirmation of Assistance letter.';
+      const incomeError =
+        'Income reviews are only for Fair PharmaCare registrants whose income has dropped by 10% ' +
+        'or more since it was verified two years ago.';
 
       // Not registered and income is not 10% less
       setRadioButton(fixture, 'isRegistered', 'false');
@@ -147,14 +155,15 @@ describe('HomeComponent', () => {
       component.continue();
       fixture.detectChanges();
 
-      expect(getErrorMsg(fixture)).toContain('not eligible');
+      expect(getErrorMsg(fixture, 0)).toContain(registError);
+      expect(getErrorMsg(fixture, 1)).toContain(incomeError);
 
       // Registered but income not 10% less
       setRadioButton(fixture, 'isRegistered', 'true');
       component.canContinue();
       fixture.detectChanges();
 
-      expect(getErrorMsg(fixture)).toContain('not eligible');
+      expect(getErrorMsg(fixture, 0)).toContain(incomeError);
 
       // Not registered but income is 10% less
       setRadioButton(fixture, 'isRegistered', 'false');
@@ -162,7 +171,7 @@ describe('HomeComponent', () => {
       component.continue();
       fixture.detectChanges();
 
-      expect(getErrorMsg(fixture)).toContain('not eligible');
+      expect(getErrorMsg(fixture, 0)).toContain(registError);
     }
   ));
 

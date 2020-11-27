@@ -20,8 +20,11 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   ];
 
   readonly netIncomeInstruct =
-    'Use information from your and your spouse, CRA Notice of Assessment or Notice of Reassessment ' +
-    'or proof of income statement for last year.';
+    `<div>Use information from your CRA Notice of Assessment or Notice of Reassessment or ` +
+    `<a href="${this.incomeStmt}" target="_blank" rel="noopener noreferrer">proof of income statement</a> ` +
+    `for last year.</div>` +
+    `<div>Haven't filed your taxes yet? If you are applying after June 1, you must provide your CRA Notice ` +
+    `of Assessment. If you are applying before June 1, provide T-slips and other income records.</div>`;
 
   readonly grossIncomeInstruct =
     '<p><strong>Estimate your gross income for the current calendar year.</strong></p>' +

@@ -18,9 +18,9 @@
       </div>
       <div *ngFor="let item of section.sectionItems; let idx = index">
         <div class="row review--row pb-2">
-          <div class="col-md-4 review--key" [innerHTML]="item.label"></div>
+          <div class="col-md-6 review--key" [innerHTML]="item.label"></div>
           <div
-            class="{{ item.extraInfo ? 'col-md-2' : 'col-md-8' }} {{
+            class="{{ item.extraInfo ? 'col-md-2' : 'col-md-6' }} {{
               item.valueClass ? item.valueClass : null
             }}"
             [innerHTML]="item.value"

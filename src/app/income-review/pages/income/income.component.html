@@ -1,8 +1,59 @@
-<h1>Estimate your 2020 Income</h1>
+<h1>Estimate your Income</h1>
+<p>
+  You can use either last year's net income or this year's gross income to apply
+  for an income review. Choose the year with the lower income (or the year for
+  which you have all required documents).
+</p>
+<p>
+  If you use last year's income, you will need to upload the relevant Canada
+  Revenue Agency (CRA) Notice of Assessment(s), Notice of Reassessment(s), or
+  <a href="{{ incomeStmt }}" target="_blank" rel="noopener noreferrer"
+    >proof of income statement</a
+  >
+  (for both you and your spouse, if applicable).
+</p>
+<p>
+  If you use this year's income, you will need to upload documents showing
+  income (for both you and your spouse, if applicable) from all sources (such as
+  wages, Employment Insurance benefits, disability payments, pensions, etc.).
+</p>
 
-<p><strong>Examples of supporting documents</strong></p>
-<div [innerHTML]="exampleSupportDocs"></div>
+<form [formGroup]="formGroup" class="pt-2">
+  <common-page-section layout="tips">
+    <common-radio
+      formControlName="isLastYearIncome"
+      name="isLastYearIncome"
+      label="Choose the one that applies:"
+      [radioLabels]="incomeOptions"
+      display="table-row-group"
+    ></common-radio>
 
+    <aside>
+      Haven't filed last year's taxes yet? Consider applying with this year's
+      gross income.
+    </aside>
+  </common-page-section>
+
+  <div *ngIf="showSection">
+    <h2 class="border-bottom">{{ incomeHeading }}</h2>
+    <common-page-section layout="noTips">
+      <div [innerHTML]="incomeInstruction"></div>
+
+      <div class="financial--container">
+        <fpir-financial-input
+          formControlName="income"
+          [attr.aria-labelledby]="arialLabelBy"
+          [moneyMask]="moneyMask"
+        >
+          <div label class="finance-text--format">{{ incomeLabel }}</div>
+          <div rowId>1</div>
+        </fpir-financial-input>
+      </div>
+    </common-page-section>
+  </div>
+</form>
+
+<!--
 <form [formGroup]="formGroup">
   <h2>{{ applSectionTitle }}</h2>
   <p class="border-bottom">
@@ -232,3 +283,4 @@
     </common-page-section>
   </div>
 </form>
+-->

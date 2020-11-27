@@ -36,23 +36,20 @@ export class Registrant extends Person {
   // consent declaration
   consent: boolean = false;
 
-  // financial information
-  originalIncome: number;
-  reducedIncome: number;
-  remainderIncome: number;
+  // Gross income for current year, net income for last year
+  income: number;
+
+  // Registered Disability Savings Plan (RDSP) income
+  rdspIncome: number;
 
   get incomeSubTotal() {
-    return (
-      this._convertNaN(this.originalIncome) +
-      this._convertNaN(this.reducedIncome) +
-      this._convertNaN(this.remainderIncome)
-    );
+    // TO UPDATE
+    return this._convertNaN(this.income) - this._convertNaN(this.rdspIncome);
   }
 
   clearIncome() {
-    this.originalIncome = undefined;
-    this.reducedIncome = undefined;
-    this.remainderIncome = undefined;
+    this.income = undefined;
+    this.rdspIncome = undefined;
   }
 
   private _convertNaN(value: number) {
@@ -72,19 +69,16 @@ export class IncomeReviewDataService {
   readonly applicationUUID: string = UUID.UUID();
 
   // Labels for calculate income, review and confirmation pages
-  readonly applSectionTitle = 'YOUR ESTIMATED 2020 INCOME';
-  readonly spSectionTitle = `SPOUSE'S ESTIMATED 2020 INCOME`;
-  readonly originalIncomeLabel =
-    'Before reduction of income<br><strong>(e.g. January - March)<strong>';
-  readonly reducedIncomeLabel =
-    'During reduction of income<br><strong>(e.g. April - June)</strong>';
-  readonly remainderIncomeLabel = 'Remainder of 2020<br>(estimated)';
-  readonly subtotalLabelLine1to3 = 'SUBTOTAL (lines 1-3)';
-  readonly totalLabelLine1to3 =
-    '<strong>TOTAL GROSS INCOME (lines 1-3)</stong>';
-  readonly subtotalLabelLine5to7 = 'SUBTOTAL (lines 5-7)';
-  readonly totalLabelLine4and8 =
-    '<strong>TOTAL GROSS INCOME (line 4 + line 8)<strong>';
+
+  // Current Year's income field headings
+  readonly currentYearIncome = `This Year's Gross Income`;
+  readonly grossIncomeLabel = 'gross income for this year:';
+
+  // Last Year's income field headings - TODO css  => p.capitalize {text-transform: capitalize};
+  readonly lastYearIncome = `Last Year's Net Income`;
+  readonly netIncomeLabel = 'net income for last year (from line 23600):';
+  readonly rdspIncomeLabel = 'RDSP income (from line 12500):';
+  readonly subtotal = 'Net income minus RDSP payments (lines 1 - 2):';
 
   // Labels for personal info, review, and confirmation pages
   readonly applFirstNameLabel = 'First name';
@@ -96,27 +90,6 @@ export class IncomeReviewDataService {
   readonly spPhnLabel = 'Spouse Personal Health Number (PHN)';
   readonly applPostalCodeLabel = 'Postal code';
 
-  // Example documents for income and support document pages
-  readonly serviceCanada = environment.links.serviceCanada;
-  readonly exampleSupportDocs =
-    `<ul><li><strong>Canada Emergency Response Benefit (CERB) and the BC Emergency ` +
-    `Benefit for Workers:</strong> Statement ` +
-    `from the CERB and/or the BC Emergency Benefit for Workers confirming payment of the benefit.</li><li>` +
-    `<strong>For employment:</strong> Letter from your employer (on letterhead) showing your gross income this period.` +
-    `</li><li><strong>For self-employment:</strong> A letter from your accountant, if you have one, and copies ` +
-    `of your invoices or cheque stubs to date.</li><li><strong>For unemployment:</strong> Record of Employment, ` +
-    `final pay stub showing gross year-to-date income, and letter from Employment Insurance (EI) showing the EI ` +
-    `coverage start date, end date and gross weekly benefit amount. These letters can be requested through ` +
-    `Service Canada.</li><li><strong>For pensions, workers compensation or disability payments:</strong> ` +
-    `Letter from Canada Pension Plan, Old Age Security, Guaranteed Income Supplement showing your current ` +
-    `gross monthly benefit amount. These letters can be requested through Service Canada, or by logging in to ` +
-    `your Service Canada account: <a href=\"${this.serviceCanada}\" target="_blank" rel="noopener noreferrer">` +
-    `www.canada.ca</a>.</li><li>Letter from WorkSafeBC showing your current gross monthly benefit amount.</li>` +
-    `<li>Letter from disability insurance or pension provider showing your current gross monthly benefit amount.</li>` +
-    `<li><strong>Gross income from other sources:</strong> Documents for investments (such as interest and mutual ` +
-    `fund payments); income from RRSPs, RIFs, LIFs, annuities, etc.; income earned outside of Canada; business ` +
-    `income (rental income including the BC-TRS, partnerships, etc.); support payments.</li></ul>`;
-
   dateOfSubmission: Date;
 
   informationCollectionNoticeConsent: boolean;
@@ -126,6 +99,9 @@ export class IncomeReviewDataService {
   isIncomeLess: boolean;
 
   hasSpouse: boolean;
+
+  // Flag to indicate this is for last year
+  isLastYearIncome: boolean;
 
   applicant: Registrant = new Registrant();
   spouse: Registrant = new Registrant();
@@ -158,7 +134,7 @@ export class IncomeReviewDataService {
     const payload = {
       applicationUUID: this.applicationUUID,
 
-      fpcIncomeReviewCovid19: {
+      fpcIncomeReview: {
         informationConsentAgreement: this.informationCollectionNoticeConsent,
         submissionDate: formatISO(new Date(), { representation: 'date' }),
         applicant: {
@@ -171,26 +147,34 @@ export class IncomeReviewDataService {
             postalCode: this._stripFormatting(this.address.postal),
           },
         },
-        grossIncome: {
+        income: {
           applicantIncome: {
-            originalIncome: this.applicant.originalIncome,
-            reducedIncome: this.applicant.reducedIncome,
-            remainderIncome: this.applicant.remainderIncome,
-            subtotal: incomeSubTotal,
+            income: this.applicant.income,
           },
           totalIncome: incomeTotal,
+          lastYearIncome: this.isLastYearIncome,
         },
         applicantConsent: this.applicant.consent,
       },
     };
 
+    if (this.isLastYearIncome) {
+      payload.fpcIncomeReview.income.applicantIncome = Object.assign(
+        payload.fpcIncomeReview.income.applicantIncome,
+        {
+          rdspIncome: this.applicant.rdspIncome,
+          subtotal: this.applicant.incomeSubTotal,
+        }
+      );
+    }
+
     if (this.hasSpouse) {
-      payload.fpcIncomeReviewCovid19.grossIncome = Object.assign(
-        payload.fpcIncomeReviewCovid19.grossIncome,
+      payload.fpcIncomeReview.income = Object.assign(
+        payload.fpcIncomeReview.income,
         this._getSpouseIncome()
       );
-      payload.fpcIncomeReviewCovid19 = Object.assign(
-        payload.fpcIncomeReviewCovid19,
+      payload.fpcIncomeReview = Object.assign(
+        payload.fpcIncomeReview,
         this._getSpouse()
       );
     }
@@ -304,7 +288,8 @@ export class IncomeReviewDataService {
     return obj;
   }
 
-  getGrossIncomeSection(printView: boolean = false): ReviewObject {
+  getIncomeSection(printView: boolean = false): ReviewObject {
+    /*
     const obj = {
       heading: 'Income',
       isPrintView: printView,
@@ -388,10 +373,11 @@ export class IncomeReviewDataService {
       obj.section.push(spouseSection);
       obj.section.push(totalSection);
     }
-
-    return obj;
+    */
+    return null; // obj;
   }
 
+  /*
   getSupportDocsSection(printView: boolean = false): ReviewObject {
     return {
       heading: 'Supporting Documents',
@@ -406,6 +392,7 @@ export class IncomeReviewDataService {
       ],
     };
   }
+*/
 
   currencyStrToNumber(strValue: string): number {
     if (strValue) {
@@ -445,13 +432,14 @@ export class IncomeReviewDataService {
 
   private _getSpouseIncome() {
     const incomeSubTotal = Number(this.spouse.incomeSubTotal.toFixed(2));
-    return {
-      spouseIncome: {
-        originalIncome: this.spouse.originalIncome,
-        reducedIncome: this.spouse.reducedIncome,
-        remainderIncome: this.spouse.remainderIncome,
-        subtotal: incomeSubTotal,
-      },
-    };
+    const obj = { spouseIncome: { originalIncome: this.spouse.income } };
+
+    if (this.isLastYearIncome) {
+      return Object.assign(obj, {
+        rdspIncome: this.spouse.rdspIncome,
+        subtotal: this.spouse.incomeSubTotal,
+      });
+    }
+    return obj;
   }
 }

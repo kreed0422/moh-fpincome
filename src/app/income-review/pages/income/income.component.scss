@@ -1,0 +1,14 @@
+@import 'variables.scss';
+
+.financial--container {
+  display: block;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background-color: $gray;
+}
+
+.finance-text--format {
+  text-align: right;
+  text-transform: capitalize;
+  vertical-align: bottom;
+}

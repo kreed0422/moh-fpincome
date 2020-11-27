@@ -5,19 +5,28 @@ import { Router } from '@angular/router';
 import { ContainerService, PageStateService } from 'moh-common-lib';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'fpir-income',
   templateUrl: './income.component.html',
+  styleUrls: ['./income.component.scss'],
 })
 export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
-  decimalPipeMask = (value: any) => {
-    if (!isNaN(value)) {
-      return Number(value).toFixed(2);
-    }
-    return value;
-    // tslint:disable-next-line: semicolon
-  };
+  readonly incomeStmt = environment.links.incomeStmt;
+  readonly incomeOptions = [
+    { label: `Applying with last year's net income`, value: true },
+    { label: `Applying with this year's gross income`, value: false },
+  ];
+
+  readonly netIncomeInstruct =
+    'Use information from your and your spouse, CRA Notice of Assessment or Notice of Reassessment ' +
+    'or proof of income statement for last year.';
+
+  readonly grossIncomeInstruct =
+    '<p><strong>Estimate your gross income for the current calendar year.</strong></p>' +
+    '<p>Add up all amounts that you and your spouse have received this year and expect to receive from all sources. ' +
+    'This will be your gross income.</p>';
 
   constructor(
     protected router: Router,
@@ -29,41 +38,50 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     super(router, containerService, pageStateService);
   }
 
-  get exampleSupportDocs() {
-    return this.incomeReviewDataService.exampleSupportDocs;
+  get isLastYearIncome() {
+    return this.incomeReviewDataService.isLastYearIncome;
   }
 
-  get applSectionTitle() {
-    return this.incomeReviewDataService.applSectionTitle;
+  set isLastYearIncome(lastYearIncome: boolean) {
+    this.incomeReviewDataService.isLastYearIncome = lastYearIncome;
   }
-  get spSectionTitle() {
-    return this.incomeReviewDataService.spSectionTitle;
+
+  get showSection() {
+    return (
+      this.incomeReviewDataService.isLastYearIncome !== undefined &&
+      this.incomeReviewDataService.isLastYearIncome !== null
+    );
+  }
+
+  get incomeHeading() {
+    return this.incomeReviewDataService.isLastYearIncome === true
+      ? this.incomeReviewDataService.lastYearIncome
+      : this.incomeReviewDataService.currentYearIncome;
+  }
+
+  get incomeInstruction() {
+    return this.incomeReviewDataService.isLastYearIncome === true
+      ? this.netIncomeInstruct
+      : this.grossIncomeInstruct;
+  }
+
+  get arialLabelBy() {
+    return this.incomeReviewDataService.isLastYearIncome === true
+      ? 'NetIncome'
+      : 'GrossIncome';
+  }
+
+  get incomeLabel() {
+    const _label =
+      this.incomeReviewDataService.isLastYearIncome === true
+        ? this.incomeReviewDataService.netIncomeLabel
+        : this.incomeReviewDataService.grossIncomeLabel;
+
+    return _label;
   }
 
   get hasSpouse() {
     return this.incomeReviewDataService.hasSpouse;
-  }
-
-  get originalIncomeLabel() {
-    return this.incomeReviewDataService.originalIncomeLabel;
-  }
-  get reducedIncomeLabel() {
-    return this.incomeReviewDataService.reducedIncomeLabel;
-  }
-  get remainderIncomeLabel() {
-    return this.incomeReviewDataService.remainderIncomeLabel;
-  }
-
-  get line1to3Label() {
-    return this.hasSpouse
-      ? this.incomeReviewDataService.subtotalLabelLine1to3
-      : this.incomeReviewDataService.totalLabelLine1to3;
-  }
-  get line5to7Label() {
-    return this.incomeReviewDataService.subtotalLabelLine5to7;
-  }
-  get line4and8Label() {
-    return this.incomeReviewDataService.totalLabelLine4and8;
   }
 
   get moneyMask() {
@@ -74,48 +92,19 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     return this.incomeReviewDataService.incomeDisplayMask;
   }
 
-  get originalIncomeErrorMsg() {
-    return `${this._stripHtml(
-      this.incomeReviewDataService.originalIncomeLabel
-    )} is required`;
-  }
-  get reducedIncomeErrorMsg() {
-    return `${this._stripHtml(this.reducedIncomeLabel)} is required`;
-  }
-  get remainderIncomeErrorMsg() {
-    return `${this._stripHtml(this.remainderIncomeLabel)} is required`;
-  }
-
-  get originalIncomeHasError() {
-    const ctrl = this.formGroup.controls.originalIncome;
-    return ctrl.hasError('required') && ctrl.touched;
-  }
-  get reducedIncomeHasError() {
-    const ctrl = this.formGroup.controls.reducedIncome;
-    return ctrl.hasError('required') && ctrl.touched;
-  }
-  get remainderIncomeHasError() {
-    const ctrl = this.formGroup.controls.remainderIncome;
-    return ctrl.hasError('required') && ctrl.touched;
-  }
-
-  get spOriginalIncomeHasError() {
-    const ctrl = this.formGroup.controls.spOriginalIncome;
-    return ctrl.hasError('required') && ctrl.touched;
-  }
-  get spReducedIncomeHasError() {
-    const ctrl = this.formGroup.controls.spReducedIncome;
-    return ctrl.hasError('required') && ctrl.touched;
-  }
-  get spRemainderIncomeHasError() {
-    const ctrl = this.formGroup.controls.spRemainderIncome;
-    return ctrl.hasError('required') && ctrl.touched;
-  }
-
   ngOnInit() {
     super.ngOnInit();
     this.formGroup = this.fb.group({
-      originalIncome: [
+      isLastYearIncome: [
+        this.incomeReviewDataService.isLastYearIncome,
+        { validators: Validators.required },
+      ],
+      income: [
+        this.incomeReviewDataService.applicant.income,
+        { validators: Validators.required, updateOn: 'blur' },
+      ],
+
+      /*  originalIncome: [
         this.incomeReviewDataService.applicant.originalIncome,
         { validators: Validators.required, updateOn: 'blur' },
       ],
@@ -164,7 +153,7 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
       total: [
         { value: this.incomeReviewDataService.incomeTotal, disabled: true },
-      ],
+      ],*/
     });
   }
 
@@ -172,7 +161,15 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     super.ngAfterViewInit();
 
     // subscribe to value changes
-    this.formGroup.controls.originalIncome.valueChanges.subscribe((val) => {
+    this.formGroup.controls.isLastYearIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.isLastYearIncome = val;
+    });
+
+    this.formGroup.controls.income.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.applicant.income = val;
+    });
+
+    /*  this.formGroup.controls.originalIncome.valueChanges.subscribe((val) => {
       this.incomeReviewDataService.applicant.originalIncome = this.incomeReviewDataService.currencyStrToNumber(
         val
       );
@@ -212,14 +209,14 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
         val
       );
       this.updateTotals();
-    });
+    });*/
   }
 
   continue() {
     this.markAllInputsTouched();
 
     if (this.canContinue()) {
-      this.navigate(INCOME_REVIEW_PAGES.SUPPORT_DOCS.fullpath);
+      this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
     }
   }
 

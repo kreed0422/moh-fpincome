@@ -64,10 +64,10 @@ export class SupportDocsComponent extends BaseForm
   ) {
     super(router, containerService, pageStateService);
   }
-
+  /*
   get exampleSupportDocs() {
     return this.incomeReviewDataService.exampleSupportDocs;
-  }
+  }*/
 
   get originalIncomeSupportDocs() {
     return this.incomeReviewDataService.originalIncomeSupportDocs;

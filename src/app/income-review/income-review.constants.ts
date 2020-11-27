@@ -4,7 +4,7 @@ import { APP_ROUTES } from '../app.constants';
 const PAGE_NAMES = {
   home: 'get-started',
   personalInfo: 'personal-info',
-  grossIncome: 'calculate-income',
+  calcIncome: 'calculate-income',
   supportDocs: 'supporting-docs',
   review: 'review',
   consent: 'declaration',
@@ -24,15 +24,15 @@ export const INCOME_REVIEW_PAGES = {
     title: PAGE_NAMES.personalInfo,
   },
   INCOME: {
-    path: PAGE_NAMES.grossIncome,
-    fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.grossIncome}`,
-    title: PAGE_NAMES.grossIncome,
+    path: PAGE_NAMES.calcIncome,
+    fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.calcIncome}`,
+    title: PAGE_NAMES.calcIncome,
   },
-  SUPPORT_DOCS: {
+  /* SUPPORT_DOCS: {
     path: PAGE_NAMES.supportDocs,
     fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.supportDocs}`,
     title: PAGE_NAMES.supportDocs,
-  },
+  },*/
   REVIEW: {
     path: PAGE_NAMES.review,
     fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.review}`,

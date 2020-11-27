@@ -24,11 +24,11 @@ export const incomeReviewPageRoutes: Routes = [
     component: IncomeComponent,
     data: { title: INCOME_REVIEW_PAGES.INCOME.title },
   },
-  {
+  /*  {
     path: INCOME_REVIEW_PAGES.SUPPORT_DOCS.path,
     component: SupportDocsComponent,
     data: { title: INCOME_REVIEW_PAGES.SUPPORT_DOCS.title },
-  },
+  },*/
   {
     path: INCOME_REVIEW_PAGES.REVIEW.path,
     component: ReviewComponent,

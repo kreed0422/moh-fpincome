@@ -1,23 +1,13 @@
-import { Component, forwardRef, Input, OnInit, Self } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NgControl,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { Attribute, Component, Input, OnInit } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 
 @Component({
   selector: 'fpir-financial-input',
   templateUrl: './financial-input.component.html',
   styleUrls: ['./financial-input.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FinancialInputComponent),
-      multi: true,
-    },
-  ],
   // tslint:disable-next-line: no-host-metadata-property
   host: {
+    '(change)': '_onChange($event.target.value)',
     '(blur)': '_onTouched()',
   },
 })
@@ -27,6 +17,7 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
 
   _value: number = null;
   _textMask: any;
+  _name: string;
 
   // Required for implementing ControlValueAccessor
   _onChange = (_: any) => {};
@@ -40,7 +31,20 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
     // tslint:disable-next-line: semicolon
   };
 
-  constructor() {}
+  constructor(public control: NgControl) {
+    if (this.control !== null) {
+      this.control.valueAccessor = this;
+    }
+  }
+
+  get isErrors() {
+    return (
+      this.control !== null &&
+      !this.control.disabled &&
+      this.control.errors &&
+      (this.control.touched || this.control.dirty)
+    );
+  }
 
   ngOnInit() {
     this._textMask = { pipe: this.decimalPipeMask };
@@ -48,14 +52,14 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
     if (this.moneyMask) {
       this._textMask = Object.assign(this._textMask, { mask: this.moneyMask });
     }
+
+    // Retreive name of the control
+    this._name = this.control ? this.control.name : 'financeInput';
   }
 
   // Required for implementing ControlValueAccessor
   writeValue(value: any): void {
-    console.log('value: ', value);
-    if (value !== null && value !== undefined) {
-      this._value = value;
-    }
+    this._value = value === undefined ? null : value;
   }
 
   // Register change function

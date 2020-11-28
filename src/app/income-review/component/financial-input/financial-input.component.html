@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row financial-input--row" aria-hidden="true">
   <div class="col-md-5 financial-input--text">
     <ng-content select="[label]"></ng-content>
   </div>
@@ -8,8 +8,9 @@
     </div>
     <input
       type="text"
-      [(ngModel)]="_value"
-      (ngModelChange)="_onChange($event)"
+      [name]="_name"
+      [value]="_value"
+      (change)="_onChange($event.target.value); _value = $event.target.value"
       (blur)="_onTouched()"
       [disabled]="disabled"
       [textMask]="_textMask"
@@ -20,3 +21,6 @@
     <ng-content select="[rowId]"></ng-content>
   </div>
 </div>
+<common-error-container [displayError]="isErrors">
+  <ng-content select="[errors]"></ng-content>
+</common-error-container>

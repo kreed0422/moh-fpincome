@@ -68,7 +68,7 @@ export class SupportDocsComponent extends BaseForm
   get exampleSupportDocs() {
     return this.incomeReviewDataService.exampleSupportDocs;
   }*/
-
+  /*
   get originalIncomeSupportDocs() {
     return this.incomeReviewDataService.originalIncomeSupportDocs;
   }
@@ -104,6 +104,7 @@ export class SupportDocsComponent extends BaseForm
       ? images
       : [];
   }
+  */
 
   ngOnInit() {
     super.ngOnInit();

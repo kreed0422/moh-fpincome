@@ -46,241 +46,37 @@
           [moneyMask]="moneyMask"
         >
           <div label class="finance-text--format">{{ incomeLabel }}</div>
-          <div rowId>1</div>
+          <div rowId>{{ incomeLineNumber }}</div>
+          <div errors class="finance-error--format">
+            {{ incomeLabel }} is required.
+          </div>
         </fpir-financial-input>
+
+        <div class="pt-2" *ngIf="hasSpouse">
+          <fpir-financial-input
+            formControlName="spouseIncome"
+            aria-labelledby="SpouseIncome"
+            [moneyMask]="moneyMask"
+          >
+            <div label class="finance-text--format">
+              {{ spouseIncomeLabel }}
+            </div>
+            <div rowId>{{ spouseIncomeLineNumber }}</div>
+            <div errors class="finance-error--format">
+              {{ spouseIncomeLabel }} is required.
+            </div>
+          </fpir-financial-input>
+
+          <fpir-financial-input
+            formControlName="incomeTotal"
+            aria-labelledby="IncomeTotal"
+            [moneyMask]="moneyTotalMask"
+          >
+            <div label class="finance-text--format">{{ incomeTotalLabel }}</div>
+            <div rowId>{{ spouseIncomeLineNumber + 1 }}</div>
+          </fpir-financial-input>
+        </div>
       </div>
     </common-page-section>
   </div>
 </form>
-
-<!--
-<form [formGroup]="formGroup">
-  <h2>{{ applSectionTitle }}</h2>
-  <p class="border-bottom">
-    Enter zero (0) for each period for which you did not have any income.
-  </p>
-  <common-page-section layout="tips">
-    <div class="row pb-2">
-      <div
-        class="col-sm-5"
-        [innerHTML]="originalIncomeLabel"
-        id="OriginalIncome"
-      ></div>
-      <div class="input-group mb-3 col-sm-5">
-        <div class="input-group-prepend">
-          <span class="input-group-text">$</span>
-        </div>
-        <input
-          aria-labelledby="OriginalIncome"
-          class="text-right"
-          type="text"
-          formControlName="originalIncome"
-          [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
-          autocomplete="off"
-        />
-        <common-error-container [displayError]="originalIncomeHasError">
-          {{ originalIncomeErrorMsg }}
-        </common-error-container>
-      </div>
-      <div class="col-sm-2">1</div>
-    </div>
-
-    <div class="row pb-2">
-      <div
-        class="col-sm-5"
-        [innerHTML]="reducedIncomeLabel"
-        id="ReducedIncome"
-      ></div>
-      <div class="input-group mb-3 col-sm-5">
-        <div class="input-group-prepend">
-          <span class="input-group-text">$</span>
-        </div>
-        <input
-          aria-labelledby="ReducedIncome"
-          class="text-right"
-          type="text"
-          formControlName="reducedIncome"
-          [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
-          autocomplete="off"
-        />
-        <common-error-container [displayError]="reducedIncomeHasError">
-          {{ reducedIncomeErrorMsg }}
-        </common-error-container>
-      </div>
-      <div class="col-sm-2">2</div>
-    </div>
-
-    <div class="row pb-2">
-      <div
-        class="col-sm-5"
-        [innerHTML]="remainderIncomeLabel"
-        id="RemainderIncome"
-      ></div>
-      <div class="input-group mb-3 col-sm-5">
-        <div class="input-group-prepend">
-          <span class="input-group-text">$</span>
-        </div>
-        <input
-          aria-labelledby="RemainderIncome"
-          class="text-right"
-          type="text"
-          formControlName="remainderIncome"
-          [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
-          autocomplete="off"
-        />
-        <common-error-container [displayError]="remainderIncomeHasError">
-          {{ remainderIncomeErrorMsg }}
-        </common-error-container>
-      </div>
-      <div class="col-sm-2">3</div>
-    </div>
-
-    <div class="row pb-2">
-      <div
-        class="col-sm-5"
-        [innerHTML]="line1to3Label"
-        id="ApplicantTotal"
-      ></div>
-      <div class="input-group mb-3 col-sm-5">
-        <div class="input-group-prepend">
-          <span class="input-group-text">$</span>
-        </div>
-        <input
-          aria-labelledby="ApplicantTotal"
-          class="text-right"
-          type="text"
-          formControlName="subtotal"
-          [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
-        />
-      </div>
-      <div class="col-sm-2">4</div>
-    </div>
-  </common-page-section>
-
-  <div *ngIf="hasSpouse">
-    <h2>{{ spSectionTitle }}</h2>
-    <p class="border-bottom">
-      Enter zero (0) for each period for which your spouse/common-law partner
-      did not have any income.
-    </p>
-    <common-page-section layout="tips">
-      <div class="row pb-2">
-        <div
-          class="col-sm-5"
-          [innerHTML]="originalIncomeLabel"
-          id="SpouseOriginaIncome"
-        ></div>
-        <div class="input-group mb-3 col-sm-5">
-          <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-          </div>
-          <input
-            aria-labelledby="SpouseOriginaIncome"
-            class="text-right"
-            type="text"
-            formControlName="spOriginalIncome"
-            [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
-            autocomplete="off"
-          />
-          <common-error-container [displayError]="spOriginalIncomeHasError">
-            {{ originalIncomeErrorMsg }}
-          </common-error-container>
-        </div>
-        <div class="col-sm-2">5</div>
-      </div>
-
-      <div class="row pb-2">
-        <div
-          class="col-sm-5"
-          [innerHTML]="reducedIncomeLabel"
-          id="SpouseReducedIncome"
-        ></div>
-        <div class="input-group mb-3 col-sm-5">
-          <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-          </div>
-          <input
-            aria-labelledby="SpouseReducedIncome"
-            class="text-right"
-            type="text"
-            formControlName="spReducedIncome"
-            [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
-            autocomplete="off"
-          />
-          <common-error-container [displayError]="spReducedIncomeHasError">
-            {{ reducedIncomeErrorMsg }}
-          </common-error-container>
-        </div>
-        <div class="col-sm-2">6</div>
-      </div>
-
-      <div class="row pb-2">
-        <div
-          class="col-sm-5"
-          [innerHTML]="remainderIncomeLabel"
-          id="SpouseReminderIncome"
-        ></div>
-        <div class="input-group mb-3 col-sm-5">
-          <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-          </div>
-          <input
-            aria-labelledby="SpouseReminderIncome"
-            class="text-right"
-            type="text"
-            formControlName="spRemainderIncome"
-            [textMask]="{ mask: moneyMask, pipe: decimalPipeMask }"
-            autocomplete="off"
-          />
-          <common-error-container [displayError]="spRemainderIncomeHasError">
-            {{ remainderIncomeErrorMsg }}
-          </common-error-container>
-        </div>
-        <div class="col-sm-2">7</div>
-      </div>
-
-      <div class="row pb-2">
-        <div
-          class="col-sm-5"
-          [innerHTML]="line5to7Label"
-          id="SpouseSubtotal"
-        ></div>
-        <div class="input-group mb-3 col-sm-5">
-          <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-          </div>
-          <input
-            aria-labelledby="SpouseSubtotal"
-            class="text-right"
-            type="text"
-            formControlName="spSubtotal"
-            [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
-          />
-        </div>
-        <div class="col-sm-2">8</div>
-      </div>
-
-      <div class="row pb-2">
-        <div
-          class="col-sm-5"
-          [innerHTML]="line4and8Label"
-          id="ApplicantAndSpouseTotal"
-        ></div>
-        <div class="input-group mb-3 col-sm-5">
-          <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-          </div>
-          <input
-            aria-labelledby="ApplicantAndSpouseTotal"
-            class="text-right"
-            type="text"
-            formControlName="total"
-            [textMask]="{ mask: moneyTotalMask, pipe: decimalPipeMask }"
-          />
-        </div>
-        <div class="col-sm-2">9</div>
-      </div>
-    </common-page-section>
-  </div>
-</form>
--->

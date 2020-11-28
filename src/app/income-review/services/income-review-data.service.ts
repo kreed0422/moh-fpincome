@@ -7,7 +7,6 @@ import { Person, Address, CommonImage } from 'moh-common-lib';
 import { INCOME_REVIEW_PAGES } from '../income-review.constants';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { conformToMask } from 'angular2-text-mask';
-import { environment } from '../../../environments/environment';
 
 export const createCurrencyMask = (opts = {}) => {
   const numberMask = createNumberMask({
@@ -36,24 +35,12 @@ export class Registrant extends Person {
   // consent declaration
   consent: boolean = false;
 
-  // Gross income for current year, net income for last year
-  income: number;
-
-  // Registered Disability Savings Plan (RDSP) income
-  rdspIncome: number;
-
-  get incomeSubTotal() {
-    // TO UPDATE
-    return this._convertNaN(this.income) - this._convertNaN(this.rdspIncome);
-  }
+  incomeStr: string;
+  rdspIncomeStr: string;
 
   clearIncome() {
-    this.income = undefined;
-    this.rdspIncome = undefined;
-  }
-
-  private _convertNaN(value: number) {
-    return isNaN(value) ? 0 : value;
+    this.incomeStr = undefined;
+    this.rdspIncomeStr = undefined;
   }
 }
 
@@ -73,12 +60,13 @@ export class IncomeReviewDataService {
   // Current Year's income field headings
   readonly currentYearIncome = `This Year's Gross Income`;
   readonly grossIncomeLabel = 'gross income for this year:';
+  readonly grossIncomeTotalLabel = 'total gross income (lines 1 + 2):';
 
   // Last Year's income field headings - TODO css  => p.capitalize {text-transform: capitalize};
   readonly lastYearIncome = `Last Year's Net Income`;
   readonly netIncomeLabel = 'net income for last year (from line 23600):';
   readonly rdspIncomeLabel = 'RDSP income (from line 12500):';
-  readonly subtotal = 'Net income minus RDSP payments (lines 1 - 2):';
+  readonly netIncomeTotalLabel = 'total net income (lines 1 + 2):';
 
   // Labels for personal info, review, and confirmation pages
   readonly applFirstNameLabel = 'First name';
@@ -107,10 +95,8 @@ export class IncomeReviewDataService {
   spouse: Registrant = new Registrant();
   address: Address = new Address();
 
-  // Support documents
-  originalIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
-  reducedIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
-  remainderIncomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
+  // Income review support documents
+  incomeSupportDocs: CommonImage<FpcDocumentTypes>[] = [];
 
   applicationResponse: ServerPayload;
 
@@ -118,19 +104,13 @@ export class IncomeReviewDataService {
   private _incomeMask = createCurrencyMask({ integerLimit: 6, prefix: '' });
   private _incomeDollarSignMask = createCurrencyMask({ integerLimit: 6 });
   private _incomeTotalMask = createCurrencyMask({
-    integerLimit: 7,
+    integerLimit: 9,
     prefix: '',
   });
-  private _incomeTotalDollarSignMask = createCurrencyMask({ integerLimit: 7 });
+  private _incomeTotalDollarSignMask = createCurrencyMask({ integerLimit: 9 });
 
   // Payload for application
   get applicationPayload() {
-    /* Typescript numbers with decimals have rounding issue when adding
-     * e.g. 10000.97 + 9999.01 = 19999.97999999
-     */
-    const incomeSubTotal = Number(this.applicant.incomeSubTotal.toFixed(2));
-    const incomeTotal = Number(this.incomeTotal.toFixed(2));
-
     const payload = {
       applicationUUID: this.applicationUUID,
 
@@ -149,9 +129,9 @@ export class IncomeReviewDataService {
         },
         income: {
           applicantIncome: {
-            income: this.applicant.income,
+            income: this._currencyStrToNumber(this.applicant.incomeStr),
           },
-          totalIncome: incomeTotal,
+          totalIncome: this.incomeTotal,
           lastYearIncome: this.isLastYearIncome,
         },
         applicantConsent: this.applicant.consent,
@@ -162,8 +142,15 @@ export class IncomeReviewDataService {
       payload.fpcIncomeReview.income.applicantIncome = Object.assign(
         payload.fpcIncomeReview.income.applicantIncome,
         {
-          rdspIncome: this.applicant.rdspIncome,
-          subtotal: this.applicant.incomeSubTotal,
+          rdspIncome: this._currencyStrToNumber(this.applicant.rdspIncomeStr),
+        }
+      );
+
+      payload.fpcIncomeReview.income = Object.assign(
+        payload.fpcIncomeReview.income,
+        {
+          rdspTotal: this.rdspIncomeTotal,
+          netTotal: this.netIncomeTotal,
         }
       );
     }
@@ -182,9 +169,50 @@ export class IncomeReviewDataService {
   }
 
   get incomeTotal() {
-    return this.applicant.incomeSubTotal + this.spouse.incomeSubTotal;
+    let _income = this._currencyStrToNumber(this.applicant.incomeStr);
+    if (this.hasSpouse) {
+      _income += this._currencyStrToNumber(this.spouse.incomeStr);
+    }
+    return Number(_income.toFixed(2));
   }
 
+  get rdspIncomeTotal() {
+    let _rdsp = this._currencyStrToNumber(this.applicant.rdspIncomeStr);
+    if (this.hasSpouse) {
+      _rdsp += this._currencyStrToNumber(this.spouse.rdspIncomeStr);
+    }
+    return Number(_rdsp.toFixed(2));
+  }
+
+  get netIncomeTotal() {
+    return this.incomeTotal - this.rdspIncomeTotal;
+  }
+
+  get incomeHeading() {
+    return this.isLastYearIncome === true
+      ? this.lastYearIncome
+      : this.currentYearIncome;
+  }
+
+  get incomeLabel() {
+    return this.isLastYearIncome === true
+      ? this.netIncomeLabel
+      : this.grossIncomeLabel;
+  }
+
+  get spouseIncomeLabel() {
+    return this.isLastYearIncome === true
+      ? `spouse's ${this.netIncomeLabel}`
+      : `spouse's ${this.grossIncomeLabel}`;
+  }
+
+  get incomeTotalLabel() {
+    return this.isLastYearIncome === true
+      ? this.netIncomeTotalLabel
+      : this.grossIncomeTotalLabel;
+  }
+
+  /*
   get uploadedDocCount() {
     const cnt =
       this.originalIncomeSupportDocs.length +
@@ -217,6 +245,7 @@ export class IncomeReviewDataService {
     });
     return consolidatedDocs;
   }
+  */
 
   get incomeInputMask() {
     return this._incomeMask;
@@ -228,12 +257,13 @@ export class IncomeReviewDataService {
 
   constructor() {}
 
+  /* TODO - remove not needed store values as strings
   formatIncome(value: number, dollarSign: boolean = true) {
     return this._currencyFormat(
       value,
       dollarSign ? this._incomeDollarSignMask : this._incomeMask
     );
-  }
+  } */
 
   formatIncomeTotal(value: number, dollarSign: boolean = true) {
     return this._currencyFormat(
@@ -289,6 +319,36 @@ export class IncomeReviewDataService {
   }
 
   getIncomeSection(printView: boolean = false): ReviewObject {
+    let count = 1;
+    const obj = {
+      heading: this.incomeHeading,
+      isPrintView: printView,
+      redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
+      section: [
+        {
+          sectionItems: [
+            {
+              label: this.incomeLabel,
+              value: this.applicant.incomeStr,
+              extraInfo: `${count}`,
+              valueClass: 'review--income-value',
+            },
+          ],
+        },
+      ],
+    };
+    count += 1;
+    /*
+    if (this.hasSpouse) {
+      obj= Object.assign( obj, {
+        label: this.incomeLabel,
+        value: this.formatIncome(this.applicant.income),
+        extraInfo: count,
+        valueClass: 'review--income-value',
+      });
+    }
+    */
+
     /*
     const obj = {
       heading: 'Income',
@@ -296,10 +356,9 @@ export class IncomeReviewDataService {
       redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
       section: [
         {
-          subHeading: this.applSectionTitle,
           sectionItems: [
             {
-              label: this.originalIncomeLabel,
+              label: this.icome,
               value: this.formatIncome(this.applicant.originalIncome),
               extraInfo: '1',
               valueClass: 'review--income-value',
@@ -374,7 +433,7 @@ export class IncomeReviewDataService {
       obj.section.push(totalSection);
     }
     */
-    return null; // obj;
+    return obj;
   }
 
   /*
@@ -394,14 +453,17 @@ export class IncomeReviewDataService {
   }
 */
 
-  currencyStrToNumber(strValue: string): number {
+  private _currencyStrToNumber(strValue: string): number {
+    let _value = 0;
+
     if (strValue) {
-      let value = strValue.replace(/,/g, '');
-      value = value.replace('$', '');
-      value = Number(value).toFixed(2);
-      return Number(value);
+      let str = strValue.replace(/,/g, '');
+      str = str.replace('$', '');
+      str = Number(str).toFixed(2);
+      const _num = Number(str);
+      _value = isNaN(_num) ? 0 : _num;
     }
-    return 0;
+    return _value;
   }
 
   private _currencyFormat(
@@ -409,6 +471,7 @@ export class IncomeReviewDataService {
     mask: (rawValue: any) => any
   ): string {
     // Rounding issue in mask
+    console.log('currency: ', currency);
     const _currency = isNaN(currency) ? 0 : Math.round(currency * 100) / 100;
     const _strValue = _currency.toFixed(2);
     const _mask = conformToMask(_strValue, mask, {});
@@ -431,13 +494,15 @@ export class IncomeReviewDataService {
   }
 
   private _getSpouseIncome() {
-    const incomeSubTotal = Number(this.spouse.incomeSubTotal.toFixed(2));
-    const obj = { spouseIncome: { originalIncome: this.spouse.income } };
+    const obj = {
+      spouseIncome: {
+        income: this._currencyStrToNumber(this.spouse.incomeStr),
+      },
+    };
 
     if (this.isLastYearIncome) {
       return Object.assign(obj, {
-        rdspIncome: this.spouse.rdspIncome,
-        subtotal: this.spouse.incomeSubTotal,
+        rdspIncome: this._currencyStrToNumber(this.spouse.rdspIncomeStr),
       });
     }
     return obj;

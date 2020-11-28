@@ -1,5 +1,13 @@
 @import 'variables.scss';
 
+@mixin sentence-case() {
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
+}
+
 .financial--container {
   display: block;
   margin-top: 0.5rem;
@@ -9,6 +17,10 @@
 
 .finance-text--format {
   text-align: right;
-  text-transform: capitalize;
-  vertical-align: bottom;
+  @include sentence-case();
+}
+
+.finance-error--format {
+  text-align: center;
+  @include sentence-case();
 }

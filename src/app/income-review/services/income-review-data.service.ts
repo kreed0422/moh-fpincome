@@ -66,6 +66,11 @@ export class IncomeReviewDataService {
   readonly lastYearIncome = `Last Year's Net Income`;
   readonly netIncomeLabel = 'net income for last year (from line 23600):';
   readonly rdspIncomeLabel = 'RDSP income (from line 12500):';
+  readonly rdspIncomeTotalLabel = 'Total RDSP income (lines 4 + 5):';
+  readonly netIncomeMinusRdspLabel =
+    'Net income minus RDSP payments (lines 1 - 2):';
+  readonly spouseNetIncomeMinusRdspLabel =
+    'Net income minus RDSP payments (lines 3 - 6):';
   readonly netIncomeTotalLabel = 'total net income (lines 1 + 2):';
 
   // Labels for personal info, review, and confirmation pages
@@ -90,6 +95,9 @@ export class IncomeReviewDataService {
 
   // Flag to indicate this is for last year
   isLastYearIncome: boolean;
+
+  // Flag to indicate RDSP Income
+  hasRdspIncome: boolean;
 
   applicant: Registrant = new Registrant();
   spouse: Registrant = new Registrant();
@@ -471,7 +479,6 @@ export class IncomeReviewDataService {
     mask: (rawValue: any) => any
   ): string {
     // Rounding issue in mask
-    console.log('currency: ', currency);
     const _currency = isNaN(currency) ? 0 : Math.round(currency * 100) / 100;
     const _strValue = _currency.toFixed(2);
     const _mask = conformToMask(_strValue, mask, {});

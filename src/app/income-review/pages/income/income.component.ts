@@ -34,8 +34,6 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   incomeLineNumber: number = 1;
   spouseIncomeLineNumber: number = 2;
-  rdspLineNumber: number = this.incomeLineNumber + 1;
-  spouseRdspLineNumber: number = this.rdspLineNumber + 1;
 
   updateIncomeTotalValue: boolean = false;
 
@@ -74,10 +72,16 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       : this.grossIncomeInstruct;
   }
 
-  get arialLabelBy() {
+  get ariaLabelIncome() {
     return this.incomeReviewDataService.isLastYearIncome === true
       ? 'NetIncome'
       : 'GrossIncome';
+  }
+
+  get ariaLabelSpouseIncome() {
+    return this.incomeReviewDataService.isLastYearIncome === true
+      ? 'SpouseNetIncome'
+      : 'SpouseGrossIncome';
   }
 
   get incomeLabel() {
@@ -92,8 +96,30 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     return this.incomeReviewDataService.incomeTotalLabel;
   }
 
+  get rdspIncomeLabel() {
+    return this.incomeReviewDataService.rdspIncomeLabel;
+  }
+
+  get spouseRdspIncomeLabel() {
+    return `spouse's ${this.incomeReviewDataService.rdspIncomeLabel}`;
+  }
+
+  get rdspIncomeTotalLabel() {
+    return this.incomeReviewDataService.rdspIncomeTotalLabel;
+  }
+
+  get netIncomeMinusRdspLabel() {
+    return this.hasSpouse
+      ? this.incomeReviewDataService.spouseNetIncomeMinusRdspLabel
+      : this.incomeReviewDataService.netIncomeMinusRdspLabel;
+  }
+
   get hasSpouse() {
     return this.incomeReviewDataService.hasSpouse;
+  }
+
+  get hasRdspIncome() {
+    return this.incomeReviewDataService.hasRdspIncome;
   }
 
   get moneyMask() {
@@ -104,13 +130,30 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     return this.incomeReviewDataService.incomeDisplayMask;
   }
 
+  get incomeTotalLineNo() {
+    return (
+      this.incomeLineNumber + (this.hasSpouse ? this.spouseIncomeLineNumber : 1)
+    );
+  }
+
+  get rdspLineNo() {
+    return this.incomeTotalLineNo + 1;
+  }
+
+  get spouseRdspLineNo() {
+    return this.rdspLineNo + 1;
+  }
+
+  get totalRspdLineNo() {
+    return this.spouseRdspLineNo + 1;
+  }
+
+  get netInomeMinusRdspLineNo() {
+    return (this.hasSpouse ? this.totalRspdLineNo : this.rdspLineNo) + 1;
+  }
+
   ngOnInit() {
     super.ngOnInit();
-
-    if (this.hasSpouse) {
-      this.rdspLineNumber = this.rdspLineNumber + this.spouseIncomeLineNumber;
-      this.spouseRdspLineNumber = this.rdspLineNumber + 1;
-    }
 
     this.formGroup = this.fb.group({
       isLastYearIncome: [
@@ -137,6 +180,46 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
           disabled: true,
         },
       ],
+      hasRdspIncome: [
+        this.incomeReviewDataService.hasRdspIncome,
+        {
+          validators: this.isLastYearIncome ? Validators.required : null,
+          updateOn: 'blur',
+        },
+      ],
+      rdspIncome: [
+        this.incomeReviewDataService.applicant.rdspIncomeStr,
+        {
+          validators: this.hasRdspIncome ? Validators.required : null,
+          updateOn: 'blur',
+        },
+      ],
+      spouseRdspIncome: [
+        this.incomeReviewDataService.spouse.rdspIncomeStr,
+        {
+          validators:
+            this.hasSpouse && this.hasRdspIncome ? Validators.required : null,
+          updateOn: 'blur',
+        },
+      ],
+      rdspIncomeTotal: [
+        {
+          value: this.incomeReviewDataService.formatIncomeTotal(
+            this.incomeReviewDataService.rdspIncomeTotal,
+            false
+          ),
+          disabled: true,
+        },
+      ],
+      netIncomeMinusRdsp: [
+        {
+          value: this.incomeReviewDataService.formatIncomeTotal(
+            this.incomeReviewDataService.netIncomeTotal,
+            false
+          ),
+          disabled: true,
+        },
+      ],
     });
   }
 
@@ -158,6 +241,25 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       this.incomeReviewDataService.spouse.incomeStr = val;
       this.updateIncomeTotal();
     });
+
+    this.formGroup.controls.hasRdspIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.hasRdspIncome = val;
+      this.resetRsdpIncome();
+
+      if (val === true) {
+        this.updateRsdpIncome();
+      }
+    });
+
+    this.formGroup.controls.rdspIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.applicant.rdspIncomeStr = val;
+      this.updateIncomeTotal();
+    });
+
+    this.formGroup.controls.spouseRdspIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.spouse.rdspIncomeStr = val;
+      this.updateIncomeTotal();
+    });
   }
 
   continue() {
@@ -176,28 +278,42 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       );
       this.formGroup.controls.incomeTotal.setValue(_income);
     }
+
+    // RDSP income
+    if (this.isLastYearIncome && this.hasRdspIncome) {
+      this.updateRsdpIncome();
+    }
+  }
+
+  resetRsdpIncome() {
+    this.incomeReviewDataService.applicant.rdspIncomeStr = undefined;
+    this.incomeReviewDataService.spouse.rdspIncomeStr = undefined;
+
+    this.formGroup.controls.rdspIncomeTotal.reset();
+    this.formGroup.controls.netIncomeMinusRdsp.reset();
+  }
+
+  updateRsdpIncome() {
+    const _rdspIncome = this.incomeReviewDataService.formatIncomeTotal(
+      this.incomeReviewDataService.rdspIncomeTotal,
+      false
+    );
+    this.formGroup.controls.rdspIncomeTotal.setValue(_rdspIncome);
+
+    const _netIncome = this.incomeReviewDataService.formatIncomeTotal(
+      this.incomeReviewDataService.netIncomeTotal,
+      false
+    );
+    this.formGroup.controls.netIncomeMinusRdsp.setValue(_netIncome);
   }
 
   resetIncome() {
     // Change will cause income to reset
-    if (
-      this.incomeReviewDataService.applicant.incomeStr !== undefined &&
-      this.incomeReviewDataService.applicant.incomeStr !== null
-    ) {
-      this.incomeReviewDataService.applicant.clearIncome();
-    }
-
-    if (
-      this.incomeReviewDataService.spouse.incomeStr !== undefined &&
-      this.incomeReviewDataService.spouse.incomeStr !== null
-    ) {
-      this.incomeReviewDataService.spouse.clearIncome();
-    }
+    this.incomeReviewDataService.applicant.clearIncome();
+    this.incomeReviewDataService.spouse.clearIncome();
 
     // Reset flags on control
     this.formGroup.controls.income.reset();
     this.formGroup.controls.spouseIncome.reset();
-
-    // RDSP values -TODO
   }
 }

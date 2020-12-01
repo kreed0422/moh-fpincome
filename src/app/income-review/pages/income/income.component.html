@@ -34,7 +34,7 @@
     </aside>
   </common-page-section>
 
-  <div *ngIf="showSection">
+  <ng-container *ngIf="showSection">
     <h2 class="border-bottom">{{ incomeHeading }}</h2>
     <common-page-section layout="noTips">
       <div [innerHTML]="incomeInstruction"></div>
@@ -42,7 +42,7 @@
       <div class="financial--container">
         <fpir-financial-input
           formControlName="income"
-          [attr.aria-labelledby]="arialLabelBy"
+          [attr.aria-labelledby]="ariaLabelIncome"
           [moneyMask]="moneyMask"
         >
           <div label class="finance-text--format">{{ incomeLabel }}</div>
@@ -52,10 +52,10 @@
           </div>
         </fpir-financial-input>
 
-        <div class="pt-2" *ngIf="hasSpouse">
+        <ng-container *ngIf="hasSpouse">
           <fpir-financial-input
             formControlName="spouseIncome"
-            aria-labelledby="SpouseIncome"
+            aria-labelledby="ariaLabelSpouseIncome"
             [moneyMask]="moneyMask"
           >
             <div label class="finance-text--format">
@@ -72,11 +72,83 @@
             aria-labelledby="IncomeTotal"
             [moneyMask]="moneyTotalMask"
           >
-            <div label class="finance-text--format">{{ incomeTotalLabel }}</div>
-            <div rowId>{{ spouseIncomeLineNumber + 1 }}</div>
+            <div label class="finance-bold-text--format">
+              {{ incomeTotalLabel }}
+            </div>
+            <div rowId>{{ incomeTotalLineNo }}</div>
           </fpir-financial-input>
-        </div>
+        </ng-container>
       </div>
+
+      <ng-container *ngIf="isLastYearIncome">
+        <common-radio
+          formControlName="hasRdspIncome"
+          name="HasRdspIncome"
+          label="Do you receive Registered Disability Savings Plan (RDSP) income?"
+          display="table-row-group"
+        ></common-radio>
+
+        <ng-container *ngIf="hasRdspIncome">
+          <p class="pt-2">
+            Fair PharmaCare coverage is based on your net income minus RDSP
+            payments.
+          </p>
+
+          <div class="financial--container">
+            <fpir-financial-input
+              formControlName="rdspIncome"
+              aria-labelledby="RdspIncome"
+              [moneyMask]="moneyMask"
+            >
+              <div label class="finance-text--format">
+                {{ rdspIncomeLabel }}
+              </div>
+              <div rowId>{{ rdspLineNo }}</div>
+              <div errors class="finance-error--format">
+                {{ rdspIncomeLabel }} is required.
+              </div>
+            </fpir-financial-input>
+
+            <ng-container *ngIf="hasSpouse">
+              <fpir-financial-input
+                formControlName="spouseRdspIncome"
+                aria-labelledby="SpouseRdspIncome"
+                [moneyMask]="moneyMask"
+              >
+                <div label class="finance-text--format">
+                  {{ spouseRdspIncomeLabel }}
+                </div>
+                <div rowId>{{ spouseRdspLineNo }}</div>
+                <div errorsspouseRdspIncomeLabel class="finance-error--format">
+                  {{ spouseRdspIncomeLabel }} is required.
+                </div>
+              </fpir-financial-input>
+
+              <fpir-financial-input
+                formControlName="rdspIncomeTotal"
+                aria-labelledby="RdspIncomeTotal"
+                [moneyMask]="moneyTotalMask"
+              >
+                <div label class="finance-bold-text--format">
+                  {{ rdspIncomeTotalLabel }}
+                </div>
+                <div rowId>{{ totalRspdLineNo }}</div>
+              </fpir-financial-input>
+            </ng-container>
+
+            <fpir-financial-input
+              formControlName="netIncomeMinusRdsp"
+              aria-labelledby="NetIncomeMinusRdsp"
+              [moneyMask]="moneyTotalMask"
+            >
+              <div label class="finance-bold-text--format">
+                {{ netIncomeMinusRdspLabel }}
+              </div>
+              <div rowId>{{ netInomeMinusRdspLineNo }}</div>
+            </fpir-financial-input>
+          </div>
+        </ng-container>
+      </ng-container>
     </common-page-section>
-  </div>
+  </ng-container>
 </form>

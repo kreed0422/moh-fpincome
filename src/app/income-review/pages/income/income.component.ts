@@ -7,6 +7,7 @@ import { IncomeReviewDataService } from '../../services/income-review-data.servi
 import { FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { SupportDocType } from '../support-docs/support-doc-type.enum';
 
 @Component({
   selector: 'fpir-income',
@@ -45,6 +46,22 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     private fb: FormBuilder
   ) {
     super(router, containerService, pageStateService);
+  }
+
+  get supportDocCase() {
+    if (this.hasSpouse) {
+      if (this.isLastYearIncome) {
+        return SupportDocType.SpouseLastYear;
+      } else {
+        return SupportDocType.SpouseThisYear;
+      }
+    } else {
+      if (this.isLastYearIncome) {
+        return SupportDocType.NoSpouseLastYear;
+      } else {
+        return SupportDocType.NoSpouseThisYear;
+      }
+    }
   }
 
   get isLastYearIncome() {

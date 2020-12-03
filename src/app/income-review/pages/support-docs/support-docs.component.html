@@ -1,107 +1,215 @@
-<h1>Upload your supporting documents</h1>
+<h1>Upload Supporting Documents</h1>
+<p>Scan the document, or take a photo of it. Make sure that it's:</p>
 <ul>
-  <li>
-    All documents must indicate gross income and have been issued in 2020.
-  </li>
-  <li>
-    Provide documents for all income sources for you and your spouse/common-law
-    partner.
-  </li>
-  <li>
-    Upload each document once only. If a document supports income for more than
-    one period, submit it once for the earliest applicable period.
-  </li>
-  <li>
-    If you are unable to obtain the required supporting documents because of
-    limited services due to the COVID-19 pandemic, you must provide a letter
-    signed by you (and your spouse/common-law partner, if applicable) declaring
-    the document(s) you are unable to provide, the reason they are not
-    available, the source of the income, the gross monthly amount of this
-    income, and how long you expect to collect this income. Upload the letter to
-    any section below.
-  </li>
-  <li>
-    Your supporting documents and letter of declaration must account for the
-    total income you are declaring for income review.
-  </li>
+  <li>The entire document, from corner to corner</li>
+  <li>Rotated correctly (not upside down or sideways)</li>
+  <li>In focus and easy to read</li>
+  <li>A JPG, PNG, GIF, BMP, or PDF</li>
 </ul>
-<p><strong>Document upload requirements</strong></p>
-<div>
-  Scan the document, or take a photo of it. Make sure that it's:
-  <ul>
-    <li>The entire document, from corner to corner</li>
-    <li>Rotated correctly (not upside down or sideways)</li>
-    <li>In focus and easy to read</li>
-    <li>A JPG, PNG, GIF, BMP or PDF</li>
-  </ul>
-</div>
-<!--
-<form #formRef="ngForm" novalidate>
-  <h2 class="border-bottom">Period before reduction of income</h2>
-  <p class="border-bottom pt-4">{{ supportDocumentLabel }}</p>
-  <common-page-section layout="double">
+<p>
+  Your information will be collected, used and disclosed in accordance with the
+  provincial
+  <em
+    >Freedom of Information and Protection of Privacy Act and Pharmaceutical
+    Services Act.</em
+  >
+</p>
+<p><em>Supporting document(s)</em></p>
+<hr />
+<common-page-section layout="tips">
+  <ng-container>
     <common-file-uploader
-      [(images)]="originalIncomeSupportDocs"
-      id="{{ originalIncomeSupDocId }}"
-      required="true"
-      instructionText="{{ uploadInstructions }}"
-      (errorDocument)="originalIncomeSupportDocError($event)"
+      instructionText="Click Add or drag and drop files into this box"
+      [images]="files"
+      (imagesChange)="handleImagesChange($event)"
+      [errorMessages]="errorMessage"
+      (errorDocument)="handleSupportDocError($event)"
+      [required]="true"
     >
     </common-file-uploader>
-    <common-error-container [displayError]="originalIncomeUploadDocError">
-      {{ originalIncomeUploadDocErrorMsg }}
+    <common-error-container [displayError]="fileError">
+      {{ fileError }}
     </common-error-container>
+  </ng-container>
 
-    <aside
-      class="tips--background-color"
-      aria-label="OriginalIncomeExampleDocs"
+  <!-- Just you, for last year -->
+  <aside class="tipbox" *ngIf="case === types.NoSpouseLastYear">
+    <strong>YOUR SUPPORTING DOCUMENTS FOR LAST YEAR'S NET INCOME</strong>
+    <ul>
+      <li>
+        Canada Revenue Agency (CRA) Notice of Assessment or Notice of
+        Reassessment or proof of income statement
+      </li>
+    </ul>
+    <ng-container *ngIf="RDSP">
+      <strong>AND</strong>
+      <ul>
+        <li>T4A slip for RDSP income</li>
+      </ul>
+    </ng-container>
+    <ul>
+      <li>
+        If you haven't yet filed last year's income tax, you may apply using
+        T-Slips for all income sources. This option is not available after June
+        1.
+      </li>
+    </ul>
+    <p>
+      Note: It is a requirement of the Fair PharmaCare program that you file
+      your income tax by the CRA deadline.
+    </p>
+  </aside>
+
+  <!-- Just you, for this year -->
+  <aside class="tipbox" *ngIf="case === types.NoSpouseThisYear">
+    <strong>YOUR SUPPORTING DOCUMENTS FOR THIS YEAR'S GROSS INCOME</strong>
+    <br />
+    <p><strong>Examples</strong> of supporting documents:</p>
+    <ul>
+      <li>
+        <strong>Employment:</strong> letter from employer (on letterhead)
+        showing gross income
+      </li>
+      <li>
+        <strong>Self-employment:</strong> invoices; cheque stubs; letter from an
+        accountant
+      </li>
+      <li>
+        <strong>Federal Recovery Benefits:</strong> Canada Recovery Sickness
+        Benefit, Canada Recovery Caregiving Benefit and Canada Recovery Benefit
+      </li>
+      <li>
+        <strong>Unemployment:</strong> record of employment (ROE); final pay
+        stub showing gross year-to-date income; letter from Employment Insurance
+        (EI) showing the EI coverage start date, end date and gross weekly
+        benefit amount*
+      </li>
+      <li>
+        <strong>Pensions, workers compensation or disability payments:</strong>
+        letter(s)* from Canada Pension Plan (CPP), Old Age Security (OAS),
+        Guaranteed Income Supplement (GIS), showing current gross monthly
+        benefit
+      </li>
+      <li>
+        <strong>WorkSafeBC:</strong> letter* showing gross monthly benefit
+      </li>
+      <li>
+        <strong>Disability insurance or pension:</strong> letter* showing
+        current gross monthly benefit
+      </li>
+      <li>
+        <strong>Other sources:</strong> investments (e.g., interest and mutual
+        fund payments); RRSPs; RIFs; LIFs; annuities; earned outside of Canada;
+        business; rental, partnerships; support payments
+      </li>
+    </ul>
+    <p>
+      * for federal benefits, request letter through Service Canada:
+      <a href="www.canada.ca">www.canada.ca</a>
+    </p>
+  </aside>
+
+  <aside class="tipbox" *ngIf="case === types.SpouseLastYear">
+    <strong
+      >SUPPORTING DOCUMENTS FOR YOU AND YOUR SPOUSE, FOR LAST YEAR'S NET
+      INCOME</strong
     >
-      <div [innerHTML]="supportDocumentExampleTilte"></div>-->
-<!-- <div [innerHTML]="exampleSupportDocs"></div> -->
-<!--  </aside>
-  </common-page-section>
+    <ul>
+      <li>
+        Canada Revenue Agency (CRA) Notice of Assessment or Notice of
+        Reassessment or proof of income statement
+      </li>
+    </ul>
+    <ng-container *ngIf="RDSP">
+      <strong>AND</strong>
+      <ul>
+        <li>T4A slip for RDSP income</li>
+      </ul>
+    </ng-container>
+    <ul>
+      <li>
+        If you haven't yet filed last year's income tax, you may apply using
+        T-Slips for all income sources. This option is not available after June
+        1.
+      </li>
+    </ul>
+    <p>
+      Note: It is a requirement of the Fair PharmaCare program that you file
+      your income tax by the CRA deadline.
+    </p>
+  </aside>
 
-  <h2 class="border-bottom">Period of reduced income</h2>
-  <p class="border-bottom pt-4">{{ supportDocumentLabel }}</p>
-  <common-page-section layout="double">
-    <common-file-uploader
-      [(images)]="reducedIncomeSupportDocs"
-      id="{{ reducedIncomeSupDocId }}"
-      instructionText="{{ uploadInstructions }}"
-      (errorDocument)="reducedIncomeSupportDocError($event)"
+  <aside class="tipbox" *ngIf="case === types.SpouseThisYear">
+    <strong
+      >YOUR SUPPORTING DOCUMENTS FOR YOU AND YOUR SPOUSE, FOR THIS YEAR'S GROSS
+      INCOME</strong
     >
-    </common-file-uploader>
-    <common-error-container [displayError]="reducedIncomeUploadDocError">
-      {{ reducedIncomeUploadDocErrorMsg }}
-    </common-error-container>
+    <br />
+    <p><strong>Examples</strong> of supporting documents:</p>
+    <ul>
+      <li>
+        <strong>Employment:</strong> letter from employer (on letterhead)
+        showing gross income
+      </li>
+      <li>
+        <strong>Self-employment:</strong> invoices; cheque stubs; letter from an
+        accountant
+      </li>
+      <li>
+        <strong>Federal Recovery Benefits:</strong> Canada Recovery Sickness
+        Benefit, Canada Recovery Caregiving Benefit and Canada Recovery Benefit
+      </li>
+      <li>
+        <strong>Unemployment:</strong> record of employment (ROE); final pay
+        stub showing gross year-to-date income; letter from Employment Insurance
+        (EI) showing the EI coverage start date, end date and gross weekly
+        benefit amount*
+      </li>
+      <li>
+        <strong>Pensions, workers compensation or disability payments:</strong>
+        letter(s)* from Canada Pension Plan (CPP), Old Age Security (OAS),
+        Guaranteed Income Supplement (GIS), showing current gross monthly
+        benefit
+      </li>
+      <li>
+        <strong>WorkSafeBC:</strong> letter* showing gross monthly benefit
+      </li>
+      <li>
+        <strong>Disability insurance or pension:</strong> letter* showing
+        current gross monthly benefit
+      </li>
+      <li>
+        <strong>Other sources:</strong> investments (e.g., interest and mutual
+        fund payments); RRSPs; RIFs; LIFs; annuities; earned outside of Canada;
+        business; rental, partnerships; support payments
+      </li>
+    </ul>
+    <p>
+      * for federal benefits, request letter through Service Canada:
+      <a href="www.canada.ca">www.canada.ca</a>
+    </p>
+  </aside>
+</common-page-section>
 
-    <aside class="tips--background-color" aria-label="ReducedIncomeExampleDocs">
-      <p [innerHTML]="supportDocumentExampleTilte"></p>
-      <div [innerHTML]="exampleSupportDocs2"></div>
-    </aside>
-  </common-page-section>
-
-  <h2 class="border-bottom">Remainder of 2020</h2>
-  <p class="border-bottom pt-4">{{ supportDocumentLabel }}</p>
-  <common-page-section layout="double">
-    <common-file-uploader
-      [(images)]="remainderIncomeSupportDocs"
-      id="{{ remainderIncomeSupDocId }}"
-      instructionText="{{ uploadInstructions }}"
-      (errorDocument)="remainderIncomeSupportDocError($event)"
-    >
-    </common-file-uploader>
-    <common-error-container [displayError]="remainderIncomeUploadDocError">
-      {{ remainderIncomeUploadDocErrorMsg }}
-    </common-error-container>
-
-    <aside
-      class="tips--background-color"
-      aria-label="RemainderIncomeExampleDocs"
-    >
-      <p [innerHTML]="supportDocumentExampleTilte"></p>
-      <div [innerHTML]="exampleSupportDocs2"></div>
-    </aside>
-  </common-page-section>
-</form>
--->
+<ng-container
+  *ngIf="case === types.SpouseThisYear || case === types.NoSpouseThisYear"
+>
+  <br />
+  <p>
+    <strong>If you want</strong> HIBC to consider your income for last year as
+    well as your income for this year, you can upload your CRA Notice of
+    Assessment / Reassessment or <u>proof of income statement</u>;
+    <strong>AND</strong> if applicable, T4A slip for RDSP income.
+  </p>
+  <br />
+  <p>
+    If you haven't yet filed last year's income tax, you may apply using tax
+    slips (e.g., T4, T4E) for all income sources. This option is not available
+    after June 1.
+  </p>
+  <br />
+  <p>
+    If your application using this year's income is rejected for any reason,
+    HIBC will base their review on your income for last year.
+  </p>
+</ng-container>

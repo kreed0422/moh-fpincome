@@ -1,4 +1,11 @@
-import { Attribute, Component, Input, OnInit } from '@angular/core';
+import {
+  Attribute,
+  Component,
+  Input,
+  OnInit,
+  Optional,
+  Self,
+} from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 
 @Component({
@@ -31,7 +38,7 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
     // tslint:disable-next-line: semicolon
   };
 
-  constructor(public control: NgControl) {
+  constructor(@Optional() @Self() public control: NgControl) {
     if (this.control !== null) {
       this.control.valueAccessor = this;
     }

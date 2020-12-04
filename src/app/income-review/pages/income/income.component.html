@@ -1,4 +1,4 @@
-<h1>Estimate your Income</h1>
+<h1>Estimate Your Income</h1>
 <p>
   You can use either last year's net income or this year's gross income to apply
   for an income review. Choose the year with the lower income (or the year for
@@ -150,9 +150,145 @@
         </ng-container>
       </ng-container>
     </common-page-section>
-    <fpir-support-docs
-      [case]="supportDocCase"
-      [RDSP]="hasRdspIncome"
-    ></fpir-support-docs>
+
+    <ng-container *ngIf="showSupportDocSection">
+      <common-page-section layout="noTips">
+        <h2>Upload Supporting Documents</h2>
+        <p *ngIf="isLastYearIncome === false">
+          Upload all supporting documents. The amounts on the uploaded documents
+          must add up to the total income you enter above.
+        </p>
+        <p><strong>Document upload requirements.</strong></p>
+        <p class="pb-0">
+          Scan the document, or take a photo of it. Make sure that it's:
+        </p>
+        <ul>
+          <li>The entire document, from corner to corner</li>
+          <li>Rotated correctly (not upside down or sideways)</li>
+          <li>In focus and easy to read</li>
+          <li>A JPG, PNG, GIF, BMP, or PDF</li>
+        </ul>
+        <p>
+          Your information will be collected, used and disclosed in accordance
+          with the provincial
+          <em
+            >Freedom of Information and Protection of Privacy Act and
+            Pharmaceutical Services Act</em
+          >.
+        </p>
+      </common-page-section>
+
+      <p class="border-bottom"><em>Supporting document(s)</em></p>
+
+      <common-page-section layout="double">
+        <!--TODO: Fix library issue with pdf upload, investigate delay in upload thumb display-->
+        <common-file-uploader
+          instructionText="Click Add or drag and drop files into this box"
+          [(images)]="supportingDocuments"
+          (errorDocument)="handleError($event)"
+          [required]="true"
+        >
+        </common-file-uploader>
+        <common-error-container [displayError]="errorMessage !== null">
+          {{ errorMessage }}
+        </common-error-container>
+
+        <aside class="support-doc--tip-area">
+          <ng-container *ngIf="isLastYearIncome === true; else GrossIncomeTip">
+            <p class="support-doc--tip-title">{{ netIncomeTipTitle }}</p>
+            <ul>
+              <li>
+                Canada Revenue Agency (CRA) Notice of Assessment or Notice of
+                Reassessment or proof of income statement
+              </li>
+            </ul>
+            <ng-container *ngIf="hasRdspIncome">
+              <strong>AND</strong>
+              <ul>
+                <li>T4A slip for RDSP income</li>
+              </ul>
+            </ng-container>
+            <ul>
+              <li>
+                If you haven't yet filed last year's income tax, you may apply
+                using T-Slips for all income sources. This option is not
+                available after June 1.
+              </li>
+            </ul>
+
+            <p>
+              Note: it is a requirement of the Fair PharmaCare program that you
+              file your income tax by the CRA deadline.
+            </p>
+          </ng-container>
+        </aside>
+      </common-page-section>
+
+      <ng-container *ngIf="isLastYearIncome === false">
+        <p class="pt-2">
+          <strong>If you want</strong> HIBC to consider your income fr last year
+          as well as your income for this year, you can upload your CRA Notice
+          of Assessment / Reassessment or
+          <a href="{{ incomeStmt }}" target="_blank" rel="noopener noreferrer"
+            >proof of income statement</a
+          >; <strong>AND</strong> if applicable, T4A slip for RDSP income.
+        </p>
+        <p>
+          If you haven't yet filed last year's income tax, you may apply using
+          tax slips (e.g., T4, T4E) for all income sources. This option is not
+          available after June 1.
+        </p>
+        <p>
+          If your application using this year's income is rejected for any
+          reason, HIBC will base their review on your income for last year.
+        </p>
+      </ng-container>
+    </ng-container>
   </ng-container>
 </form>
+
+<ng-template #GrossIncomeTip>
+  <p class="support-doc--tip-title">{{ grossIncomeTipTitle }}</p>
+  <p><strong>Examples</strong> of supporting documents:</p>
+  <ul>
+    <li>
+      <strong>Employment:</strong> letter from employer (on letterhead) showing
+      gross income
+    </li>
+    <li>
+      <strong>Self-employment:</strong> invoices; cheque stubs; letter from an
+      accountant
+    </li>
+    <li>
+      <strong>Federal Recovery Benefits:</strong> Canada Recovery Sickness
+      Benefit, Canada Recovery Caregiving Benefit and Canada Recovery Benefit
+    </li>
+    <li>
+      <strong>Unemployment:</strong> record of employment (ROE); final pay stub
+      showing gross year-to-date income; letter from Employment Insurance (EI)
+      showing the EI coverage start date, end date and gross weekly benefit
+      amount*
+    </li>
+    <li>
+      <strong>Pensions, workers compensation or disability payments:</strong>
+      letter(s)* from Canada Pension Plan (CPP), Old Age Security (OAS),
+      Guaranteed Income Supplement (GIS), showing current gross monthly benefit
+    </li>
+    <li><strong>WorkSafeBC:</strong> letter* showing gross monthly benefit</li>
+    <li>
+      <strong>Disability insurance or pension:</strong> letter* showing current
+      gross monthly benefit
+    </li>
+    <li>
+      <strong>Other sources:</strong> investments (e.g., interest and mutual
+      fund payments); RRSPs; RIFs; LIFs; annuities; earned outside of Canada;
+      business; rental, partnerships; support payments
+    </li>
+  </ul>
+  <p>
+    * for federal benefits, request letter through Service Canada:
+    <a href="{{ serviceCanada }}" target="_blank" rel="noopener noreferrer"
+      >www.canada.ca</a
+    >
+  </p>
+</ng-template>

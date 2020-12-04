@@ -5,7 +5,6 @@ const PAGE_NAMES = {
   home: 'get-started',
   personalInfo: 'personal-info',
   calcIncome: 'calculate-income',
-  supportDocs: 'supporting-docs',
   review: 'review',
   consent: 'declaration',
   confirmation: 'confirmation',
@@ -28,11 +27,6 @@ export const INCOME_REVIEW_PAGES = {
     fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.calcIncome}`,
     title: PAGE_NAMES.calcIncome,
   },
-  /* SUPPORT_DOCS: {
-    path: PAGE_NAMES.supportDocs,
-    fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.supportDocs}`,
-    title: PAGE_NAMES.supportDocs,
-  },*/
   REVIEW: {
     path: PAGE_NAMES.review,
     fullpath: `${APP_ROUTES.income_review}/${PAGE_NAMES.review}`,

@@ -2,12 +2,18 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { BaseForm } from '../../models/base-form';
 import { Router } from '@angular/router';
-import { ContainerService, PageStateService } from 'moh-common-lib';
-import { IncomeReviewDataService } from '../../services/income-review-data.service';
+import {
+  CommonImage,
+  CommonImageError,
+  ContainerService,
+  PageStateService,
+} from 'moh-common-lib';
+import {
+  FpcDocumentTypes,
+  IncomeReviewDataService,
+} from '../../services/income-review-data.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { SupportDocType } from '../support-docs/support-doc-type.enum';
 
 @Component({
   selector: 'fpir-income',
@@ -16,6 +22,7 @@ import { SupportDocType } from '../support-docs/support-doc-type.enum';
 })
 export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   readonly incomeStmt = environment.links.incomeStmt;
+  readonly serviceCanada = environment.links.serviceCanada;
   readonly incomeOptions = [
     { label: `Applying with last year's net income`, value: true },
     { label: `Applying with this year's gross income`, value: false },
@@ -33,10 +40,17 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     '<p>Add up all amounts that you and your spouse have received this year and expect to receive from all sources. ' +
     'This will be your gross income.</p>';
 
+  readonly supportDocSpouseFrag =
+    'supporting documents for you and your spouse, ';
+  readonly supportDocFrag = 'supporting documents ';
+  readonly netIncomeFrag = `for last year's net income`;
+  readonly grossIncomeFrag = `for this year's gross income`;
+
   incomeLineNumber: number = 1;
   spouseIncomeLineNumber: number = 2;
 
   updateIncomeTotalValue: boolean = false;
+  errorMessage: string;
 
   constructor(
     protected router: Router,
@@ -46,22 +60,6 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     private fb: FormBuilder
   ) {
     super(router, containerService, pageStateService);
-  }
-
-  get supportDocCase() {
-    if (this.hasSpouse) {
-      if (this.isLastYearIncome) {
-        return SupportDocType.SpouseLastYear;
-      } else {
-        return SupportDocType.SpouseThisYear;
-      }
-    } else {
-      if (this.isLastYearIncome) {
-        return SupportDocType.NoSpouseLastYear;
-      } else {
-        return SupportDocType.NoSpouseThisYear;
-      }
-    }
   }
 
   get isLastYearIncome() {
@@ -139,6 +137,14 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     return this.incomeReviewDataService.hasRdspIncome;
   }
 
+  get showSupportDocSection() {
+    return (
+      (this.isLastYearIncome === true &&
+        (this.hasRdspIncome === true || this.hasRdspIncome === false)) ||
+      this.isLastYearIncome === false
+    );
+  }
+
   get moneyMask() {
     return this.incomeReviewDataService.incomeInputMask;
   }
@@ -167,6 +173,28 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   get netInomeMinusRdspLineNo() {
     return (this.hasSpouse ? this.totalRspdLineNo : this.rdspLineNo) + 1;
+  }
+
+  set supportingDocuments(supportDocuments: CommonImage<FpcDocumentTypes>[]) {
+    this.incomeReviewDataService.incomeSupportDocs = supportDocuments;
+  }
+
+  get supportingDocuments() {
+    return this.incomeReviewDataService.incomeSupportDocs;
+  }
+
+  get netIncomeTipTitle() {
+    return (
+      (this.hasSpouse ? this.supportDocSpouseFrag : this.supportDocFrag) +
+      this.netIncomeFrag
+    );
+  }
+
+  get grossIncomeTipTitle() {
+    return (
+      (this.hasSpouse ? this.supportDocSpouseFrag : this.supportDocFrag) +
+      this.grossIncomeFrag
+    );
   }
 
   ngOnInit() {
@@ -332,5 +360,54 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     // Reset flags on control
     this.formGroup.controls.income.reset();
     this.formGroup.controls.spouseIncome.reset();
+  }
+
+  handleError(error: CommonImage) {
+    if (error) {
+      // Determine error to display
+      switch (error.error) {
+        case CommonImageError.WrongType:
+          this.errorMessage = 'That is the wrong type of attachment to submit.';
+          break;
+
+        case CommonImageError.AlreadyExists:
+          this.errorMessage = 'That attachment has already been uploaded.';
+          break;
+
+        case CommonImageError.PDFnotSupported:
+          this.errorMessage =
+            'That PDF type is not supported, please upload a different attachment.';
+          break;
+
+        case CommonImageError.CannotOpen:
+          this.errorMessage =
+            'That attachment cannot be opened, please upload a different attachment.';
+          break;
+
+        case CommonImageError.CannotOpenPDF:
+          this.errorMessage =
+            'That PDF cannot be opened, please upload a different attachment.';
+          break;
+
+        case CommonImageError.TooSmall:
+          this.errorMessage =
+            'That attachment is too small, please upload a larger attachment.';
+          break;
+
+        case CommonImageError.TooBig:
+          this.errorMessage =
+            'That attachment is too big, please upload a smaller attachment.';
+          break;
+
+        // Catch all, unknown error
+        default:
+          this.errorMessage =
+            'The upload failed, please try again. If the issue persists, please upload a different attachment.';
+          break;
+      }
+    } else {
+      // clear error message
+      this.errorMessage = null;
+    }
   }
 }

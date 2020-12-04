@@ -220,41 +220,6 @@ export class IncomeReviewDataService {
       : this.grossIncomeTotalLabel;
   }
 
-  /*
-  get uploadedDocCount() {
-    const cnt =
-      this.originalIncomeSupportDocs.length +
-      this.reducedIncomeSupportDocs.length +
-      this.remainderIncomeSupportDocs.length;
-    return Number(cnt).toString();
-  }
-
-  get consolidateDocuments() {
-    let consolidatedDocs: CommonImage<FpcDocumentTypes>[] = [
-      ...this.originalIncomeSupportDocs,
-    ];
-
-    if (this.reducedIncomeSupportDocs.length > 0) {
-      consolidatedDocs = consolidatedDocs.concat([
-        ...this.reducedIncomeSupportDocs,
-      ]);
-    }
-
-    if (this.remainderIncomeSupportDocs.length > 0) {
-      consolidatedDocs = consolidatedDocs.concat([
-        ...this.remainderIncomeSupportDocs,
-      ]);
-    }
-
-    // update attachment order and document type
-    consolidatedDocs.forEach((x, idx) => {
-      x.attachmentOrder = idx + 1;
-      x.documentType = FpcDocumentTypes.SupportDocument;
-    });
-    return consolidatedDocs;
-  }
-  */
-
   get incomeInputMask() {
     return this._incomeMask;
   }

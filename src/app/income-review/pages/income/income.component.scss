@@ -31,3 +31,13 @@
   font-weight: bold;
   @include sentence-case();
 }
+
+.support-doc--tip-area {
+  background-color: $gray;
+  padding: 1rem;
+}
+
+.support-doc--tip-title {
+  font-weight: bold;
+  text-transform: uppercase;
+}

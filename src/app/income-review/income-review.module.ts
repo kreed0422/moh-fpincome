@@ -25,7 +25,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReviewContainerComponent } from './component/review-container/review-container.component';
 import { PersonalInfoComponent } from './pages/personal-info/personal-info.component';
 import { IncomeComponent } from './pages/income/income.component';
-import { SupportDocsComponent } from './pages/support-docs/support-docs.component';
 import { TextMaskModule } from 'angular2-text-mask';
 import { FinancialInputComponent } from './component/financial-input/financial-input.component';
 
@@ -41,7 +40,6 @@ import { FinancialInputComponent } from './component/financial-input/financial-i
     ReviewContainerComponent,
     PersonalInfoComponent,
     IncomeComponent,
-    SupportDocsComponent,
     FinancialInputComponent,
   ],
   imports: [

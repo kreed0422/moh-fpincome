@@ -49,10 +49,10 @@ export class ConfirmationComponent extends Base implements OnInit {
     this.personalInfo.reviewObject = this.incomeReviewDataService.getPersonalInformationSection(
       this.printView
     );
-    this.income.reviewObject = this.incomeReviewDataService.getIncomeSection(
+    /*  this.income.reviewObject = this.incomeReviewDataService.getIncomeSection(
       this.printView
     );
-    /*  this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection(
+      this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection(
       this.printView
     );*/
   }

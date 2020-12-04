@@ -1,5 +1,13 @@
 @import 'variables.scss';
 
+@mixin sentence-case() {
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
+}
+
 .review--heading {
   margin-left: 0px;
   margin-right: auto;
@@ -40,4 +48,9 @@
   :host .review--container {
     page-break-inside: avoid;
   }
+}
+
+.review--key {
+  text-align: right;
+  @include sentence-case();
 }

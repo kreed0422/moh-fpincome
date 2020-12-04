@@ -5,7 +5,6 @@ import { ReviewComponent } from './pages/review/review.component';
 import { ConsentComponent } from './pages/consent/consent.component';
 import { PersonalInfoComponent } from './pages/personal-info/personal-info.component';
 import { IncomeComponent } from './pages/income/income.component';
-import { SupportDocsComponent } from './pages/support-docs/support-docs.component';
 
 /** The individual page routes only, does not include container */
 export const incomeReviewPageRoutes: Routes = [
@@ -23,11 +22,6 @@ export const incomeReviewPageRoutes: Routes = [
     path: INCOME_REVIEW_PAGES.INCOME.path,
     component: IncomeComponent,
     data: { title: INCOME_REVIEW_PAGES.INCOME.title },
-  },
-  {
-    path: INCOME_REVIEW_PAGES.SUPPORT_DOCS.path,
-    component: SupportDocsComponent,
-    data: { title: INCOME_REVIEW_PAGES.SUPPORT_DOCS.title },
   },
   {
     path: INCOME_REVIEW_PAGES.REVIEW.path,

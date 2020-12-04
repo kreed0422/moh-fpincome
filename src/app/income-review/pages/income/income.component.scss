@@ -1,0 +1,43 @@
+@import 'variables.scss';
+
+@mixin sentence-case() {
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.financial--container {
+  display: block;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background-color: $gray;
+}
+
+.finance-text--format {
+  text-align: right;
+  @include sentence-case();
+}
+
+.finance-error--format {
+  text-align: center;
+  @include sentence-case();
+}
+
+.finance-bold-text--format {
+  text-align: right;
+  font-weight: bold;
+  @include sentence-case();
+}
+
+.support-doc--tip-area {
+  background-color: $gray;
+  padding: 1rem;
+}
+
+.support-doc--tip-title {
+  font-weight: bold;
+  text-transform: uppercase;
+}

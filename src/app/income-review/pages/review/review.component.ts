@@ -13,10 +13,10 @@ import { ReviewContainerComponent } from '../../component/review-container/revie
 export class ReviewComponent extends BaseForm implements OnInit {
   @ViewChild('personalInfo', { static: true })
   personalInfo: ReviewContainerComponent;
-  @ViewChild('grossIncome', { static: true })
-  grossIncome: ReviewContainerComponent;
-  @ViewChild('supportDocs', { static: true })
-  supportDocs: ReviewContainerComponent;
+  @ViewChild('income', { static: true })
+  income: ReviewContainerComponent;
+  /*  @ViewChild('supportDocs', { static: true })
+  supportDocs: ReviewContainerComponent;*/
 
   constructor(
     protected router: Router,
@@ -30,8 +30,8 @@ export class ReviewComponent extends BaseForm implements OnInit {
   ngOnInit() {
     super.ngOnInit();
     this.personalInfo.reviewObject = this.incomeReviewDataService.getPersonalInformationSection();
-    this.grossIncome.reviewObject = this.incomeReviewDataService.getGrossIncomeSection();
-    this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection();
+    this.income.reviewObject = this.incomeReviewDataService.getIncomeSection();
+    // this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection();
   }
 
   continue() {

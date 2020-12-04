@@ -1,30 +1,28 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SupportDocsComponent } from './support-docs.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TextMaskModule } from 'angular2-text-mask';
 import { SharedCoreModule } from 'moh-common-lib';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('SupportDocsComponent', () => {
-  let component: SupportDocsComponent;
-  let fixture: ComponentFixture<SupportDocsComponent>;
+import { FinancialInputComponent } from './financial-input.component';
+
+describe('FinancialInputComponent', () => {
+  let component: FinancialInputComponent;
+  let fixture: ComponentFixture<FinancialInputComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SupportDocsComponent],
+      declarations: [FinancialInputComponent],
       imports: [
+        TextMaskModule,
+        SharedCoreModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterTestingModule,
-        SharedCoreModule,
-        HttpClientTestingModule,
       ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SupportDocsComponent);
+    fixture = TestBed.createComponent(FinancialInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

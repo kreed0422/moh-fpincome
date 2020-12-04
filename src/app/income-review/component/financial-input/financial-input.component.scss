@@ -1,0 +1,18 @@
+@import 'variables.scss';
+
+.financial-input--row {
+  padding: 0.5rem;
+}
+
+.financial-input--text {
+  padding-top: 0.75rem;
+}
+
+input {
+  text-align: right;
+  width: 90%;
+}
+
+.input-group {
+  flex-wrap: nowrap !important;
+}

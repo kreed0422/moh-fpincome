@@ -19,10 +19,10 @@ import { environment } from '../../../../environments/environment';
 export class ConfirmationComponent extends Base implements OnInit {
   @ViewChild('personalInfo', { static: true })
   personalInfo: ReviewContainerComponent;
-  @ViewChild('grossIncome', { static: true })
-  grossIncome: ReviewContainerComponent;
-  @ViewChild('supportDocs', { static: true })
-  supportDocs: ReviewContainerComponent;
+  @ViewChild('income', { static: true })
+  income: ReviewContainerComponent;
+  /* @ViewChild('supportDocs', { static: true })
+  supportDocs: ReviewContainerComponent;*/
 
   readonly printView: boolean = true;
   readonly hibc = environment.links.hibc;
@@ -49,12 +49,12 @@ export class ConfirmationComponent extends Base implements OnInit {
     this.personalInfo.reviewObject = this.incomeReviewDataService.getPersonalInformationSection(
       this.printView
     );
-    this.grossIncome.reviewObject = this.incomeReviewDataService.getGrossIncomeSection(
+    /*  this.income.reviewObject = this.incomeReviewDataService.getIncomeSection(
       this.printView
     );
-    this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection(
+      this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection(
       this.printView
-    );
+    );*/
   }
 
   get isError() {

@@ -2,22 +2,55 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { BaseForm } from '../../models/base-form';
 import { Router } from '@angular/router';
-import { ContainerService, PageStateService } from 'moh-common-lib';
-import { IncomeReviewDataService } from '../../services/income-review-data.service';
+import {
+  CommonImage,
+  CommonImageError,
+  ContainerService,
+  PageStateService,
+} from 'moh-common-lib';
+import {
+  FpcDocumentTypes,
+  IncomeReviewDataService,
+} from '../../services/income-review-data.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'fpir-income',
   templateUrl: './income.component.html',
+  styleUrls: ['./income.component.scss'],
 })
 export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
-  decimalPipeMask = (value: any) => {
-    if (!isNaN(value)) {
-      return Number(value).toFixed(2);
-    }
-    return value;
-    // tslint:disable-next-line: semicolon
-  };
+  readonly incomeStmt = environment.links.incomeStmt;
+  readonly serviceCanada = environment.links.serviceCanada;
+  readonly incomeOptions = [
+    { label: `Applying with last year's net income`, value: true },
+    { label: `Applying with this year's gross income`, value: false },
+  ];
+
+  readonly netIncomeInstruct =
+    `<div>Use information from your CRA Notice of Assessment or Notice of Reassessment or ` +
+    `<a href="${this.incomeStmt}" target="_blank" rel="noopener noreferrer">proof of income statement</a> ` +
+    `for last year.</div>` +
+    `<div>Haven't filed your taxes yet? If you are applying after June 1, you must provide your CRA Notice ` +
+    `of Assessment. If you are applying before June 1, provide T-slips and other income records.</div>`;
+
+  readonly grossIncomeInstruct =
+    '<p><strong>Estimate your gross income for the current calendar year.</strong></p>' +
+    '<p>Add up all amounts that you and your spouse have received this year and expect to receive from all sources. ' +
+    'This will be your gross income.</p>';
+
+  readonly supportDocSpouseFrag =
+    'supporting documents for you and your spouse, ';
+  readonly supportDocFrag = 'supporting documents ';
+  readonly netIncomeFrag = `for last year's net income`;
+  readonly grossIncomeFrag = `for this year's gross income`;
+
+  incomeLineNumber: number = 1;
+  spouseIncomeLineNumber: number = 2;
+
+  updateIncomeTotalValue: boolean = false;
+  errorMessage: string;
 
   constructor(
     protected router: Router,
@@ -29,41 +62,87 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     super(router, containerService, pageStateService);
   }
 
-  get exampleSupportDocs() {
-    return this.incomeReviewDataService.exampleSupportDocs;
+  get isLastYearIncome() {
+    return this.incomeReviewDataService.isLastYearIncome;
   }
 
-  get applSectionTitle() {
-    return this.incomeReviewDataService.applSectionTitle;
+  set isLastYearIncome(lastYearIncome: boolean) {
+    this.incomeReviewDataService.isLastYearIncome = lastYearIncome;
   }
-  get spSectionTitle() {
-    return this.incomeReviewDataService.spSectionTitle;
+
+  get showSection() {
+    return (
+      this.incomeReviewDataService.isLastYearIncome !== undefined &&
+      this.incomeReviewDataService.isLastYearIncome !== null
+    );
+  }
+
+  get incomeHeading() {
+    return this.incomeReviewDataService.incomeHeading;
+  }
+
+  get incomeInstruction() {
+    return this.incomeReviewDataService.isLastYearIncome === true
+      ? this.netIncomeInstruct
+      : this.grossIncomeInstruct;
+  }
+
+  get ariaLabelIncome() {
+    return this.incomeReviewDataService.isLastYearIncome === true
+      ? 'NetIncome'
+      : 'GrossIncome';
+  }
+
+  get ariaLabelSpouseIncome() {
+    return this.incomeReviewDataService.isLastYearIncome === true
+      ? 'SpouseNetIncome'
+      : 'SpouseGrossIncome';
+  }
+
+  get incomeLabel() {
+    return this.incomeReviewDataService.incomeLabel;
+  }
+
+  get spouseIncomeLabel() {
+    return this.incomeReviewDataService.spouseIncomeLabel;
+  }
+
+  get incomeTotalLabel() {
+    return this.incomeReviewDataService.incomeTotalLabel;
+  }
+
+  get rdspIncomeLabel() {
+    return this.incomeReviewDataService.rdspIncomeLabel;
+  }
+
+  get spouseRdspIncomeLabel() {
+    return `spouse's ${this.incomeReviewDataService.rdspIncomeLabel}`;
+  }
+
+  get rdspIncomeTotalLabel() {
+    return this.incomeReviewDataService.rdspIncomeTotalLabel;
+  }
+
+  get netIncomeMinusRdspLabel() {
+    return this.hasSpouse
+      ? this.incomeReviewDataService.spouseNetIncomeMinusRdspLabel
+      : this.incomeReviewDataService.netIncomeMinusRdspLabel;
   }
 
   get hasSpouse() {
     return this.incomeReviewDataService.hasSpouse;
   }
 
-  get originalIncomeLabel() {
-    return this.incomeReviewDataService.originalIncomeLabel;
-  }
-  get reducedIncomeLabel() {
-    return this.incomeReviewDataService.reducedIncomeLabel;
-  }
-  get remainderIncomeLabel() {
-    return this.incomeReviewDataService.remainderIncomeLabel;
+  get hasRdspIncome() {
+    return this.incomeReviewDataService.hasRdspIncome;
   }
 
-  get line1to3Label() {
-    return this.hasSpouse
-      ? this.incomeReviewDataService.subtotalLabelLine1to3
-      : this.incomeReviewDataService.totalLabelLine1to3;
-  }
-  get line5to7Label() {
-    return this.incomeReviewDataService.subtotalLabelLine5to7;
-  }
-  get line4and8Label() {
-    return this.incomeReviewDataService.totalLabelLine4and8;
+  get showSupportDocSection() {
+    return (
+      (this.isLastYearIncome === true &&
+        (this.hasRdspIncome === true || this.hasRdspIncome === false)) ||
+      this.isLastYearIncome === false
+    );
   }
 
   get moneyMask() {
@@ -74,96 +153,117 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     return this.incomeReviewDataService.incomeDisplayMask;
   }
 
-  get originalIncomeErrorMsg() {
-    return `${this._stripHtml(
-      this.incomeReviewDataService.originalIncomeLabel
-    )} is required`;
-  }
-  get reducedIncomeErrorMsg() {
-    return `${this._stripHtml(this.reducedIncomeLabel)} is required`;
-  }
-  get remainderIncomeErrorMsg() {
-    return `${this._stripHtml(this.remainderIncomeLabel)} is required`;
+  get incomeTotalLineNo() {
+    return (
+      this.incomeLineNumber + (this.hasSpouse ? this.spouseIncomeLineNumber : 1)
+    );
   }
 
-  get originalIncomeHasError() {
-    const ctrl = this.formGroup.controls.originalIncome;
-    return ctrl.hasError('required') && ctrl.touched;
-  }
-  get reducedIncomeHasError() {
-    const ctrl = this.formGroup.controls.reducedIncome;
-    return ctrl.hasError('required') && ctrl.touched;
-  }
-  get remainderIncomeHasError() {
-    const ctrl = this.formGroup.controls.remainderIncome;
-    return ctrl.hasError('required') && ctrl.touched;
+  get rdspLineNo() {
+    return this.incomeTotalLineNo + 1;
   }
 
-  get spOriginalIncomeHasError() {
-    const ctrl = this.formGroup.controls.spOriginalIncome;
-    return ctrl.hasError('required') && ctrl.touched;
+  get spouseRdspLineNo() {
+    return this.rdspLineNo + 1;
   }
-  get spReducedIncomeHasError() {
-    const ctrl = this.formGroup.controls.spReducedIncome;
-    return ctrl.hasError('required') && ctrl.touched;
+
+  get totalRspdLineNo() {
+    return this.spouseRdspLineNo + 1;
   }
-  get spRemainderIncomeHasError() {
-    const ctrl = this.formGroup.controls.spRemainderIncome;
-    return ctrl.hasError('required') && ctrl.touched;
+
+  get netInomeMinusRdspLineNo() {
+    return (this.hasSpouse ? this.totalRspdLineNo : this.rdspLineNo) + 1;
+  }
+
+  set supportingDocuments(supportDocuments: CommonImage<FpcDocumentTypes>[]) {
+    this.incomeReviewDataService.incomeSupportDocs = supportDocuments;
+  }
+
+  get supportingDocuments() {
+    return this.incomeReviewDataService.incomeSupportDocs;
+  }
+
+  get netIncomeTipTitle() {
+    return (
+      (this.hasSpouse ? this.supportDocSpouseFrag : this.supportDocFrag) +
+      this.netIncomeFrag
+    );
+  }
+
+  get grossIncomeTipTitle() {
+    return (
+      (this.hasSpouse ? this.supportDocSpouseFrag : this.supportDocFrag) +
+      this.grossIncomeFrag
+    );
   }
 
   ngOnInit() {
     super.ngOnInit();
+
     this.formGroup = this.fb.group({
-      originalIncome: [
-        this.incomeReviewDataService.applicant.originalIncome,
+      isLastYearIncome: [
+        this.incomeReviewDataService.isLastYearIncome,
+        { validators: Validators.required },
+      ],
+      income: [
+        this.incomeReviewDataService.applicant.incomeStr,
         { validators: Validators.required, updateOn: 'blur' },
       ],
-      reducedIncome: [
-        this.incomeReviewDataService.applicant.reducedIncome,
-        { validators: Validators.required, updateOn: 'blur' },
-      ],
-      remainderIncome: [
-        this.incomeReviewDataService.applicant.remainderIncome,
-        { validators: Validators.required, updateOn: 'blur' },
-      ],
-      subtotal: [
+      spouseIncome: [
+        this.incomeReviewDataService.spouse.incomeStr,
         {
-          value: this.incomeReviewDataService.applicant.incomeSubTotal,
+          validators: this.hasSpouse ? Validators.required : null,
+          updateOn: 'blur',
+        },
+      ],
+      incomeTotal: [
+        {
+          value: this.incomeReviewDataService.formatIncomeTotal(
+            this.incomeReviewDataService.incomeTotal,
+            false
+          ),
           disabled: true,
         },
       ],
-
-      spOriginalIncome: [
-        this.incomeReviewDataService.spouse.originalIncome,
+      hasRdspIncome: [
+        this.incomeReviewDataService.hasRdspIncome,
         {
-          validators: this.hasSpouse ? Validators.required : null,
+          validators: this.isLastYearIncome ? Validators.required : null,
           updateOn: 'blur',
         },
       ],
-      spReducedIncome: [
-        this.incomeReviewDataService.spouse.reducedIncome,
+      rdspIncome: [
+        this.incomeReviewDataService.applicant.rdspIncomeStr,
         {
-          validators: this.hasSpouse ? Validators.required : null,
+          validators: this.hasRdspIncome ? Validators.required : null,
           updateOn: 'blur',
         },
       ],
-      spRemainderIncome: [
-        this.incomeReviewDataService.spouse.remainderIncome,
+      spouseRdspIncome: [
+        this.incomeReviewDataService.spouse.rdspIncomeStr,
         {
-          validators: this.hasSpouse ? Validators.required : null,
+          validators:
+            this.hasSpouse && this.hasRdspIncome ? Validators.required : null,
           updateOn: 'blur',
         },
       ],
-      spSubtotal: [
+      rdspIncomeTotal: [
         {
-          value: this.incomeReviewDataService.spouse.incomeSubTotal,
+          value: this.incomeReviewDataService.formatIncomeTotal(
+            this.incomeReviewDataService.rdspIncomeTotal,
+            false
+          ),
           disabled: true,
         },
       ],
-
-      total: [
-        { value: this.incomeReviewDataService.incomeTotal, disabled: true },
+      netIncomeMinusRdsp: [
+        {
+          value: this.incomeReviewDataService.formatIncomeTotal(
+            this.incomeReviewDataService.netIncomeTotal,
+            false
+          ),
+          disabled: true,
+        },
       ],
     });
   }
@@ -172,46 +272,38 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     super.ngAfterViewInit();
 
     // subscribe to value changes
-    this.formGroup.controls.originalIncome.valueChanges.subscribe((val) => {
-      this.incomeReviewDataService.applicant.originalIncome = this.incomeReviewDataService.currencyStrToNumber(
-        val
-      );
-      this.updateTotals();
+    this.formGroup.controls.isLastYearIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.isLastYearIncome = val;
+      this.resetIncome();
     });
 
-    this.formGroup.controls.reducedIncome.valueChanges.subscribe((val) => {
-      this.incomeReviewDataService.applicant.reducedIncome = this.incomeReviewDataService.currencyStrToNumber(
-        val
-      );
-      this.updateTotals();
+    this.formGroup.controls.income.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.applicant.incomeStr = val;
+      this.updateIncomeTotal();
     });
 
-    this.formGroup.controls.remainderIncome.valueChanges.subscribe((val) => {
-      this.incomeReviewDataService.applicant.remainderIncome = this.incomeReviewDataService.currencyStrToNumber(
-        val
-      );
-      this.updateTotals();
+    this.formGroup.controls.spouseIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.spouse.incomeStr = val;
+      this.updateIncomeTotal();
     });
 
-    this.formGroup.controls.spOriginalIncome.valueChanges.subscribe((val) => {
-      this.incomeReviewDataService.spouse.originalIncome = this.incomeReviewDataService.currencyStrToNumber(
-        val
-      );
-      this.updateTotals();
+    this.formGroup.controls.hasRdspIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.hasRdspIncome = val;
+      this.resetRsdpIncome();
+
+      if (val === true) {
+        this.updateRsdpIncome();
+      }
     });
 
-    this.formGroup.controls.spReducedIncome.valueChanges.subscribe((val) => {
-      this.incomeReviewDataService.spouse.reducedIncome = this.incomeReviewDataService.currencyStrToNumber(
-        val
-      );
-      this.updateTotals();
+    this.formGroup.controls.rdspIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.applicant.rdspIncomeStr = val;
+      this.updateIncomeTotal();
     });
 
-    this.formGroup.controls.spRemainderIncome.valueChanges.subscribe((val) => {
-      this.incomeReviewDataService.spouse.remainderIncome = this.incomeReviewDataService.currencyStrToNumber(
-        val
-      );
-      this.updateTotals();
+    this.formGroup.controls.spouseRdspIncome.valueChanges.subscribe((val) => {
+      this.incomeReviewDataService.spouse.rdspIncomeStr = val;
+      this.updateIncomeTotal();
     });
   }
 
@@ -219,33 +311,103 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
     this.markAllInputsTouched();
 
     if (this.canContinue()) {
-      this.navigate(INCOME_REVIEW_PAGES.SUPPORT_DOCS.fullpath);
+      this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
     }
   }
 
-  updateTotals() {
-    let _income = this.incomeReviewDataService.formatIncomeTotal(
-      this.incomeReviewDataService.applicant.incomeSubTotal,
-      false
-    );
-    this.formGroup.controls.subtotal.setValue(_income);
-
+  updateIncomeTotal() {
     if (this.hasSpouse) {
-      _income = this.incomeReviewDataService.formatIncomeTotal(
-        this.incomeReviewDataService.spouse.incomeSubTotal,
-        false
-      );
-      this.formGroup.controls.spSubtotal.setValue(_income);
-      _income = this.incomeReviewDataService.formatIncomeTotal(
+      const _income = this.incomeReviewDataService.formatIncomeTotal(
         this.incomeReviewDataService.incomeTotal,
         false
       );
-      this.formGroup.controls.total.setValue(_income);
+      this.formGroup.controls.incomeTotal.setValue(_income);
+    }
+
+    // RDSP income
+    if (this.isLastYearIncome && this.hasRdspIncome) {
+      this.updateRsdpIncome();
     }
   }
 
-  private _stripHtml(label: string) {
-    const text = label.replace(/(?:<strong>|<\/strong>)/g, '');
-    return text.replace(/<br>/g, ' ');
+  resetRsdpIncome() {
+    this.incomeReviewDataService.applicant.rdspIncomeStr = undefined;
+    this.incomeReviewDataService.spouse.rdspIncomeStr = undefined;
+
+    this.formGroup.controls.rdspIncomeTotal.reset();
+    this.formGroup.controls.netIncomeMinusRdsp.reset();
+  }
+
+  updateRsdpIncome() {
+    const _rdspIncome = this.incomeReviewDataService.formatIncomeTotal(
+      this.incomeReviewDataService.rdspIncomeTotal,
+      false
+    );
+    this.formGroup.controls.rdspIncomeTotal.setValue(_rdspIncome);
+
+    const _netIncome = this.incomeReviewDataService.formatIncomeTotal(
+      this.incomeReviewDataService.netIncomeTotal,
+      false
+    );
+    this.formGroup.controls.netIncomeMinusRdsp.setValue(_netIncome);
+  }
+
+  resetIncome() {
+    // Change will cause income to reset
+    this.incomeReviewDataService.applicant.clearIncome();
+    this.incomeReviewDataService.spouse.clearIncome();
+
+    // Reset flags on control
+    this.formGroup.controls.income.reset();
+    this.formGroup.controls.spouseIncome.reset();
+  }
+
+  handleError(error: CommonImage) {
+    if (error) {
+      // Determine error to display
+      switch (error.error) {
+        case CommonImageError.WrongType:
+          this.errorMessage = 'That is the wrong type of attachment to submit.';
+          break;
+
+        case CommonImageError.AlreadyExists:
+          this.errorMessage = 'That attachment has already been uploaded.';
+          break;
+
+        case CommonImageError.PDFnotSupported:
+          this.errorMessage =
+            'That PDF type is not supported, please upload a different attachment.';
+          break;
+
+        case CommonImageError.CannotOpen:
+          this.errorMessage =
+            'That attachment cannot be opened, please upload a different attachment.';
+          break;
+
+        case CommonImageError.CannotOpenPDF:
+          this.errorMessage =
+            'That PDF cannot be opened, please upload a different attachment.';
+          break;
+
+        case CommonImageError.TooSmall:
+          this.errorMessage =
+            'That attachment is too small, please upload a larger attachment.';
+          break;
+
+        case CommonImageError.TooBig:
+          this.errorMessage =
+            'That attachment is too big, please upload a smaller attachment.';
+          break;
+
+        // Catch all, unknown error
+        default:
+          this.errorMessage =
+            'The upload failed, please try again. If the issue persists, please upload a different attachment.';
+          break;
+      }
+    } else {
+      // clear error message
+      this.errorMessage = null;
+    }
   }
 }

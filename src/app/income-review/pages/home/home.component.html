@@ -3,15 +3,14 @@
   <h2 collectModalTitle>Information Collection Notice</h2>
   <div collectModalBody>
     <p>
-      The personal information you provide to the PharmaCare program is
-      collected by the British Columbia Ministry of Health under the authority
-      of s. 22 of the <em>Pharmaceutical Services Act</em> and s. 26 of the
-      <em>Freedom of Information and Protection of Privacy Act</em> for the
-      purpose of registering you in Fair PharmaCare. If you have any questions
-      about the collection and use of your personal information, please contact
-      the Director of Information and PharmaNet Innovation, Ministry of Health,
-      <a href="{{ collectionNoticeEmail }}">Pharma@Gov.bc.ca</a> or
-      250-952-2790, or PO Box 9652, STN PROV GOVT, Victoria, BC V8W 9P4
+      The personal information you provide to the PharmaCare program will be
+      used by the British Columbia Ministry of Health to verify and administer
+      your Fair PharmaCare coverage. It will be collected, used and disclosed in
+      accordance with the <em>Pharmaceutical Services Act</em> and the
+      <em>Freedom of Information and Protection of Privacy Act</em>. For any
+      questions about the collection or use of this information, call Health
+      Insurance BC from Vancouver at 1-604-683-7151 or from elsewhere in B.C.
+      toll free at 1-800-663-7100.
     </p>
 
     <div>
@@ -26,84 +25,56 @@
 </fpir-collection-notice>
 
 <!-- HOME PAGE -->
-<h1>Use this form if</h1>
+<h1>Get Started</h1>
+<common-page-section layout="tips">
+  <div>
+    If you are registered for Fair PharmaCare, you can apply to have your
+    coverage reviewed if your income has dropped by 10% or more in the past two
+    years. It is possible that your deductible and family maximum will be
+    lowered.
+  </div>
+  <h2>You can use this form if</h2>
+  <div>
+    <ul>
+      <li>
+        You are registered for Fair PharmaCare. If you aren't sure,
+        <a
+          href="{{ fpcRegistrationStatus }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          >check your status</a
+        >.
+      </li>
+      <li>
+        You expect your net income for last year or gross income for this year
+        to be at least 10% lower than your net income from two years ago, as
+        verified by Canada Revenue Agency (CRA). The loss of income can be for
+        any reason, including the COVID-19 pandemic.
+      </li>
+    </ul>
+  </div>
+  <div class="pb-4">
+    <strong>Note:</strong> Submit this application no later than December 31 of
+    this year. We only review your coverage for this year. Your coverage for
+    previous years cannot be reviewed or changed retroactively.
+  </div>
+  <div>
+    <strong>New residents of Canada:</strong> If you have not yet filed a tax
+    return in Canada for a full year of income, you must submit a Notarized
+    Affidavit Form (HLTH 5357) before submitting this application. Call Health
+    Insurance BC (HIBC) to request an affidavit form: 1 800 663-7100
+    (toll-free); 604 683-7151 (Lower Mainland).
+  </div>
 
-<div class="pb-4">
-  <ul>
-    <li>You have already registered for Fair PharmaCare; and</li>
-    <li>
-      You have experienced layoff, loss of employment or other reduction of
-      income resulting from the COVID-19 pandemic; and
-    </li>
-    <li>
-      Your anticipated gross income for this year will be at least 10% less than
-      your income from two years ago as verified by the Canada Revenue Agency.
-    </li>
-  </ul>
-  For income reviews not related to COVID-19, use the following form:
-  <a href="{{ hlth5355 }}" target="_blank" rel="noopener noreferrer"
-    >Application for Income Review (HLTH 5355)</a
-  >.
-</div>
-
-<div>
-  <strong>IMPORTANT</strong><br />
-  <ul>
-    <li>
-      If you are unable to provide required supporting documents, you must
-      submit a letter signed by you (and your spouse/common-law partner, if
-      applicable) declaring the following:<br />
-      <ul>
-        <li>
-          The types of document(s) you are unable to provide and why they are
-          not available;
-        </li>
-        <li>
-          The source of the income received, e.g., Canadian Emergency Response
-          Benefit (CERB);
-        </li>
-        <li>The gross income you received from this source each month; and</li>
-        <li>
-          How many months of the year you have received this income, and how
-          many additional months you expect to receive it.
-        </li>
-        <li>
-          Note: the letter of declaration is only for documents you are unable
-          to obtain. You must try to obtain all required documents.
-        </li>
-      </ul>
-    </li>
-    <li>
-      To request more assistance for this year, your application and supporting
-      documents must be received no later than December 31 of this year. You
-      cannot request more assistance for a previous year.
-    </li>
-    <li>
-      To confirm you are registered with Fair PharmaCare, check your status
-      here:
-      <a
-        href="{{ fpcRegistrationStatus }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        >my.gov.bc.ca/fpcare/registration-status/request-status</a
-      >.
-    </li>
-  </ul>
-</div>
-<p>
-  If you are a new resident of Canada: if you have not yet filed a tax return in
-  Canada for a full year of income, you must submit an affidavit. Call Health
-  Insurance BC before completing this form (toll-free: 1 800 663-7100; Lower
-  Mainland: 604 683-7151).
-</p>
-<p>
-  The Medical Services Plan (MSP), which covers physician visits and hospital
-  services, etc., offers supplementary benefits to households with lower
-  incomes. For more information, visit
-  <a href="{{ mspSuppBenefits }}" target="_blank" rel="noopener noreferrer"
-    >www.gov.bc.ca/MSP/supplementarybenefits</a
-  >.
-</p>
+  <aside>
+    <strong>Did you know:</strong> The Medical Services Plan (MSP) can help
+    households with lower incomes pay for certain supplementary medical services
+    (e.g., physical therapy, massage, podiatry). Learn more about
+    <a href="{{ mspSuppBenefits }}" target="_blank" rel="noopener noreferrer"
+      >MSP supplementary benefits</a
+    >.
+  </aside>
+</common-page-section>
 
 <form [formGroup]="formGroup">
   <h2 class="border-bottom">Fair PharmaCare Registration</h2>
@@ -114,6 +85,15 @@
       [label]="isRegisteredQuestion"
       display="table-row-group"
     ></common-radio>
+
+    <common-error-container [displayError]="isRegisterError">
+      Income reviews are for people who are registered for the income-based Fair
+      PharmaCare plan. You can
+      <a href="{{ fpcRegistration }}" target="_blank" rel="noopener noreferrer"
+        >register here</a
+      >. You can only apply for an income review once you have registered for
+      Fair PharmaCare and received a Confirmation of Assistance letter.
+    </common-error-container>
   </common-page-section>
 
   <h2 class="border-bottom">Income Requirements</h2>
@@ -124,9 +104,24 @@
       [label]="isIncomeLessQuestion"
       display="table-row-group"
     ></common-radio>
-  </common-page-section>
 
-  <common-error-container [displayError]="!isEligible && isTouched">
-    You are not eligible to apply for Fair PharmaCare Income Review.
-  </common-error-container>
+    <common-error-container [displayError]="isIncomeLessError">
+      Income reviews are only for Fair PharmaCare registrants whose income has
+      dropped by 10% or more since it was verified two years ago.
+    </common-error-container>
+
+    <aside>
+      <div class="pb-4">
+        <strong>Net income:</strong> Your income after deductions. We use your
+        Canada Revenue Agency Notice of Assessment / Reassessment to verify your
+        net income. Contact HIBC if you don't have a Notice of Assessment /
+        Reassessment.
+      </div>
+
+      <div>
+        <strong>Gross income:</strong> Your income before deductions, verified
+        by supporting documents.
+      </div>
+    </aside>
+  </common-page-section>
 </form>

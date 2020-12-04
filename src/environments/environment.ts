@@ -22,14 +22,14 @@ export const environment = {
    */
   links: {
     mspSuppBenefits: 'https://www.gov.bc.ca/MSP/supplementarybenefits',
-    hlth5355: 'https://www2.gov.bc.ca/assets/gov/health/forms/5355fil.pdf',
     fpcRegStatus:
       'https://my.gov.bc.ca/fpcare/registration-status/request-status',
     hibc:
       'http://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents-contact-us',
-    collectionNoticeEmail:
-      'mailto:Pharma@Gov.bc.ca?subject=FPC Income Review Inoformation Collection Notice',
     serviceCanada: 'https://www.canada.ca/',
+    fpcRegister:
+      // tslint:disable-next-line: max-line-length
+      'https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/pharmacare-for-bc-residents/who-we-cover/fair-pharmacare-plan/register-for-fair-pharmacare',
   },
 
   /**

@@ -109,8 +109,9 @@ export class IncomeReviewDataService {
   applicationResponse: ServerPayload;
 
   // Masks for displaying currency
+  // TODO: Figure out how to display negative numbers
   private _incomeMask = createCurrencyMask({ integerLimit: 6, prefix: '' });
-  private _incomeDollarSignMask = createCurrencyMask({ integerLimit: 6 });
+  // private _incomeDollarSignMask = createCurrencyMask({ integerLimit: 6 });
   private _incomeTotalMask = createCurrencyMask({
     integerLimit: 9,
     prefix: '',
@@ -250,42 +251,35 @@ export class IncomeReviewDataService {
       heading: 'Personal Information',
       isPrintView: printView,
       redirectPath: INCOME_REVIEW_PAGES.PERSONAL_INFO.fullpath,
-      section: [
+      sectionItems: [
         {
-          sectionItems: [
-            {
-              label: `${this.applFirstNameLabel}:`,
-              value: this.applicant.firstName,
-            },
-            {
-              label: `${this.applLastNameLabel}:`,
-              value: this.applicant.lastName,
-            },
-            {
-              label: `${this.applAddressLabel}:`,
-              value: this.address.addressLine1,
-            },
-            { label: 'City:', value: this.address.city },
-            {
-              label: `${this.applPostalCodeLabel}:`,
-              value: this.address.postal,
-            },
-            { label: `${this.phnLabel}:`, value: this.applicant.phn },
-          ],
+          label: `${this.applFirstNameLabel}:`,
+          value: this.applicant.firstName,
         },
+        {
+          label: `${this.applLastNameLabel}:`,
+          value: this.applicant.lastName,
+        },
+        {
+          label: `${this.applAddressLabel}:`,
+          value: this.address.addressLine1,
+        },
+        { label: 'City:', value: this.address.city },
+        {
+          label: `${this.applPostalCodeLabel}:`,
+          value: this.address.postal,
+        },
+        { label: `${this.phnLabel}:`, value: this.applicant.phn },
       ],
     };
 
     if (this.hasSpouse) {
-      const spouseSection = {
-        sectionItems: [
-          { label: `${this.spFirstNameLabel}:`, value: this.spouse.firstName },
-          { label: `${this.spLastNameLabel}:`, value: this.spouse.lastName },
-          { label: `${this.spPhnLabel}:`, value: this.spouse.phn },
-        ],
-      };
-
-      obj.section.push(spouseSection);
+      const spouseSection = [
+        { label: `${this.spFirstNameLabel}:`, value: this.spouse.firstName },
+        { label: `${this.spLastNameLabel}:`, value: this.spouse.lastName },
+        { label: `${this.spPhnLabel}:`, value: this.spouse.phn },
+      ];
+      obj.sectionItems = obj.sectionItems.concat(spouseSection);
     }
 
     return obj;
@@ -296,116 +290,92 @@ export class IncomeReviewDataService {
     const obj = {
       heading: this.incomeHeading,
       isPrintView: printView,
+      isFinancialData: true,
       redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
-      section: [
+      sectionItems: [
         {
-          sectionItems: [
-            {
-              label: this.incomeLabel,
-              value: this.applicant.incomeStr,
-              extraInfo: `${count}`,
-              valueClass: 'review--income-value',
-            },
-          ],
-        },
-      ],
-    };
-    count += 1;
-    /*
-    if (this.hasSpouse) {
-      obj= Object.assign( obj, {
-        label: this.incomeLabel,
-        value: this.formatIncome(this.applicant.income),
-        extraInfo: count,
-        valueClass: 'review--income-value',
-      });
-    }
-    */
-
-    /*
-    const obj = {
-      heading: 'Income',
-      isPrintView: printView,
-      redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
-      section: [
-        {
-          sectionItems: [
-            {
-              label: this.icome,
-              value: this.formatIncome(this.applicant.originalIncome),
-              extraInfo: '1',
-              valueClass: 'review--income-value',
-            },
-            {
-              label: this.reducedIncomeLabel,
-              value: this.formatIncome(this.applicant.reducedIncome),
-              extraInfo: '2',
-              valueClass: 'review--income-value',
-            },
-            {
-              label: this.remainderIncomeLabel,
-              value: this.formatIncome(this.applicant.remainderIncome),
-              extraInfo: '3',
-              valueClass: 'review--income-value',
-            },
-            {
-              label: this.hasSpouse
-                ? this.subtotalLabelLine1to3
-                : this.totalLabelLine1to3,
-              value: this.formatIncomeTotal(this.applicant.incomeSubTotal),
-              extraInfo: '4',
-              valueClass: 'review--income-value review--income-total-color',
-            },
-          ],
+          label: this.incomeLabel,
+          value: this.applicant.incomeStr,
+          extraInfo: {
+            lineNo: `${count++}`,
+            mask: this.incomeInputMask,
+            isTotal: false,
+          },
         },
       ],
     };
 
     if (this.hasSpouse) {
-      const spouseSection = {
-        subHeading: this.spSectionTitle,
-        sectionItems: [
-          {
-            label: this.originalIncomeLabel,
-            value: this.formatIncome(this.spouse.originalIncome),
-            extraInfo: '5',
-            valueClass: 'review--income-value',
+      obj.sectionItems = obj.sectionItems.concat([
+        {
+          label: this.spouseIncomeLabel,
+          value: this.spouse.incomeStr,
+          extraInfo: {
+            lineNo: `${count++}`,
+            mask: this.incomeInputMask,
+            isTotal: false,
           },
-          {
-            label: this.reducedIncomeLabel,
-            value: this.formatIncome(this.spouse.reducedIncome),
-            extraInfo: '6',
-            valueClass: 'review--income-value',
+        },
+        {
+          label: this.incomeTotalLabel,
+          value: this.incomeTotal.toFixed(2),
+          extraInfo: {
+            lineNo: `${count++}`,
+            mask: this.incomeDisplayMask,
+            isTotal: true,
           },
-          {
-            label: this.remainderIncomeLabel,
-            value: this.formatIncome(this.spouse.remainderIncome),
-            extraInfo: '7',
-            valueClass: 'review--income-value',
-          },
-          {
-            label: this.subtotalLabelLine5to7,
-            value: this.formatIncomeTotal(this.spouse.incomeSubTotal),
-            extraInfo: '8',
-            valueClass: 'review--income-value review--income-total-color',
-          },
-        ],
-      };
-      const totalSection = {
-        subHeading: null,
-        sectionItems: [
-          {
-            label: this.totalLabelLine4and8,
-            value: this.formatIncomeTotal(this.incomeTotal),
-            extraInfo: '9',
-            valueClass: 'review--income-value review--income-total-color',
-          },
-        ],
-      };
-      obj.section.push(spouseSection);
-      obj.section.push(totalSection);
+        },
+      ]);
     }
-    */
+
+    if (this.isLastYearIncome === true) {
+      obj.sectionItems = obj.sectionItems.concat([
+        {
+          label: this.rdspIncomeLabel,
+          value: this.applicant.rdspIncomeStr,
+          extraInfo: {
+            lineNo: `${count++}`,
+            mask: this.incomeInputMask,
+            isTotal: false,
+          },
+        },
+      ]);
+
+      if (this.hasSpouse) {
+        obj.sectionItems = obj.sectionItems.concat([
+          {
+            label: `spouse's ${this.rdspIncomeLabel}`,
+            value: this.spouse.rdspIncomeStr,
+            extraInfo: {
+              lineNo: `${count++}`,
+              mask: this.incomeInputMask,
+              isTotal: false,
+            },
+          },
+          {
+            label: this.rdspIncomeTotalLabel,
+            value: this.rdspIncomeTotal.toFixed(2),
+            extraInfo: {
+              lineNo: `${count++}`,
+              mask: this.incomeDisplayMask,
+              isTotal: true,
+            },
+          },
+        ]);
+      }
+
+      obj.sectionItems = obj.sectionItems.concat([
+        {
+          label: this.netIncomeMinusRdspLabel,
+          value: this.netIncomeTotal.toFixed(2),
+          extraInfo: {
+            lineNo: `${count++}`,
+            mask: this.incomeDisplayMask,
+            isTotal: true,
+          },
+        },
+      ]);
+    }
     return obj;
   }
 

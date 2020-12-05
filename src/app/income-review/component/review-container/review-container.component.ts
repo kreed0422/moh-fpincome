@@ -4,19 +4,13 @@ import { Router } from '@angular/router';
 export interface ReviewSectionItemType {
   label: string;
   value: string;
-  extraInfo?: string | null;
-  valueClass?: string | null; // Format cell for value only
+  extraInfo?: string | { [key: string]: any } | null;
 }
-
-export interface ReviewSectionType {
-  subHeading?: string | null;
-  sectionItems: ReviewSectionItemType[];
-}
-
 export interface ReviewObject {
   heading: string;
   isPrintView: boolean;
-  section: ReviewSectionType[];
+  sectionItems: ReviewSectionItemType[];
+  isFinancialData?: boolean;
   redirectPath?: string;
 }
 

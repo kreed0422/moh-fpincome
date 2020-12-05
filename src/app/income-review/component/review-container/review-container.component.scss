@@ -1,12 +1,4 @@
-@import 'variables.scss';
-
-@mixin sentence-case() {
-  text-transform: lowercase;
-
-  &:first-letter {
-    text-transform: uppercase;
-  }
-}
+@import 'income-review.scss';
 
 .review--heading {
   margin-left: 0px;
@@ -28,20 +20,14 @@
 
 .review--row > div {
   margin-top: 0.5rem;
-}
-.review--subheading {
-  font-weight: bold;
+  padding-bottom: 0.5rem;
 }
 
 .review--background-color {
   background-color: $gray;
-}
-
-.review--income-value {
-  text-align: right;
-}
-.review--income-total-color {
-  background-color: lightgrey;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
 }
 
 @media print {
@@ -52,5 +38,4 @@
 
 .review--key {
   text-align: right;
-  @include sentence-case();
 }

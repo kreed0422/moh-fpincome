@@ -21,10 +21,24 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
 export class FinancialInputComponent implements OnInit, ControlValueAccessor {
   @Input() disabled: boolean = false;
   @Input() moneyMask: any = null;
+  @Input() tabIndex: number;
+
+  // Not used as form - used to display
+  @Input()
+  set value(val: number) {
+    this._value = val;
+  }
+  get value() {
+    return this._value;
+  }
+  @Input()
+  set id(val: string) {
+    this._name = val;
+  }
 
   _value: number = null;
   _textMask: any;
-  _name: string;
+  _name: string = `finance-${Math.random()}`;
 
   // Required for implementing ControlValueAccessor
   _onChange = (_: any) => {};
@@ -61,7 +75,7 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
     }
 
     // Retreive name of the control
-    this._name = this.control ? this.control.name : 'financeInput';
+    this._name = this.control ? this.control.name : this._name;
   }
 
   // Required for implementing ControlValueAccessor

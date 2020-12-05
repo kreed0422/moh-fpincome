@@ -1,12 +1,4 @@
-@import 'variables.scss';
-
-@mixin sentence-case() {
-  text-transform: lowercase;
-
-  &:first-letter {
-    text-transform: uppercase;
-  }
-}
+@import 'income-review.scss';
 
 .financial--container {
   display: block;
@@ -14,22 +6,6 @@
   padding: 1rem;
   margin-bottom: 1.5rem;
   background-color: $gray;
-}
-
-.finance-text--format {
-  text-align: right;
-  @include sentence-case();
-}
-
-.finance-error--format {
-  text-align: center;
-  @include sentence-case();
-}
-
-.finance-bold-text--format {
-  text-align: right;
-  font-weight: bold;
-  @include sentence-case();
 }
 
 .support-doc--tip-area {

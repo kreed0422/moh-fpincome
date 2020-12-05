@@ -11,27 +11,36 @@
     </div>
   </div>
 
-  <div class="review--background-color pt-2 pb-2 pl-4">
-    <div *ngFor="let section of reviewObject.section; let s_idx = index">
-      <div class="review--subheading pb-2 pt-2" *ngIf="section.subHeading">
-        {{ section.subHeading }}
-      </div>
-      <div *ngFor="let item of section.sectionItems; let idx = index">
-        <div class="row review--row pb-2">
+  <div class="review--background-color">
+    <ng-container *ngIf="!reviewObject?.isFinancialData; else FinancialDisplay">
+      <div *ngFor="let item of reviewObject.sectionItems; let idx = index">
+        <div class="row review--row">
           <div class="col-md-6 review--key" [innerHTML]="item.label"></div>
-          <div
-            class="{{ item.extraInfo ? 'col-md-2' : 'col-md-6' }} {{
-              item.valueClass ? item.valueClass : null
-            }}"
-            [innerHTML]="item.value"
-          ></div>
-          <div
-            class="col-md-2"
-            *ngIf="item.extraInfo"
-            [innerHTML]="item.extraInfo"
-          ></div>
+          <div class="col-md-6" [innerHTML]="item.value"></div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 </div>
+
+<ng-template #FinancialDisplay>
+  <div *ngFor="let item of reviewObject.sectionItems; let idx = index">
+    <fpir-financial-input
+      value="{{ item.value }}"
+      [moneyMask]="item?.extraInfo?.mask"
+      disabled="true"
+    >
+      <div
+        label
+        class="{{
+          item?.extraInfo?.isTotal
+            ? 'finance-bold-text--format'
+            : 'finance-text--format'
+        }}"
+      >
+        {{ item.label }}
+      </div>
+      <div rowId>{{ item?.extraInfo?.lineNo }}</div>
+    </fpir-financial-input>
+  </div>
+</ng-template>

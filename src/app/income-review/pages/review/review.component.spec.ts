@@ -6,6 +6,8 @@ import { SharedCoreModule } from 'moh-common-lib';
 
 import { ReviewComponent } from './review.component';
 import { ReviewContainerComponent } from '../../component/review-container/review-container.component';
+import { FinancialInputComponent } from '../../component/financial-input/financial-input.component';
+import { TextMaskModule } from 'angular2-text-mask';
 
 describe('ReviewComponent', () => {
   let component: ReviewComponent;
@@ -13,12 +15,17 @@ describe('ReviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ReviewContainerComponent, ReviewComponent],
+      declarations: [
+        ReviewContainerComponent,
+        ReviewComponent,
+        FinancialInputComponent,
+      ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule,
         SharedCoreModule,
+        TextMaskModule,
       ],
     }).compileComponents();
   }));

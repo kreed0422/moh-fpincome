@@ -56,7 +56,7 @@ export const environment = {
      * When enabled = true, mockBackend can be used when mockBackend: {enabled = true}, loads provider for a fake backend
      */
     mockBackend: {
-      enabled: false,
+      enabled: true,
       executeErrorScenario: false,
 
       // YYYY-MM-DD 24H:mm:ss

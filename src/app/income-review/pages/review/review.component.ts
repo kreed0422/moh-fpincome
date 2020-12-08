@@ -15,8 +15,8 @@ export class ReviewComponent extends BaseForm implements OnInit {
   personalInfo: ReviewContainerComponent;
   @ViewChild('income', { static: true })
   income: ReviewContainerComponent;
-  /*  @ViewChild('supportDocs', { static: true })
-  supportDocs: ReviewContainerComponent;*/
+  @ViewChild('supportDocs', { static: true })
+  supportDocs: ReviewContainerComponent;
 
   constructor(
     protected router: Router,
@@ -31,7 +31,7 @@ export class ReviewComponent extends BaseForm implements OnInit {
     super.ngOnInit();
     this.personalInfo.reviewObject = this.incomeReviewDataService.getPersonalInformationSection();
     this.income.reviewObject = this.incomeReviewDataService.getIncomeSection();
-    // this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection();
+    this.supportDocs.reviewObject = this.incomeReviewDataService.getSupportDocsSection();
   }
 
   continue() {

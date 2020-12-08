@@ -46,6 +46,9 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   readonly netIncomeFrag = `for last year's net income`;
   readonly grossIncomeFrag = `for this year's gross income`;
 
+  readonly uploadInstructions =
+    'Click add, or drag and drop file into this box';
+
   incomeLineNumber: number = 1;
   spouseIncomeLineNumber: number = 2;
 
@@ -219,8 +222,7 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       incomeTotal: [
         {
           value: this.incomeReviewDataService.formatIncomeTotal(
-            this.incomeReviewDataService.incomeTotal,
-            false
+            this.incomeReviewDataService.incomeTotal
           ),
           disabled: true,
         },
@@ -250,8 +252,7 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       rdspIncomeTotal: [
         {
           value: this.incomeReviewDataService.formatIncomeTotal(
-            this.incomeReviewDataService.rdspIncomeTotal,
-            false
+            this.incomeReviewDataService.rdspIncomeTotal
           ),
           disabled: true,
         },
@@ -259,8 +260,7 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       netIncomeMinusRdsp: [
         {
           value: this.incomeReviewDataService.formatIncomeTotal(
-            this.incomeReviewDataService.netIncomeTotal,
-            false
+            this.incomeReviewDataService.netIncomeTotal
           ),
           disabled: true,
         },
@@ -318,8 +318,7 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   updateIncomeTotal() {
     if (this.hasSpouse) {
       const _income = this.incomeReviewDataService.formatIncomeTotal(
-        this.incomeReviewDataService.incomeTotal,
-        false
+        this.incomeReviewDataService.incomeTotal
       );
       this.formGroup.controls.incomeTotal.setValue(_income);
     }
@@ -340,14 +339,12 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   updateRsdpIncome() {
     const _rdspIncome = this.incomeReviewDataService.formatIncomeTotal(
-      this.incomeReviewDataService.rdspIncomeTotal,
-      false
+      this.incomeReviewDataService.rdspIncomeTotal
     );
     this.formGroup.controls.rdspIncomeTotal.setValue(_rdspIncome);
 
     const _netIncome = this.incomeReviewDataService.formatIncomeTotal(
-      this.incomeReviewDataService.netIncomeTotal,
-      false
+      this.incomeReviewDataService.netIncomeTotal
     );
     this.formGroup.controls.netIncomeMinusRdsp.setValue(_netIncome);
   }

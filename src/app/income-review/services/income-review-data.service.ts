@@ -111,12 +111,10 @@ export class IncomeReviewDataService {
   // Masks for displaying currency
   // TODO: Figure out how to display negative numbers
   private _incomeMask = createCurrencyMask({ integerLimit: 6, prefix: '' });
-  // private _incomeDollarSignMask = createCurrencyMask({ integerLimit: 6 });
   private _incomeTotalMask = createCurrencyMask({
     integerLimit: 9,
     prefix: '',
   });
-  private _incomeTotalDollarSignMask = createCurrencyMask({ integerLimit: 9 });
 
   // Payload for application
   get applicationPayload() {
@@ -231,19 +229,8 @@ export class IncomeReviewDataService {
 
   constructor() {}
 
-  /* TODO - remove not needed store values as strings
-  formatIncome(value: number, dollarSign: boolean = true) {
-    return this._currencyFormat(
-      value,
-      dollarSign ? this._incomeDollarSignMask : this._incomeMask
-    );
-  } */
-
-  formatIncomeTotal(value: number, dollarSign: boolean = true) {
-    return this._currencyFormat(
-      value,
-      dollarSign ? this._incomeTotalDollarSignMask : this._incomeTotalMask
-    );
+  formatIncomeTotal(value: number) {
+    return this._currencyFormat(value, this._incomeTotalMask);
   }
 
   getPersonalInformationSection(printView: boolean = false): ReviewObject {
@@ -379,22 +366,30 @@ export class IncomeReviewDataService {
     return obj;
   }
 
-  /*
   getSupportDocsSection(printView: boolean = false): ReviewObject {
     return {
       heading: 'Supporting Documents',
       isPrintView: printView,
-      redirectPath: INCOME_REVIEW_PAGES.SUPPORT_DOCS.fullpath,
-      section: [
+      redirectPath: INCOME_REVIEW_PAGES.INCOME.fullpath,
+      sectionItems: [
         {
-          sectionItems: [
-            { label: 'Documents uploaded', value: this.uploadedDocCount },
-          ],
+          label: 'Documents uploaded:',
+          value: `${this.incomeSupportDocs.length}`,
         },
       ],
     };
   }
-*/
+
+  getAttachments(): CommonImage<FpcDocumentTypes>[] {
+    const _documents = this.incomeSupportDocs;
+    // update attachment order and document type
+    _documents.forEach((x, idx) => {
+      x.attachmentOrder = idx + 1;
+      x.documentType = FpcDocumentTypes.SupportDocument;
+    });
+
+    return _documents;
+  }
 
   private _currencyStrToNumber(strValue: string): number {
     let _value = 0;

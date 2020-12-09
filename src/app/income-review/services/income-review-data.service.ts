@@ -115,7 +115,6 @@ export class IncomeReviewDataService {
     integerLimit: 9,
     prefix: '',
   });
-  private _incomeTotalDollarSignMask = createCurrencyMask({ integerLimit: 9 });
 
   // Payload for application
   get applicationPayload() {
@@ -379,6 +378,17 @@ export class IncomeReviewDataService {
         },
       ],
     };
+  }
+
+  getAttachments(): CommonImage<FpcDocumentTypes>[] {
+    const _documents = this.incomeSupportDocs;
+    // update attachment order and document type
+    _documents.forEach((x, idx) => {
+      x.attachmentOrder = idx + 1;
+      x.documentType = FpcDocumentTypes.SupportDocument;
+    });
+
+    return _documents;
   }
 
   private _currencyStrToNumber(strValue: string): number {

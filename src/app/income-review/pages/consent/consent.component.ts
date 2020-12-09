@@ -113,8 +113,7 @@ export class ConsentComponent extends BaseForm
     if (this.canContinue() && this.isChecked) {
       this.containerService.setIsLoading(true);
       const jsonPayload = this.incomeReviewDataService.applicationPayload;
-      const supportDocuments = [];
-      // this.incomeReviewDataService.consolidateDocuments;
+      const supportDocuments = this.incomeReviewDataService.getAttachments();
 
       this.incomeReviewApiService
         .submitApplication(jsonPayload, supportDocuments)

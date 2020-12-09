@@ -29,9 +29,12 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
     this._name = val;
   }
 
+  readonly _id = Math.ceil(Math.random() * 99999).toString();
+  readonly _prefix = 'finance-';
+
   _value: number = null;
   _textMask: any;
-  _name: string = `finance-${Math.random()}`;
+  _name: string;
 
   // Required for implementing ControlValueAccessor
   _onChange = (_: any) => {};
@@ -68,7 +71,7 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
     }
 
     // Retreive name of the control
-    this._name = this.control ? this.control.name : this._name;
+    this._name = this.control ? this.control.name : this._prefix + this._id;
   }
 
   // Required for implementing ControlValueAccessor

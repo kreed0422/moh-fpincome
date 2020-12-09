@@ -181,12 +181,14 @@
       <p class="border-bottom"><em>Supporting document(s)</em></p>
 
       <common-page-section layout="double">
-        <!--TODO: Fix library issue with pdf upload, investigate delay in upload thumb display-->
+        <!--TODO: Fix library issue with pdf upload, investigate delay in upload thumb display
+                  PDF not uploading - errroring  -->
         <common-file-uploader
-          instructionText="Click Add or drag and drop files into this box"
+          instructionText="{{ uploadInstructions }}"
           [(images)]="supportingDocuments"
           (errorDocument)="handleError($event)"
-          [required]="true"
+          required="true"
+          id="supportDocuments"
         >
         </common-file-uploader>
         <common-error-container [displayError]="errorMessage !== null">

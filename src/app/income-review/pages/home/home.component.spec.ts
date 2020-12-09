@@ -17,12 +17,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
 import {
   getDebugElement,
-  getDebugInlineError,
   setInput,
   clickRadioButton,
   MockRouter,
   partialRequiredMsg,
-  getAllDebugElements,
+  getRadioErrorMsg,
+  getErrorMsg,
 } from '../../../_developmentHelpers/test-helpers';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 import { Router } from '@angular/router';
@@ -40,19 +40,6 @@ function setRadioButton(
 ) {
   const radioBtn = getDebugElement(fixture, 'common-radio', btnName);
   clickRadioButton(radioBtn, valueName);
-}
-
-function getRadioErrorMsg(fixture: ComponentFixture<any>, btnName: string) {
-  const btn = getDebugElement(fixture, 'common-radio', btnName);
-  return getDebugInlineError(btn);
-}
-
-function getErrorMsg(fixture: ComponentFixture<any>, pos) {
-  const formError = getAllDebugElements(
-    fixture,
-    'form common-error-container .error--container'
-  );
-  return formError[pos].nativeElement.textContent;
 }
 
 function getCollectionNoticeButton(fixture: ComponentFixture<any>) {

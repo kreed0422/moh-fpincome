@@ -61,6 +61,45 @@ export function clickRadioButton(de: DebugElement, value: string) {
   _de.nativeElement.click();
 }
 
+export function getRadioErrorMsg(
+  fixture: ComponentFixture<any>,
+  btnName: string
+) {
+  const btn = getDebugElement(fixture, 'common-radio', btnName);
+  return getDebugInlineError(btn);
+}
+
+export function getErrorMsg(fixture: ComponentFixture<any>, pos) {
+  const formError = getAllDebugElements(
+    fixture,
+    'form common-error-container .error--container'
+  );
+  return formError[pos].nativeElement.textContent;
+}
+
+export function getRadioBtnLabel(de: DebugElement, value: any) {
+  const _input = de.query(By.css('input[value="' + value + '"]'));
+  if (_input) {
+    const _label = de.query(
+      By.css('label[for="' + _input.nativeElement.id + '"] ')
+    );
+    return _label ? String(_label.nativeElement.textContent).trim() : null;
+  }
+  return null;
+}
+
+export function getCheckedValue(de: DebugElement) {
+  const _de = de.query(By.css('input[type=radio]:checked'));
+  return _de ? _de.nativeElement.value : null;
+}
+
+export function clickValue(de: DebugElement, value: any) {
+  const _de = de.query(By.css('input[value="' + value + '"]'));
+  if (_de) {
+    _de.nativeElement.click();
+  }
+}
+
 export class MockRouter {
   url = '/';
 

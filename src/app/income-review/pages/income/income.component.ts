@@ -179,7 +179,13 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   }
 
   set supportingDocuments(supportDocuments: CommonImage<FpcDocumentTypes>[]) {
-    this.incomeReviewDataService.incomeSupportDocs = supportDocuments;
+    // Set file error to null - hide error container
+    this.errorMessage = null;
+
+    // Update document list
+    this.incomeReviewDataService.incomeSupportDocs = supportDocuments
+      ? supportDocuments
+      : [];
   }
 
   get supportingDocuments() {
@@ -310,7 +316,11 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   continue() {
     this.markAllInputsTouched();
 
-    if (this.canContinue()) {
+    if (
+      this.canContinue() &&
+      this.incomeReviewDataService.incomeSupportDocs.length > 0 &&
+      this.errorMessage === null
+    ) {
       this.navigate(INCOME_REVIEW_PAGES.REVIEW.fullpath);
     }
   }

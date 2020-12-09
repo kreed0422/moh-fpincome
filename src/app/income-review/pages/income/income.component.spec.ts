@@ -12,8 +12,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedCoreModule } from 'moh-common-lib';
 import { TextMaskModule } from 'angular2-text-mask';
 import {
+  getCheckedValue,
   getDebugElement,
+  getRadioBtnLabel,
+  getRadioErrorMsg,
   MockRouter,
+  partialRequiredMsg,
 } from '../../../_developmentHelpers/test-helpers';
 import { Router } from '@angular/router';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
@@ -21,6 +25,8 @@ import { FinancialInputComponent } from '../../component/financial-input/financi
 
 class MockDataService {
   hasSpouse: boolean;
+  isLastYearIncome: boolean;
+  hasRdspIncome: boolean;
 }
 
 function setInputField(
@@ -70,33 +76,127 @@ describe('IncomeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /* it('should not display fields related to spouse when no spouse indicated', () => {
-    expect(getDebugElement(fixture, 'input', 'spOriginalIncome')).toBeNull();
-    expect(getDebugElement(fixture, 'input', 'spReducedIncome')).toBeNull();
-    expect(getDebugElement(fixture, 'input', 'spRemainderIncome')).toBeNull();
-    expect(getDebugElement(fixture, 'input', 'spSubtotal')).toBeNull();
-    expect(getDebugElement(fixture, 'input', 'total')).toBeNull();
+  it('should display required error when mandatory radio buttons are empty', () => {
+    expect(component.canContinue()).toBeFalsy();
+    component.continue();
+    fixture.detectChanges();
+
+    expect(getRadioErrorMsg(fixture, 'isLastYearIncome')).toContain(
+      partialRequiredMsg
+    );
   });
 
-  it('should display fields related to spouse when spouse indicated', inject(
+  /*
+
+ TODO: figure out test - no working throwing errors
+  it('should display gross income field', inject(
     [IncomeReviewDataService],
     (mockDataService: MockDataService) => {
-      mockDataService.hasSpouse = true;
+
+      mockDataService.hasSpouse = false;
+      mockDataService.isLastYearIncome = false;
+      fixture.detectChanges();
+      fixture.whenRenderingDone().then(() => {
+
+        const _income = getDebugElement(fixture, 'fpir-financial-input', 'income');
+        expect(_income).not.toBeNull();
+
+        const _uploader = getDebugElement(fixture, 'common-file-uploader', 'supportDocuments');
+        expect(_uploader).not.toBeNull();
+    });
+  }));
+
+  it('should display total gross income when spouse indicated', inject(
+    [IncomeReviewDataService],
+    (mockDataService: MockDataService) => {
+
+    mockDataService.hasSpouse = true;
+    mockDataService.isLastYearIncome = false;
+    fixture.detectChanges();
+    fixture.whenRenderingDone().then(() => {
+
+      let _income = getDebugElement(fixture, 'fpir-financial-input', 'income');
+      expect(_income).not.toBeNull();
+      _income = getDebugElement(fixture, 'fpir-financial-input', 'spouseIncome');
+      expect(_income).not.toBeNull();
+      // _income = getDebugElement(fixture, 'fpir-financial-input', 'incomeTotal');
+      // expect(_income).not.toBeNull();
+
+     // const _uploader = getDebugElement(fixture, 'common-file-uploader', 'supportDocuments');
+     // expect(_uploader).not.toBeNull();
+    });
+  }));
+
+  /*
+
+  TODO: Fix test
+  it('should display net income field and no file uploader', () => {
+    const _net = getDebugElement(fixture, 'common-radio', 'isLastYearIncome');
+    clickValue(_net, true);
+    fixture.detectChanges();
+
+    expect(getCheckedValue(_net)).toBe('true');
+    expect(getRadioBtnLabel(_net, true)).toContain('net income');
+
+    const _income = getDebugElement(fixture, 'fpir-financial-input', 'income');
+    expect(_income).not.toBeNull();
+
+    const _rdsp =  getDebugElement(fixture, 'common-radio', 'hasRdspIncome');
+    expect(_rdsp).not.toBeNull();
+
+   // const _uploader = getDebugElement(fixture, 'common-file-uploader', 'supportDocuments');
+   // expect(_uploader).toBeNull();
+  });
+
+  it('should display total net income and no file upload uwhen spouse indicated', inject(
+    [IncomeReviewDataService],
+    (mockDataService: MockDataService) => {
+
+    mockDataService.hasSpouse = true;
+    mockDataService.isLastYearIncome = true;
+    fixture.detectChanges();
+    fixture.whenRenderingDone().then(() => {
+
+      let _income = getDebugElement(fixture, 'fpir-financial-input', 'income');
+      expect(_income).not.toBeNull();
+      _income = getDebugElement(fixture, 'fpir-financial-input', 'spouseIncome');
+      expect(_income).not.toBeNull();
+      _income = getDebugElement(fixture, 'fpir-financial-input', 'incomeTotal');
+      expect(_income).not.toBeNull();
+
+      const _rdsp =  getDebugElement(fixture, 'common-radio', 'hasRdspIncome');
+      expect(_rdsp).not.toBeNull();
+
+    //  const _uploader = getDebugElement(fixture, 'common-file-uploader', 'supportDocuments');
+    //   expect(_uploader).toBeNull();
+    });
+  }));
+
+
+  fit('should display rdsp income fields and file uploader when select select has RDSP', () => {
+    const _net = getDebugElement(fixture, 'common-radio', 'isLastYearIncome');
+    clickValue(_net, true);
+    fixture.detectChanges();
+
+    fixture.whenRenderingDone().then(() => {
+
+      const _rdsp =  getDebugElement(fixture, 'common-radio', 'hasRdspIncome');
+      clickValue(_rdsp, true);
       fixture.detectChanges();
 
       fixture.whenRenderingDone().then(() => {
-        expect(
-          getDebugElement(fixture, 'input', 'spOriginalIncome')
-        ).not.toBeNull();
-        expect(
-          getDebugElement(fixture, 'input', 'spReducedIncome')
-        ).not.toBeNull();
-        expect(
-          getDebugElement(fixture, 'input', 'spRemainderIncome')
-        ).not.toBeNull();
-        expect(getDebugElement(fixture, 'input', 'spSubtotal')).not.toBeNull();
-        expect(getDebugElement(fixture, 'input', 'total')).not.toBeNull();
+
+        let _income = getDebugElement(fixture, 'fpir-financial-input', 'rdspIncome');
+        expect(_income).not.toBeNull();
+
+        _income = getDebugElement(fixture, 'fpir-financial-input', 'netIncomeMinusRdsp');
+        expect(_income).not.toBeNull();
+
+        const _uploader = getDebugElement(fixture, 'common-file-uploader', 'supportDocuments');
+        expect(_uploader).not.toBeNull();
       });
-    }
-  )); */
+
+    });
+
+  }); */
 });

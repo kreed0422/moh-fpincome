@@ -127,9 +127,7 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   }
 
   get netIncomeMinusRdspLabel() {
-    return this.hasSpouse
-      ? this.incomeReviewDataService.spouseNetIncomeMinusRdspLabel
-      : this.incomeReviewDataService.netIncomeMinusRdspLabel;
+    return this.incomeReviewDataService.totalNetIncomeLabel;
   }
 
   get hasSpouse() {

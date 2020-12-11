@@ -443,7 +443,7 @@ export class IncomeReviewDataService {
     };
 
     if (this.isLastYearIncome) {
-      return Object.assign(obj, {
+      obj.spouseIncome = Object.assign(obj.spouseIncome, {
         rdspIncome: this._currencyStrToNumber(this.spouse.rdspIncomeStr),
       });
     }

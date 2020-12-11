@@ -218,6 +218,11 @@ export class IncomeReviewDataService {
       ? this.netIncomeTotalLabel
       : this.grossIncomeTotalLabel;
   }
+  get totalNetIncomeLabel() {
+    return this.hasSpouse
+      ? this.spouseNetIncomeMinusRdspLabel
+      : this.netIncomeMinusRdspLabel;
+  }
 
   get incomeInputMask() {
     return this._incomeMask;
@@ -353,7 +358,7 @@ export class IncomeReviewDataService {
 
       obj.sectionItems = obj.sectionItems.concat([
         {
-          label: this.netIncomeMinusRdspLabel,
+          label: this.totalNetIncomeLabel,
           value: this.netIncomeTotal.toFixed(2),
           extraInfo: {
             lineNo: `${count++}`,
@@ -438,7 +443,7 @@ export class IncomeReviewDataService {
     };
 
     if (this.isLastYearIncome) {
-      return Object.assign(obj, {
+      obj.spouseIncome = Object.assign(obj.spouseIncome, {
         rdspIncome: this._currencyStrToNumber(this.spouse.rdspIncomeStr),
       });
     }

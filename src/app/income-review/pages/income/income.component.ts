@@ -53,7 +53,7 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   spouseIncomeLineNumber: number = 2;
 
   updateIncomeTotalValue: boolean = false;
-  errorMessage: string;
+  errorMessage: string = null;
 
   constructor(
     protected router: Router,
@@ -296,7 +296,6 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       this.resetRsdpIncome();
 
       if (val === true) {
-        this.updateRsdpIncome();
       }
     });
 
@@ -333,38 +332,40 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
     // RDSP income
     if (this.isLastYearIncome && this.hasRdspIncome) {
-      this.updateRsdpIncome();
+      const _rdspIncome = this.incomeReviewDataService.formatIncomeTotal(
+        this.incomeReviewDataService.rdspIncomeTotal
+      );
+      this.formGroup.controls.rdspIncomeTotal.setValue(_rdspIncome);
+
+      const _netIncome = this.incomeReviewDataService.formatIncomeTotal(
+        this.incomeReviewDataService.netIncomeTotal
+      );
+      this.formGroup.controls.netIncomeMinusRdsp.setValue(_netIncome);
     }
   }
 
   resetRsdpIncome() {
-    this.incomeReviewDataService.applicant.rdspIncomeStr = undefined;
-    this.incomeReviewDataService.spouse.rdspIncomeStr = undefined;
-
-    this.formGroup.controls.rdspIncomeTotal.reset();
-    this.formGroup.controls.netIncomeMinusRdsp.reset();
-  }
-
-  updateRsdpIncome() {
-    const _rdspIncome = this.incomeReviewDataService.formatIncomeTotal(
-      this.incomeReviewDataService.rdspIncomeTotal
-    );
-    this.formGroup.controls.rdspIncomeTotal.setValue(_rdspIncome);
-
-    const _netIncome = this.incomeReviewDataService.formatIncomeTotal(
-      this.incomeReviewDataService.netIncomeTotal
-    );
-    this.formGroup.controls.netIncomeMinusRdsp.setValue(_netIncome);
+    this.formGroup.controls.rdspIncomeTotal.reset(null);
+    this.formGroup.controls.netIncomeMinusRdsp.reset(null);
   }
 
   resetIncome() {
-    // Change will cause income to reset
-    this.incomeReviewDataService.applicant.clearIncome();
-    this.incomeReviewDataService.spouse.clearIncome();
-
     // Reset flags on control
-    this.formGroup.controls.income.reset();
-    this.formGroup.controls.spouseIncome.reset();
+    this.formGroup.controls.income.reset(null);
+    this.formGroup.controls.rdspIncome.reset(null);
+
+    if (this.hasSpouse) {
+      // Reset flags on control
+      this.formGroup.controls.spouseIncome.reset(null);
+      this.formGroup.controls.spouseRdspIncome.reset(null);
+    }
+
+    // RDSP
+    this.formGroup.controls.hasRdspIncome.reset();
+    this.resetRsdpIncome();
+
+    // Clear support documents
+    this.incomeReviewDataService.incomeSupportDocs = [];
   }
 
   handleError(error: CommonImage) {

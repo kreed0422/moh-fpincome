@@ -11,7 +11,7 @@
         type="text"
         [id]="_name"
         [value]="_value"
-        (input)="_onChange($event.target.value)"
+        (input)="_value = $event.target.value; _onChange($event.target.value)"
         (blur)="_onTouched()"
         [disabled]="disabled"
         [textMask]="_textMask"

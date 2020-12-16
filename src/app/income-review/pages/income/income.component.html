@@ -23,12 +23,14 @@
     <common-radio
       formControlName="isLastYearIncome"
       name="isLastYearIncome"
+      id="isLastYearIncome"
       label="Choose the one that applies:"
       [radioLabels]="incomeOptions"
       display="table-row-group"
+      required
     ></common-radio>
 
-    <aside>
+    <aside aria-describedby="isLastYearIncome">
       Haven't filed last year's taxes yet? Consider applying with this year's
       gross income.
     </aside>
@@ -44,6 +46,7 @@
           formControlName="income"
           [attr.aria-labelledby]="ariaLabelIncome"
           [moneyMask]="moneyMask"
+          required
         >
           <div label class="finance-text--format">{{ incomeLabel }}</div>
           <div rowId>{{ incomeLineNumber }}</div>
@@ -57,6 +60,7 @@
             formControlName="spouseIncome"
             aria-labelledby="ariaLabelSpouseIncome"
             [moneyMask]="moneyMask"
+            [required]="hasSpouse"
           >
             <div label class="finance-text--format">
               {{ spouseIncomeLabel }}
@@ -86,6 +90,7 @@
           name="HasRdspIncome"
           label="Do you receive Registered Disability Savings Plan (RDSP) income?"
           display="table-row-group"
+          [required]="isLastYearIncome"
         ></common-radio>
 
         <ng-container *ngIf="hasRdspIncome">
@@ -99,6 +104,7 @@
               formControlName="rdspIncome"
               aria-labelledby="RdspIncome"
               [moneyMask]="moneyMask"
+              [required]="hasRdspIncome"
             >
               <div label class="finance-text--format">
                 {{ rdspIncomeLabel }}
@@ -114,6 +120,7 @@
                 formControlName="spouseRdspIncome"
                 aria-labelledby="SpouseRdspIncome"
                 [moneyMask]="moneyMask"
+                [required]="hasSpouse && hasRdspIncome"
               >
                 <div label class="finance-text--format">
                   {{ spouseRdspIncomeLabel }}
@@ -187,7 +194,7 @@
           instructionText="{{ uploadInstructions }}"
           [(images)]="supportingDocuments"
           (errorDocument)="handleError($event)"
-          required="true"
+          required
           id="supportDocuments"
         >
         </common-file-uploader>
@@ -195,7 +202,10 @@
           {{ errorMessage }}
         </common-error-container>
 
-        <aside class="support-doc--tip-area">
+        <aside
+          class="support-doc--tip-area"
+          aria-describedby="supportDocuments"
+        >
           <ng-container *ngIf="isLastYearIncome === true; else GrossIncomeTip">
             <p class="support-doc--tip-title">{{ netIncomeTipTitle }}</p>
             <ul>

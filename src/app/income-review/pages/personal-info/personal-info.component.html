@@ -13,6 +13,7 @@
           name="firstName"
           label="{{ applFirstNameLabel }}"
           maxlength="{{ firstNameLen }}"
+          required
         ></common-name>
       </div>
       <div class="p-2">
@@ -21,6 +22,7 @@
           name="lastName"
           label="{{ applLastNameLabel }}"
           maxlength="{{ lastNameLen }}"
+          required
         ></common-name>
       </div>
       <!-- NOTE: When library is updated placeholder fields can be removed -->
@@ -31,6 +33,7 @@
           label="{{ applAddressLabel }}"
           maxlength="{{ addressLen }}"
           placeholder=""
+          required
         ></common-street>
       </div>
       <div class="p-2">
@@ -39,6 +42,7 @@
           name="city"
           maxlength="{{ cityNameLen }}"
           placeholder=""
+          required
         ></common-city>
       </div>
     </div>
@@ -48,6 +52,7 @@
           formControlName="postalCode"
           name="postalCode"
           label="{{ applPostalCodeLabel }}"
+          required
         ></common-postal-code>
       </div>
       <div class="p-2">
@@ -56,6 +61,7 @@
           name="phn"
           label="{{ phnLabel }}"
           placeholder=""
+          required
         ></common-phn>
       </div>
     </div>
@@ -66,6 +72,7 @@
       name="hasSpouse"
       [label]="hasSpouseQuestion"
       display="table-row-group"
+      required
     ></common-radio>
     <div *ngIf="hasSpouseFlag" class="border-left pl-4">
       <div class="col-md-8">
@@ -75,6 +82,7 @@
             name="spFirstName"
             label="{{ spFirstNameLabel }}"
             maxlength="{{ firstNameLen }}"
+            [required]="hasSpouseFlag"
           ></common-name>
         </div>
         <div class="p-2">
@@ -83,6 +91,7 @@
             name="spLastName"
             label="{{ spLastNameLabel }}"
             maxlength="{{ lastNameLen }}"
+            [required]="hasSpouseFlag"
           ></common-name>
         </div>
       </div>
@@ -93,6 +102,7 @@
             name="spPhn"
             label="{{ spPhnLabel }}"
             placeholder=""
+            [required]="hasSpouseFlag"
           ></common-phn>
         </div>
       </div>

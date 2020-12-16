@@ -65,26 +65,20 @@ export class PersonalInfoComponent extends BaseForm
 
   ngOnInit() {
     super.ngOnInit();
+
+    // Use attribute 'required' rather than setting Valiator.required so that
+    // screen readers indentify fields that are required
     this.formGroup = this.fb.group({
-      firstName: [
-        this.incomeReviewDataService.applicant.firstName,
-        Validators.required,
-      ],
-      lastName: [
-        this.incomeReviewDataService.applicant.lastName,
-        Validators.required,
-      ],
-      address: [
-        this.incomeReviewDataService.address.addressLine1,
-        Validators.required,
-      ],
-      city: [this.incomeReviewDataService.address.city, Validators.required],
+      firstName: [this.incomeReviewDataService.applicant.firstName],
+      lastName: [this.incomeReviewDataService.applicant.lastName],
+      address: [this.incomeReviewDataService.address.addressLine1],
+      city: [this.incomeReviewDataService.address.city],
       postalCode: [
         this.incomeReviewDataService.address.postal,
-        [Validators.required, commonValidatePostalcode(true, true)],
+        [commonValidatePostalcode(true, true)],
       ],
-      phn: [this.incomeReviewDataService.applicant.phn, Validators.required],
-      hasSpouse: [this.incomeReviewDataService.hasSpouse, Validators.required],
+      phn: [this.incomeReviewDataService.applicant.phn],
+      hasSpouse: [this.incomeReviewDataService.hasSpouse],
       spFirstName: [this.incomeReviewDataService.spouse.firstName],
       spLastName: [this.incomeReviewDataService.spouse.lastName],
       spPhn: [this.incomeReviewDataService.spouse.phn],
@@ -116,7 +110,6 @@ export class PersonalInfoComponent extends BaseForm
     });
     this.formGroup.controls.hasSpouse.valueChanges.subscribe((val) => {
       this.incomeReviewDataService.hasSpouse = val;
-      this.updateSpouseValidators(val);
     });
     this.formGroup.controls.spFirstName.valueChanges.subscribe(
       (val) => (this.incomeReviewDataService.spouse.firstName = val)
@@ -136,34 +129,6 @@ export class PersonalInfoComponent extends BaseForm
     if (this.canContinue()) {
       this.navigate(INCOME_REVIEW_PAGES.INCOME.fullpath);
     }
-  }
-
-  updateSpouseValidators(hasSpouse: boolean) {
-    const firstName = this.formGroup.controls.spFirstName;
-    const lastName = this.formGroup.controls.spLastName;
-    const spousePhn = this.formGroup.controls.spPhn;
-
-    if (hasSpouse) {
-      firstName.setValidators(Validators.required);
-      lastName.setValidators(Validators.required);
-      spousePhn.setValidators(Validators.required);
-    } else {
-      firstName.clearValidators();
-      lastName.clearValidators();
-      spousePhn.clearValidators();
-
-      firstName.patchValue(null);
-      lastName.patchValue(null);
-      spousePhn.patchValue(null);
-
-      // If income was entered and applicant removes spouse, income fields need to be cleared.
-      this.incomeReviewDataService.spouse.clearIncome();
-    }
-
-    firstName.updateValueAndValidity();
-    lastName.updateValueAndValidity();
-    spousePhn.updateValueAndValidity();
-    this.formGroup.updateValueAndValidity({ onlySelf: false });
   }
 
   checkDuplicatePhn(onSpouse: boolean = true) {

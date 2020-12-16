@@ -72,15 +72,12 @@ export class HomeComponent extends BaseForm implements OnInit, AfterViewInit {
 
   ngOnInit() {
     super.ngOnInit();
+
+    // Use attribute 'required' rather than setting Valiator.required so that
+    // screen readers indentify fields that are required
     this.formGroup = this.fb.group({
-      isRegistered: [
-        this.incomeReviewDataService.isRegistered,
-        Validators.required,
-      ],
-      isIncomeLess: [
-        this.incomeReviewDataService.isIncomeLess,
-        Validators.required,
-      ],
+      isRegistered: [this.incomeReviewDataService.isRegistered],
+      isIncomeLess: [this.incomeReviewDataService.isIncomeLess],
     });
   }
 

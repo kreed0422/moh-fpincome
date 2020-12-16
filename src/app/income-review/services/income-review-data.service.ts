@@ -289,7 +289,7 @@ export class IncomeReviewDataService {
           label: this.incomeLabel,
           value: this.applicant.incomeStr,
           extraInfo: {
-            lineNo: `${count++}`,
+            lineNo: `${(count += 1)}`,
             mask: this.incomeInputMask,
             isTotal: false,
           },
@@ -303,7 +303,7 @@ export class IncomeReviewDataService {
           label: this.spouseIncomeLabel,
           value: this.spouse.incomeStr,
           extraInfo: {
-            lineNo: `${count++}`,
+            lineNo: `${(count += 1)}`,
             mask: this.incomeInputMask,
             isTotal: false,
           },
@@ -312,7 +312,7 @@ export class IncomeReviewDataService {
           label: this.incomeTotalLabel,
           value: this.incomeTotal.toFixed(2),
           extraInfo: {
-            lineNo: `${count++}`,
+            lineNo: `${(count += 1)}`,
             mask: this.incomeDisplayMask,
             isTotal: true,
           },
@@ -326,7 +326,7 @@ export class IncomeReviewDataService {
           label: this.rdspIncomeLabel,
           value: this.applicant.rdspIncomeStr,
           extraInfo: {
-            lineNo: `${count++}`,
+            lineNo: `${(count += 1)}`,
             mask: this.incomeInputMask,
             isTotal: false,
           },
@@ -339,7 +339,7 @@ export class IncomeReviewDataService {
             label: `spouse's ${this.rdspIncomeLabel}`,
             value: this.spouse.rdspIncomeStr,
             extraInfo: {
-              lineNo: `${count++}`,
+              lineNo: `${(count += 1)}`,
               mask: this.incomeInputMask,
               isTotal: false,
             },
@@ -348,7 +348,7 @@ export class IncomeReviewDataService {
             label: this.rdspIncomeTotalLabel,
             value: this.rdspIncomeTotal.toFixed(2),
             extraInfo: {
-              lineNo: `${count++}`,
+              lineNo: `${(count += 1)}`,
               mask: this.incomeDisplayMask,
               isTotal: true,
             },
@@ -361,7 +361,7 @@ export class IncomeReviewDataService {
           label: this.totalNetIncomeLabel,
           value: this.netIncomeTotal.toFixed(2),
           extraInfo: {
-            lineNo: `${count++}`,
+            lineNo: `${(count += 1)}`,
             mask: this.incomeDisplayMask,
             isTotal: true,
           },

@@ -37,12 +37,14 @@
       <common-checkbox
         [label]="registrantConsentStmt"
         formControlName="registrantConsent"
+        required
       ></common-checkbox>
     </div>
     <div *ngIf="hasSpouse" class="pt-4">
       <common-checkbox
         [label]="spouseConsentStmt"
         formControlName="spouseConsent"
+        [required]="hasSpouse"
       ></common-checkbox>
     </div>
 

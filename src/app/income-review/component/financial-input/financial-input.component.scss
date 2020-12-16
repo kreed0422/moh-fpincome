@@ -16,3 +16,17 @@ input {
 .input-group {
   flex-wrap: nowrap !important;
 }
+
+.financial-input--disabled {
+  text-align: right;
+  padding: 0.5rem 0.25rem;
+  width: 90%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: gray;
+}
+
+.financial-input--disabled::after,
+.financial-input--disabled::before {
+  box-sizing: border-box;
+}

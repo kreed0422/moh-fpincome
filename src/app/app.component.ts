@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
         .split('-')
         .map((x) => x[0].toUpperCase() + x.slice(1))
         .join(' ');
-      tabTitle = tabTitle.concat('|' + _title);
+      tabTitle = tabTitle.concat(' - ' + _title);
     }
 
     // If title is null, use default title

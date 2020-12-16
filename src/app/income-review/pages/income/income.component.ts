@@ -12,7 +12,7 @@ import {
   FpcDocumentTypes,
   IncomeReviewDataService,
 } from '../../services/income-review-data.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
 
 @Component({

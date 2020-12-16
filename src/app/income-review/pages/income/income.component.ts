@@ -207,21 +207,17 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
   ngOnInit() {
     super.ngOnInit();
 
+    // Use attribute 'required' rather than setting Valiator.required so that
+    // screen readers indentify fields that are required
     this.formGroup = this.fb.group({
-      isLastYearIncome: [
-        this.incomeReviewDataService.isLastYearIncome,
-        { validators: Validators.required },
-      ],
+      isLastYearIncome: [this.incomeReviewDataService.isLastYearIncome],
       income: [
         this.incomeReviewDataService.applicant.incomeStr,
-        { validators: Validators.required, updateOn: 'blur' },
+        { updateOn: 'blur' },
       ],
       spouseIncome: [
         this.incomeReviewDataService.spouse.incomeStr,
-        {
-          validators: this.hasSpouse ? Validators.required : null,
-          updateOn: 'blur',
-        },
+        { updateOn: 'blur' },
       ],
       incomeTotal: [
         {
@@ -233,25 +229,15 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       ],
       hasRdspIncome: [
         this.incomeReviewDataService.hasRdspIncome,
-        {
-          validators: this.isLastYearIncome ? Validators.required : null,
-          updateOn: 'blur',
-        },
+        { updateOn: 'blur' },
       ],
       rdspIncome: [
         this.incomeReviewDataService.applicant.rdspIncomeStr,
-        {
-          validators: this.hasRdspIncome ? Validators.required : null,
-          updateOn: 'blur',
-        },
+        { updateOn: 'blur' },
       ],
       spouseRdspIncome: [
         this.incomeReviewDataService.spouse.rdspIncomeStr,
-        {
-          validators:
-            this.hasSpouse && this.hasRdspIncome ? Validators.required : null,
-          updateOn: 'blur',
-        },
+        { updateOn: 'blur' },
       ],
       rdspIncomeTotal: [
         {

@@ -80,15 +80,11 @@ export class ConsentComponent extends BaseForm
     this.containerService.setSubmitLabel(FORM_SUBMIT_LABEL);
     this.containerService.setUseDefaultColor(false);
 
+    // Use attribute 'required' rather than setting Valiator.required so that
+    // screen readers indentify fields that are required
     this.formGroup = this.fb.group({
-      registrantConsent: [
-        this.incomeReviewDataService.applicant.consent,
-        Validators.required,
-      ],
-      spouseConsent: [
-        this.incomeReviewDataService.spouse.consent,
-        Validators.required,
-      ],
+      registrantConsent: [this.incomeReviewDataService.applicant.consent],
+      spouseConsent: [this.incomeReviewDataService.spouse.consent],
     });
   }
 

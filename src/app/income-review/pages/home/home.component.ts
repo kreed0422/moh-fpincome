@@ -8,7 +8,7 @@ import { CollectionNoticeComponent } from '../../component/collection-notice/col
 import { environment } from '../../../../environments/environment';
 import { UUID } from 'angular2-uuid';
 import { IncomeReviewApiService } from '../../services/income-review-api.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'fpir-home',

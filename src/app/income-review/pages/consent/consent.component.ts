@@ -12,7 +12,7 @@ import {
   FORM_SUBMIT_LABEL,
   INCOME_REVIEW_PAGES,
 } from '../../income-review.constants';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { IncomeReviewApiService } from '../../services/income-review-api.service';
 import { SplunkLoggingService } from '../../../services/splunk-logging.service';
 import { ServerPayload } from '../../models/review-income-api';

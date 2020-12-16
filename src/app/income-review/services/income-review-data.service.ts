@@ -289,7 +289,7 @@ export class IncomeReviewDataService {
           label: this.incomeLabel,
           value: this.applicant.incomeStr,
           extraInfo: {
-            lineNo: `${(count += 1)}`,
+            lineNo: `${count}`,
             mask: this.incomeInputMask,
             isTotal: false,
           },
@@ -361,7 +361,7 @@ export class IncomeReviewDataService {
           label: this.totalNetIncomeLabel,
           value: this.netIncomeTotal.toFixed(2),
           extraInfo: {
-            lineNo: `${(count += 1)}`,
+            lineNo: `${count + 1}`,
             mask: this.incomeDisplayMask,
             isTotal: true,
           },

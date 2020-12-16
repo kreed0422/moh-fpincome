@@ -7,7 +7,7 @@ import {
   commonValidatePostalcode,
 } from 'moh-common-lib';
 import { IncomeReviewDataService } from '../../services/income-review-data.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { INCOME_REVIEW_PAGES } from '../../income-review.constants';
 
 @Component({

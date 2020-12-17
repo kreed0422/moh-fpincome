@@ -10,12 +10,12 @@ import { conformToMask } from 'angular2-text-mask';
 
 export const createCurrencyMask = (opts = {}) => {
   const numberMask = createNumberMask({
-    allowDecimal: true,
-    requireDecimal: true,
+    allowDecimal: false,
+    requireDecimal: false,
     includeThousandsSeparator: true,
     thousandsSeparatorSymbol: ',',
     decimalSymbol: '.',
-    decimalLimit: 2,
+    decimalLimit: 0,
     ...opts,
   });
 
@@ -109,8 +109,10 @@ export class IncomeReviewDataService {
   applicationResponse: ServerPayload;
 
   // Masks for displaying currency
-  // TODO: Figure out how to display negative numbers
-  private _incomeMask = createCurrencyMask({ integerLimit: 6, prefix: '' });
+  private _incomeMask = createCurrencyMask({
+    integerLimit: 6,
+    prefix: '',
+  });
   private _incomeTotalMask = createCurrencyMask({
     integerLimit: 9,
     prefix: '',
@@ -180,7 +182,7 @@ export class IncomeReviewDataService {
     if (this.hasSpouse) {
       _income += this._currencyStrToNumber(this.spouse.incomeStr);
     }
-    return Number(_income.toFixed(2));
+    return Number(_income.toFixed());
   }
 
   get rdspIncomeTotal() {
@@ -188,11 +190,14 @@ export class IncomeReviewDataService {
     if (this.hasSpouse) {
       _rdsp += this._currencyStrToNumber(this.spouse.rdspIncomeStr);
     }
-    return Number(_rdsp.toFixed(2));
+    return Number(_rdsp.toFixed());
   }
 
   get netIncomeTotal() {
-    return this.incomeTotal - this.rdspIncomeTotal;
+    const _diff = this.incomeTotal - this.rdspIncomeTotal;
+
+    // If difference is a negative number return 0
+    return _diff < 0 ? 0 : _diff;
   }
 
   get incomeHeading() {
@@ -310,7 +315,7 @@ export class IncomeReviewDataService {
         },
         {
           label: this.incomeTotalLabel,
-          value: this.incomeTotal.toFixed(2),
+          value: this.formatIncomeTotal(this.incomeTotal),
           extraInfo: {
             lineNo: `${(count += 1)}`,
             mask: this.incomeDisplayMask,
@@ -346,7 +351,7 @@ export class IncomeReviewDataService {
           },
           {
             label: this.rdspIncomeTotalLabel,
-            value: this.rdspIncomeTotal.toFixed(2),
+            value: this.formatIncomeTotal(this.rdspIncomeTotal),
             extraInfo: {
               lineNo: `${(count += 1)}`,
               mask: this.incomeDisplayMask,
@@ -359,7 +364,7 @@ export class IncomeReviewDataService {
       obj.sectionItems = obj.sectionItems.concat([
         {
           label: this.totalNetIncomeLabel,
-          value: this.netIncomeTotal.toFixed(2),
+          value: this.formatIncomeTotal(this.netIncomeTotal),
           extraInfo: {
             lineNo: `${count + 1}`,
             mask: this.incomeDisplayMask,
@@ -402,7 +407,7 @@ export class IncomeReviewDataService {
     if (strValue) {
       let str = strValue.replace(/,/g, '');
       str = str.replace('$', '');
-      str = Number(str).toFixed(2);
+      str = Number(str).toFixed();
       const _num = Number(str);
       _value = isNaN(_num) ? 0 : _num;
     }
@@ -415,7 +420,7 @@ export class IncomeReviewDataService {
   ): string {
     // Rounding issue in mask
     const _currency = isNaN(currency) ? 0 : Math.round(currency * 100) / 100;
-    const _strValue = _currency.toFixed(2);
+    const _strValue = _currency.toFixed();
     const _mask = conformToMask(_strValue, mask, {});
     return _mask.conformedValue;
   }

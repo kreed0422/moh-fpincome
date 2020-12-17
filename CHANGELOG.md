@@ -1,3 +1,33 @@
+<a name="2.0.1"></a>
+
+## [2.0.1](https://github.com/bcgov/moh-fpincome/compare/v2.0.0...v2.0.1) (2020-12-17)
+
+### Bug Fixes
+
+- set negative values to 0 ([0bdeea6](https://github.com/bcgov/moh-fpincome/commit/0bdeea6))
+
+<a name="2.0.0"></a>
+
+# [2.0.0](https://github.com/bcgov/moh-fpincome/compare/v1.0.0...v2.0.0) (2020-12-17)
+
+### Bug Fixes
+
+- **access:** use required attribute rather than set validator ([0306ba1](https://github.com/bcgov/moh-fpincome/commit/0306ba1))
+- **consent:** lint issue resolved ([de1f7f0](https://github.com/bcgov/moh-fpincome/commit/de1f7f0))
+- **errors:** add error messages ([91ae5c5](https://github.com/bcgov/moh-fpincome/commit/91ae5c5))
+- **home:** correct spelling ([4e5e9c6](https://github.com/bcgov/moh-fpincome/commit/4e5e9c6))
+- **home:** fix wording as per moh request ([9a489f3](https://github.com/bcgov/moh-fpincome/commit/9a489f3))
+- **income:** cannot navigate next page without file ([c544c43](https://github.com/bcgov/moh-fpincome/commit/c544c43))
+- **json:** corrected format of income object ([6334bb8](https://github.com/bcgov/moh-fpincome/commit/6334bb8))
+- **review:** correct label ([0d01445](https://github.com/bcgov/moh-fpincome/commit/0d01445))
+- align labels, clear fields, remove pipe from tab title ([d5a6fe9](https://github.com/bcgov/moh-fpincome/commit/d5a6fe9))
+- readonly income display fields ([323e3ab](https://github.com/bcgov/moh-fpincome/commit/323e3ab))
+- remove decimals ([dd46b36](https://github.com/bcgov/moh-fpincome/commit/dd46b36))
+
+### Features
+
+- add support document functionality ([3bf1ae7](https://github.com/bcgov/moh-fpincome/commit/3bf1ae7))
+
 <a name="1.0.0"></a>
 
 # [1.0.0](https://github.com/bcgov/moh-fpincome/compare/v0.3.5...v1.0.0) (2020-06-18)

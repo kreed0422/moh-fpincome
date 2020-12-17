@@ -40,14 +40,6 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
   _onChange = (_: any) => {};
   _onTouched = (_?: any) => {};
 
-  decimalPipeMask = (value: any) => {
-    if (!isNaN(value)) {
-      return Number(value).toFixed(2);
-    }
-    return value;
-    // tslint:disable-next-line: semicolon
-  };
-
   constructor(@Optional() @Self() public control: NgControl) {
     if (this.control !== null) {
       this.control.valueAccessor = this;
@@ -64,10 +56,10 @@ export class FinancialInputComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-    this._textMask = { pipe: this.decimalPipeMask };
+    this._textMask = {};
 
     if (this.moneyMask) {
-      this._textMask = Object.assign(this._textMask, { mask: this.moneyMask });
+      this._textMask = { mask: this.moneyMask };
     }
 
     // Retreive name of the control

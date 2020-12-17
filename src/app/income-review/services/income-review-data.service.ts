@@ -10,12 +10,13 @@ import { conformToMask } from 'angular2-text-mask';
 
 export const createCurrencyMask = (opts = {}) => {
   const numberMask = createNumberMask({
-    allowDecimal: true,
-    requireDecimal: true,
+    allowDecimal: false,
+    requireDecimal: false,
     includeThousandsSeparator: true,
     thousandsSeparatorSymbol: ',',
     decimalSymbol: '.',
-    decimalLimit: 2,
+    decimalLimit: 0,
+    allowNegative: true,
     ...opts,
   });
 
@@ -109,8 +110,10 @@ export class IncomeReviewDataService {
   applicationResponse: ServerPayload;
 
   // Masks for displaying currency
-  // TODO: Figure out how to display negative numbers
-  private _incomeMask = createCurrencyMask({ integerLimit: 6, prefix: '' });
+  private _incomeMask = createCurrencyMask({
+    integerLimit: 6,
+    prefix: '',
+  });
   private _incomeTotalMask = createCurrencyMask({
     integerLimit: 9,
     prefix: '',

@@ -1,3 +1,11 @@
+<a name="2.0.1"></a>
+
+## [2.0.1](https://github.com/bcgov/moh-fpincome/compare/v2.0.0...v2.0.1) (2020-12-17)
+
+### Bug Fixes
+
+- set negative values to 0 ([0bdeea6](https://github.com/bcgov/moh-fpincome/commit/0bdeea6))
+
 <a name="2.0.0"></a>
 
 # [2.0.0](https://github.com/bcgov/moh-fpincome/compare/v1.0.0...v2.0.0) (2020-12-17)

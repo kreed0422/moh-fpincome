@@ -282,6 +282,7 @@ export class IncomeComponent extends BaseForm implements OnInit, AfterViewInit {
       this.resetRsdpIncome();
 
       if (val === true) {
+        this.updateIncomeTotal();
       }
     });
 
